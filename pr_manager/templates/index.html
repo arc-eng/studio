@@ -27,7 +27,7 @@
         <ul class="menu-list">
         {% for repo, prs in repos.items %}
             <li>
-                <a class="menu-label">{{ repo }}</a>
+                <a class="menu-label" href="https://github.com/{{ repo }}" target="_blank">{{ repo }}</a>
                 <ul>
                 {% for pr in prs %}
                     <li class="block">
