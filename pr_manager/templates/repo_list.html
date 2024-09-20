@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Repositories</h1>
+  <ul>
+    {% for repo in repos %}
+      <li><a href="/pull-request-manager/{{ repo.full_name }}">{{ repo.full_name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}
