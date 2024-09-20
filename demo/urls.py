@@ -19,5 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("pr_manager.urls"))
+    path("pull-request-manager", include("pr_manager.urls"))
 ]
