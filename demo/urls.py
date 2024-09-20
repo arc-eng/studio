@@ -22,5 +22,5 @@ import pr_manager
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("pull-request-manager/", include("pr_manager.urls")),
-    path("", pr_manager.views.index, name="repo_list"),
+    path("tasks/<str:task_id>/", pr_manager.views.view_task, name="view_task"),
 ]

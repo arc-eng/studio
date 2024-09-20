@@ -46,14 +46,13 @@
                             {% csrf_token %}
                             <input type="hidden" name="repo" value="{{ repo }}">
                             <input type="hidden" name="pr_number" value="{{ pr.number }}">
-                            <button type="submit" class="button is-medium is-primary is-dark">
+                            <button type="submit" class="button is-primary is-dark is-rounded">
                                 <span class="icon">
                                     <i class="fas fa-wand-magic-sparkles"></i>
                                 </span>
-                                <span>Generate </span>
                             </button>
                         </form>
-                        <a class="button is-medium"  href="{{ pr.html_url }}" target="_blank">
+                        <a class="button ml-3"  href="{{ pr.html_url }}" target="_blank">
                             <span class="icon">
                                 <i class="fas fa-arrow-up-right-from-square"></i>
                             </span>

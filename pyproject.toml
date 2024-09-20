@@ -7,10 +7,11 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "~3.10.0"
 django = "^5.1.1"
 arcane-engine = "^1.8.0"
 pygithub = "^2.4.0"
+markdown = "^3.7"
 
 
 [build-system]

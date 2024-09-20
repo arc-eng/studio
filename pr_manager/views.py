@@ -1,16 +1,22 @@
 import logging
+import os
 
+import markdown
+from arcane.engine import ArcaneEngine
 from django.conf import settings
-from django.shortcuts import render, redirect
 from django.core.cache import cache
-from github import Github
-from django.views.decorators.http import require_POST
+from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from github import Github
 
+from demo.prompts import PR_DESCRIPTION
 
 g = Github(settings.GITHUB_PAT)
 logger = logging.getLogger(__name__)
+
+# TODO Make this available as parameter on ArcaneEngine
+os.environ.setdefault('PR_PILOT_API_KEY', settings.ARCANE_API_KEY)
 
 
 def get_prs(repo_name):
@@ -35,11 +41,21 @@ def get_prs(repo_name):
 
 
 def get_user_repos():
+
+    # Try fetching cached PRs first
+    cached_repos = cache.get('user_repos')
+
+    if cached_repos:
+        logger.info("Returning cached user repos")
+        return cached_repos
     user = g.get_user()
-    return user.get_repos()
+    repos = user.get_repos()
+    logger.info(f"Found {repos.totalCount} repos for user {user.login}")
+    cache.set('user_repos', repos, timeout=3600)
+    return repos
 
 
-def index(request, owner=None, repo=None):
+def show_repos(request, owner=None, repo=None):
     repos = get_user_repos()
     if not owner or not repo:
         prs = []
@@ -59,7 +75,17 @@ def index(request, owner=None, repo=None):
 @require_POST
 def generate_description(request, owner, repo):
     pr_number = request.POST.get('pr_number')
-    # Here you would add the logic to generate the PR description
-    # For now, we'll just log the repo and PR number
-    logger.info(f"Generating description for PR {pr_number} in repo {repo}")
-    return redirect(reverse('show_repo', args=[owner, repo]))
+    engine = ArcaneEngine()
+    prompt = PR_DESCRIPTION.format(pr_number=pr_number)
+    task = engine.create_task(f"{owner}/{repo}", prompt)
+
+    return redirect(reverse('view_task', args=(task.id,)))
+
+
+def view_task(request, task_id):
+    task = ArcaneEngine().get_task(task_id)
+    task.result = markdown.markdown(task.result)
+    task.user_request = markdown.markdown(task.user_request)
+    return render(request, "view_task.html", {
+        "task": task
+    })
