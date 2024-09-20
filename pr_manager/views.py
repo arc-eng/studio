@@ -13,42 +13,39 @@ g = Github(settings.GITHUB_PAT)
 logger = logging.getLogger(__name__)
 
 
-def get_prs():
+def get_prs(repo_name):
 
     # Try fetching cached PRs first
-    cached_pulls = cache.get('all_pull_requests')
+    cached_pulls = cache.get(f'pull_requests_{repo_name}')
 
     if cached_pulls:
         logger.info("Returning cached pull requests")
         return cached_pulls
 
     all_pulls = []
-    for repo in g.get_user().get_repos():
-        pulls = repo.get_pulls(state='open')
-        logger.info(f"Found {pulls.totalCount} PRs in {repo.name}")
-        for pr in pulls:
-            all_pulls.append({
-                'repo': repo.name,
-                'title': pr.title,
-                'html_url': pr.html_url,
-                'number': pr.number
-            })
+    repo = g.get_repo(repo_name)
+    pulls = repo.get_pulls(state='open')
+    logger.info(f"Found {pulls.totalCount} PRs in {repo.name}")
+    for pr in pulls:
+        all_pulls.append({
+            'repo': repo.name,
+            'title': pr.title,
+            'html_url': pr.html_url,
+            'number': pr.number
+        })
     # Cache the result for 1 hour (3600 seconds)
-    cache.set('all_pull_requests', all_pulls, timeout=3600)
+    cache.set(f'pull_requests_{repo_name}', all_pulls, timeout=3600)
     return all_pulls
 
 
 def index(request):
-    prs = get_prs()
-    repos = {}
-    for pr in prs:
-        if pr['repo'] not in repos:
-            repos[pr['repo']] = []
-        repos[pr['repo']].append(pr)
+    repo_name = request.GET.get('repo', 'default/repo')  # Default to 'default/repo' if not provided
+    prs = get_prs(repo_name)
+    repos = {repo_name: prs}
     return render(request, "index.html", {
         "repos": repos,
         "pr_count": len(prs),
-        "repo_count": len(repos)
+        "repo_count": 1
     })
 
 
