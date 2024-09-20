@@ -23,7 +23,7 @@
         Generate beautiful reports based on your prompts.
     </p>
 
-    <form method="post" action="{% url 'generate_report' %}">
+    <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
         {% csrf_token %}
         <div class="field">
             <label class="label">Prompt</label>
@@ -41,7 +41,7 @@
             <ul class="is-centered">
                 {% for report in reports %}
                     <li class="block">
-                        <a class="button is-rounded" href="{% url 'view_report' report.id %}">
+                        <a class="button is-rounded" href="{% url 'view_report' owner=repo_owner repo=repo_name report_id=report.id %}">
                             <span class="icon">
                                 <i class="fas fa-file-alt"></i>
                             </span>

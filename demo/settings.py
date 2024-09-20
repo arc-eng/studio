@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'pr_manager',
     'tasks',
+    'reports'
 ]
 
 MIDDLEWARE = [
