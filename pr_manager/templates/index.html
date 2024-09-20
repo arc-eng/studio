@@ -13,22 +13,40 @@
         <div class="level-item has-text-centered">
             <div>
                 <p class="heading">Open Pull Requests</p>
-                <p class="title">0</p>
+                <p class="title">{{ pr_count }}</p>
             </div>
         </div>
         <div class="level-item has-text-centered">
             <div>
                 <p class="heading">Repos</p>
-                <p class="title">0</p>
+                <p class="title">{{ repo_count }}</p>
             </div>
         </div>
     </nav>
-    <ul>
-    {% for pr in prs %}
-        <li class="block">
-            <a href="{{ pr.html_url }}" target="_blank">{{ pr.title }}</a>
-        </li>
-    {%  endfor %}
-    </ul>
-
+    <div class="menu">
+        <ul class="menu-list">
+        {% for repo, prs in repos.items %}
+            <li>
+                <a class="menu-label">{{ repo }}</a>
+                <ul>
+                {% for pr in prs %}
+                    <li class="block">
+                        <a href="{{ pr.html_url }}" target="_blank">{{ pr.title }}</a>
+                        <form method="post" action="{% url 'generate_description' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="repo" value="{{ repo }}">
+                            <input type="hidden" name="pr_number" value="{{ pr.number }}">
+                            <button type="submit" class="button is-small is-info">
+                                <span class="icon">
+                                    <i class="fas fa-magic"></i>
+                                </span>
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
