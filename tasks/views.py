@@ -1,11 +1,12 @@
 import markdown
 from arcane.engine import ArcaneEngine
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from demo.github import list_repos_by_owner
 
 
 # Create your views here.
+
 def view_task(request, owner, repo, task_id):
     task = ArcaneEngine().get_task(task_id)
     task.result = markdown.markdown(task.result)
@@ -32,3 +33,13 @@ def list_tasks(request, owner, repo):
         "tasks": tasks,
         "active_tab": "tasks",
     })
+
+
+@csrf_exempt
+def create_task(request, owner, repo):
+    if request.method == "POST":
+        task_description = request.POST.get("task_description")
+        if task_description:
+            # Assuming ArcaneEngine has a method to create tasks
+            ArcaneEngine().create_task(owner, repo, task_description)
+    return redirect('list_tasks', owner=owner, repo=repo)
