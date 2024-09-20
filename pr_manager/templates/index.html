@@ -28,14 +28,16 @@
     <div class="columns">
         <div class="column is-one-third">
             <aside class="menu">
-                <p class="menu-label">Your Repositories</p>
-                <ul class="menu-list">
-                    {% for repo in repos %}
-                        <li class="">
-                            <a class="{% if repo.full_name == selected_repo %}is-active{% endif %} menu-label" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.full_name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% for owner, owner_repos in repos.items %}
+                    <p class="menu-label">{{ owner }}</p>
+                    <ul class="menu-list">
+                        {% for repo in owner_repos %}
+                            <li class="">
+                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
             </aside>
         </div>
         <div class="column">
@@ -57,7 +59,6 @@
                                 <i class="fas fa-arrow-up-right-from-square"></i>
                             </span>
                             <span>{{ pr.title }}</span>
-                            
                         </a>
                     </li>
                 {% endfor %}
