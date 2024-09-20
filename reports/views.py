@@ -27,9 +27,10 @@ def view_reports(request, owner, repo):
 @require_POST
 def generate_report(request, owner, repo):
     prompt = request.POST.get('prompt')
+    title = request.POST.get('title')  # Get the title from the form
     engine = ArcaneEngine()
     task = engine.create_task(f"{owner}/{repo}", GENERATE_REPORT.format(report_description=prompt))
-    report = Report.objects.create(prompt=prompt, task_id=task.id)
+    report = Report.objects.create(prompt=prompt, task_id=task.id, title=title)  # Save the title
     return redirect(reverse('view_report', args=(owner, repo, report.id,)))
 
 
