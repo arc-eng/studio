@@ -1,14 +1,25 @@
-{% block repo_menu %}
-<aside class="menu">
-    {% for owner, owner_repos in repos.items %}
-        <p class="menu-label">{{ owner }}</p>
-        <ul class="menu-list">
-            {% for repo in owner_repos %}
-                <li class="">
-                    <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.name }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
-</aside>
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="columns">
+        <div class="column is-one-fifth">
+            <aside class="menu">
+                {% for owner, owner_repos in repos.items %}
+                    <p class="menu-label">{{ owner }}</p>
+                    <ul class="menu-list">
+                        {% for repo in owner_repos %}
+                            <li class="">
+                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </aside>
+        </div>
+        <div class="column">
+            {% block repo_content %}{% endblock %}
+        </div>
+    </div>
+
 {% endblock %}

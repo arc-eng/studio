@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_repos.html" %}
 
 {%  block css %}
     .is-scrollable {
@@ -8,17 +8,8 @@
     }
 {% endblock %}
 
-{% block content %}
+{% block repo_content %}
 
-    <div class="box content is-scrollable">
-        <p class="is-size-5 has-text-weight-light has-text-info has-text-centered ">
-            <span class="icon has-text-info is-small"><i class="fas fa-user"></i></span> <b class="">Instructions</b>
-        </p>
-        <div class="is-size-6 is-family-monospace p-3">
-            {{ task.user_request | safe}}
-        </div>
-
-    </div>
 
 
     <div class="has-text-centered">
@@ -33,7 +24,7 @@
 
 
     {%  if task.status == "completed" %}
-        <div class="box content is-size-6 has-background-white-bis mt-5">
+        <div class="content is-size-6 mt-5">
 
                 <div class="is-size-3 has-text-weight-light has-text-centered is-spaced title">
                     {% if task.status == "failed" %}
@@ -67,7 +58,8 @@
 
 
 
-    <div class="content box has-background-white-bis mt-5">
+
+    <div class="content box has-background-white-bis mt-5 {% if task.status == "completed" %}is-hidden{% endif %}">
         <h3 class="has-text-centered"><span class="icon"><i class="fa fa-file-alt"></i></span> Task Log</h3>
 
         <!-- Render task events using BulmaCSS Table -->
@@ -109,6 +101,20 @@
         </div>
 
     </div>
+
+
+    {%  if task.status != "completed" %}
+    <div class="box content is-scrollable has-background-grey-lighter">
+        <p class="is-size-6 has-text-weight-light has-text-centered">
+            <span class="icon is-small"><i class="fab fa-github"></i></span> <b class="has-text-grey-dark">Instructions</b>
+
+        </p>
+        <div class="is-size-7 is-family-monospace p-3">
+            {{ task.user_request | safe}}
+        </div>
+
+    </div>
+    {% endif %}
 
     <script>
         $(document).ready(function() {

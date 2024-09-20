@@ -52,35 +52,26 @@
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <span class="icon"><i class="fas fa-dragon"></i></span>
-            Arcane Engine Demos
-        </a>
-    </div>
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-            <a class="navbar-item" href="/pull-request-manager/">
-                <span class="icon has-text-primary"><i class="fas fa-home"></i></span>
-                Pull Request Manager
+<nav class="level p-5">
+    <div class="level-left">
+        <p class="level-item has-text-centered">
+            <a class="button is-primary is-light is-rounded" href="/pull-request-manager/">
+                <span class="icon"><i class="fas fa-cogs"></i></span>
+                <span>Initialize</span>
             </a>
-
-            <a class="navbar-item" href="https://arcane.engineer/development-kit/" target="_blank">
-                <span class="icon has-text-dark"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                Get Started
+        </p>
+        <p class="level-item has-text-centered">
+            <a class="button is-info is-light is-rounded" href="/pull-request-manager/">
+                <span class="icon"><i class="fas fa-code-branch"></i></span>
+                <span>Pull Requests</span>
             </a>
-
-        </div>
-
+        </p>
     </div>
 
 </nav>
-<section class="section">
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-</section>
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
 <footer class="footer">
     <div class="content has-text-centered">
         <p>

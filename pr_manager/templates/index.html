@@ -2,7 +2,7 @@
 
 {% block title %}Pull Request Manager{% endblock %}
 
-{% block content %}
+{% block repo_content %}
     <h1 class="title is-1 has-text-centered">
         Pull Request Manager
     </h1>
@@ -24,27 +24,22 @@
             </div>
         </div>
     </nav>
-
-    <div class="columns">
-        <div class="column is-one-third">
-            {% block repo_menu %}
-            {% endblock %}
-        </div>
-        <div class="column">
-            <ul>
+    <div class="columns is-centered mb-5">
+        <div class="column is-narrow">
+            <ul class="is-centered">
                 {% for pr in prs %}
                     <li class="block">
                         <form method="post" action="{% url 'generate_description' repo_owner repo_name %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="repo" value="{{ repo }}">
                             <input type="hidden" name="pr_number" value="{{ pr.number }}">
-                            <button type="submit" class="button is-primary is-dark is-rounded">
+                            <button type="submit" class="button is-success is-light is-rounded">
                                 <span class="icon">
                                     <i class="fas fa-wand-magic-sparkles"></i>
                                 </span>
                             </button>
                         </form>
-                        <a class="button ml-3"  href="{{ pr.html_url }}" target="_blank">
+                        <a class="button is-rounded ml-3"  href="{{ pr.html_url }}" target="_blank">
                             <span class="icon">
                                 <i class="fas fa-arrow-up-right-from-square"></i>
                             </span>
@@ -55,6 +50,5 @@
             </ul>
         </div>
     </div>
-
 
 {% endblock %}

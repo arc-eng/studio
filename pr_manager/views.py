@@ -55,8 +55,7 @@ def get_user_repos():
     cache.set('user_repos', repos, timeout=3600)
     return repos
 
-
-def show_repos(request, owner=None, repo=None):
+def list_repos_by_owner():
     repos = get_user_repos()
     repos_by_owner = {}
     for repository in repos:
@@ -64,6 +63,12 @@ def show_repos(request, owner=None, repo=None):
         if owner_name not in repos_by_owner:
             repos_by_owner[owner_name] = []
         repos_by_owner[owner_name].append(repository)
+    return repos_by_owner
+
+
+def show_repos(request, owner=None, repo=None):
+    repos = get_user_repos()
+    repos_by_owner = list_repos_by_owner()
     if not owner or not repo:
         prs = []
     else:
@@ -80,7 +85,6 @@ def show_repos(request, owner=None, repo=None):
 
 
 @require_POST
-
 def generate_description(request, owner, repo):
     pr_number = request.POST.get('pr_number')
     engine = ArcaneEngine()
@@ -95,5 +99,6 @@ def view_task(request, task_id):
     task.result = markdown.markdown(task.result)
     task.user_request = markdown.markdown(task.user_request)
     return render(request, "view_task.html", {
+        "repos": list_repos_by_owner(),
         "task": task
     })
