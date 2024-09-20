@@ -24,5 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
+    path("reports/", include("reports.urls")),
     path("", views.suite_overview, name="suite_overview"),
 ]
