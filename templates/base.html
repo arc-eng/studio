@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PVNMNEWKS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1PVNMNEWKS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
+
+    <!-- Meta tags -->
+    <meta name="description" content="{{ description }}">
+    <meta name="keywords" content="LLM,AI,Machine Learning,Developer Tools,Productivity,{{ keywords }}">
+    <meta name="author" content="Arcane Engineering">
+    <meta name="robots" content="index, follow">
+    <meta name="revisit-after" content="1 day">
+    <meta name="language" content="English">
+
+
+    <!-- Social media tags -->
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/logo.jpg' %}">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        {% block css %}
+        {% endblock %}
+
+    </style>
+
+    <script>
+        $(document).ready(function() {
+        });
+    </script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <span class="icon"><i class="fas fa-dragon"></i></span>
+            Arcane Engine Demos
+        </a>
+    </div>
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/pull-request-manager/">
+                <span class="icon has-text-primary"><i class="fas fa-home"></i></span>
+                Pull Request Manager
+            </a>
+
+            <a class="navbar-item" href="https://arcane.engineer/development-kit/" target="_blank">
+                <span class="icon has-text-dark"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                Get Started
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>
+<section class="section">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</section>
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>
+            Made with <span class="icon has-text-danger"><i class="fa fa-heart"></i> </span> by <a href="mailto:hello@arcane.engineer">Arcane Engineering</a>.
+            All rights reserved.
+        </p>
+    </div>
+</footer>
+</body>
+</html>
