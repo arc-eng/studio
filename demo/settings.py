@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pr_manager',
+    'tasks',
 ]
 
 MIDDLEWARE = [
@@ -160,4 +161,5 @@ GITHUB_PAT = os.environ.get("GITHUB_PAT")
 
 
 # TODO Make this available as parameter on ArcaneEngine
-os.environ.setdefault('PR_PILOT_API_KEY', ARCANE_API_KEY)
+if ARCANE_API_KEY:
+    os.environ.setdefault('PR_PILOT_API_KEY', ARCANE_API_KEY)

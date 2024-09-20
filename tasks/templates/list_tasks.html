@@ -1,0 +1,63 @@
+{% extends "base_repos.html" %}
+
+{%  block css %}
+    .is-scrollable {
+        max-height: 400px;      /* Set a max height */
+        overflow-y: auto;       /* Enable vertical scrolling */
+    }
+    .is-blinking {
+        animation: blinkAnimation 2s infinite;
+        }
+
+    @keyframes blinkAnimation {
+        0%   { opacity: 1; }
+        50%  { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+{% endblock %}
+
+{% block repo_content %}
+<h3 class="title is-3 has-text-centered">
+    <span class="icon"><i class="fa-regular fa-clock"></i></span>
+    <span>Task History</span>
+</h3>
+
+<p class="content is-size-5 has-text-weight-light has-text-centered">
+    View the history of tasks for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
+</p>
+
+<div class="table-container p-3">
+    <table class="table is-fullwidth is-hoverable is-size-5">
+        <tbody>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                        {% if task.status == 'completed' %}
+                            <span class="icon has-text-success"><i class="fa fa-square-check"></i></span>
+                        {% elif task.status == 'failed' %}
+                            <span class="icon has-text-danger"><i class="fa fa-triangle-exclamation"></i></span>
+                        {% elif task.status == 'scheduled' or task.status == "running" %}
+                            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="" href="https://github.com/{{ task.github_user }} " target="_blank">
+                            <span class="icon is-dark"><i class="fab fa-github"></i></span>
+                            <span>{{ task.github_user }}</span>
+                        </a>
+                    <td>
+                        <span class="has-font-weight-light is-family-monospace is-size-6">
+                            {{ task.created | timesince }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
+                            {{ task.title }}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

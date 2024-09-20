@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import tasks.views
 from demo import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
-    path("<str:owner>/<str:repo>/tasks/<str:task_id>/", views.view_task, name="view_task"),
+    path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
     path("", views.suite_overview, name="suite_overview"),
 ]
