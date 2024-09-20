@@ -20,7 +20,7 @@
     </h3>
 
     <p class="content is-size-5 has-text-weight-light has-text-centered">
-        Generate beautiful reports based on your prompts.
+        Generate instant reports for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
     </p>
 
     <div class="table-container p-3">
@@ -29,7 +29,12 @@
                 {% for report in reports %}
                     <tr>
                         <td>
-                            <a class="button is-rounded" href="{% url 'view_report' owner=repo_owner repo=repo_name report_id=report.id %}">
+                        <span class="has-font-weight-light is-family-monospace is-size-6">
+                            {{ report.created_at | timesince }} ago
+                        </span>
+                        </td>
+                        <td>
+                            <a class="" href="{% url 'view_report' owner=repo_owner repo=repo_name report_id=report.id %}">
                                 <span class="icon">
                                     <i class="fas fa-file-alt"></i>
                                 </span>
@@ -46,14 +51,14 @@
         <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
             {% csrf_token %}
             <div class="field">
-                <label class="label">Prompt</label>
+                <label class="label">Describe what your report should look like</label>
                 <div class="control">
-                    <textarea class="textarea is-medium" name="prompt" placeholder="Enter your prompt here..."></textarea>
+                    <textarea class="textarea is-medium" name="prompt" placeholder="List the root directory, read all files related to CI/CD and report how this repo does deployments."></textarea>
                 </div>
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <button type="submit" class="button is-primary">
+                    <button type="submit" class="button is-link">
                         <span class="icon"><i class="fa fa-plus"></i></span>
                         <span>Generate Report</span>
                     </button>

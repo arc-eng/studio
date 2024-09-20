@@ -21,9 +21,7 @@
         </ul>
     </nav>
     {% if report.result %}
-        <div class="box">
-            {{ report.result | safe }}
-        </div>
+        {{ report.result | safe }}
 
     {% else %}
         <p class="content is-size-5 has-text-weight-light has-text-centered">

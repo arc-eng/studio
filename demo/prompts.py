@@ -49,8 +49,8 @@ Do the following:
 The HTML code should meet the following requirements:
 
 - Uses BulmaCSS classes, components, elements and layout to style the report
-- Use Fa icons everywhere to make it look good
-- The outer most tag is a simple div with the class `container`
+- At the beginning of every header, use a FontAwesome icon
+- The outer most tag is a simple div with the class `box`
 - The top to bottom structure should be title, executive summary, table of contents, sections, and references
 
 Return only the HTML code, nothing else. Do not wrap it in backticks or code blocks.
