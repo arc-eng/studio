@@ -9,5 +9,26 @@
     <p class="content is-medium">
         Generate PR descriptions for any of your repositories in seconds.
     </p>
+    <nav class="level">
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="heading">Open Pull Requests</p>
+                <p class="title">0</p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="heading">Repos</p>
+                <p class="title">0</p>
+            </div>
+        </div>
+    </nav>
+    <ul>
+    {% for pr in prs %}
+        <li class="block">
+            <a href="{{ pr.html_url }}" target="_blank">{{ pr.title }}</a>
+        </li>
+    {%  endfor %}
+    </ul>
 
 {% endblock %}
