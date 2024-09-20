@@ -38,8 +38,17 @@ def get_prs(repo_name):
     return all_pulls
 
 
-def index(request):
-    repo_name = request.GET.get('repo', 'default/repo')  # Default to 'default/repo' if not provided
+def repo_list(request):
+    user = g.get_user()
+    repos = user.get_repos()
+    repo_list = [repo.full_name for repo in repos]
+    return render(request, "repo_list.html", {
+        "repos": repo_list,
+    })
+
+
+def index(request, owner, repo):
+    repo_name = f"{owner}/{repo}"
     prs = get_prs(repo_name)
     repos = {repo_name: prs}
     return render(request, "index.html", {
