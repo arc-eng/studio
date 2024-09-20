@@ -157,3 +157,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ARCANE_API_KEY = os.environ.get("ARCANE_API_KEY")
 GITHUB_PAT = os.environ.get("GITHUB_PAT")
+
+
+# TODO Make this available as parameter on ArcaneEngine
+os.environ.setdefault('PR_PILOT_API_KEY', ARCANE_API_KEY)

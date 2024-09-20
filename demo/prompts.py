@@ -23,5 +23,13 @@ Use the following guidelines:
 
 # Your task
 Edit PR #{pr_number} title and description to reflect the changes made in this PR.
-Respond only with a link to the PR.
+Respond in the following format:
+
+```
+I've updated the title and description of <number and title of PR, hyperlink>
+
+---
+
+<pr description>
+```
 """

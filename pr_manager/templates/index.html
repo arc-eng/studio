@@ -1,11 +1,24 @@
-{% extends "base.html" %}
+{% extends "base_repos.html" %}
 
 {% block title %}Pull Request Manager{% endblock %}
 
-{% block content %}
-    <h1 class="title is-1 has-text-centered">
-        Pull Request Manager
-    </h1>
+{% block breadcrumbs %}
+    <li>
+        <a href="#">
+        <span class="icon is-small">
+          <i class="fas fa-code-branch" aria-hidden="true"></i>
+        </span>
+            <span>Pull Request Manager</span>
+        </a>
+    </li>
+
+{% endblock %}
+
+{% block repo_content %}
+    <h2 class="title is-2 has-text-centered">
+        <span class="icon"><i class="fas fa-code-branch"></i></span>
+        <span>Pull Request Manager</span>
+    </h2>
 
     <p class="content is-size-5 has-text-weight-light has-text-centered">
         Generate PR descriptions for any of your repositories in seconds.
@@ -24,46 +37,31 @@
             </div>
         </div>
     </nav>
-
-    <div class="columns">
-        <div class="column is-one-third">
-            <aside class="menu">
-                <p class="menu-label">Your Repositories</p>
-                <ul class="menu-list">
-                    {% for repo in repos %}
-                        <li class="">
-                            <a class="{% if repo.full_name == selected_repo %}is-active{% endif %} menu-label" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.full_name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </aside>
-        </div>
-        <div class="column">
-            <ul>
+    <div class="columns is-centered mb-5">
+        <div class="column is-narrow">
+            <ul class="is-centered">
                 {% for pr in prs %}
                     <li class="block">
                         <form method="post" action="{% url 'generate_description' repo_owner repo_name %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="repo" value="{{ repo }}">
                             <input type="hidden" name="pr_number" value="{{ pr.number }}">
-                            <button type="submit" class="button is-primary is-dark is-rounded">
+                            <button type="submit" class="button is-success is-light is-rounded">
                                 <span class="icon">
                                     <i class="fas fa-wand-magic-sparkles"></i>
                                 </span>
                             </button>
                         </form>
-                        <a class="button ml-3"  href="{{ pr.html_url }}" target="_blank">
+                        <a class="button is-rounded ml-3"  href="{{ pr.html_url }}" target="_blank">
                             <span class="icon">
                                 <i class="fas fa-arrow-up-right-from-square"></i>
                             </span>
                             <span>{{ pr.title }}</span>
-                            
                         </a>
                     </li>
                 {% endfor %}
             </ul>
         </div>
     </div>
-
 
 {% endblock %}

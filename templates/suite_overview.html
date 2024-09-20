@@ -1,0 +1,41 @@
+{% extends "base_repos.html" %}
+
+{%  block css %}
+{% endblock %}
+
+{% block repo_content %}
+    <section class="is-medium">
+        <h1 class="title is-1 has-text-centered">
+            Welcome to the Arcane Suite
+        </h1>
+
+        <p class="content is-size-5 has-text-weight-light has-text-centered">
+            An extensible suite of productivity tools and automations for development teams.
+        </p>
+    </section>
+    <section class="is-medium is-hidden">
+        <div class="grid">
+            <div class="cell p-5">
+                <div class="card">
+                    <div class="card-content">
+                        <p class="title">
+                            Pull Requests
+                        </p>
+                        <p>
+                            Generate PR descriptions for any of your repositories in seconds.
+                        </p>
+                    </div>
+                    <footer class="card-footer">
+                        <a href="{% url 'view_pull_requests' owner=None repo=None %}" class="card-footer-item">
+                            <span class="icon">
+                                <i class="fas fa-code-branch" aria-hidden="true"></i>
+                              </span>
+                            <span>Manage PRs</span>
+                        </a>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
