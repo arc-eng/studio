@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_repos.html" %}
 
 {% block title %}Pull Request Manager{% endblock %}
 
@@ -27,18 +27,8 @@
 
     <div class="columns">
         <div class="column is-one-third">
-            <aside class="menu">
-                {% for owner, owner_repos in repos.items %}
-                    <p class="menu-label">{{ owner }}</p>
-                    <ul class="menu-list">
-                        {% for repo in owner_repos %}
-                            <li class="">
-                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.name }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% endfor %}
-            </aside>
+            {% block repo_menu %}
+            {% endblock %}
         </div>
         <div class="column">
             <ul>
