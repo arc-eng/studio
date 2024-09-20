@@ -2,10 +2,23 @@
 
 {% block title %}Pull Request Manager{% endblock %}
 
+{% block breadcrumbs %}
+    <li>
+        <a href="#">
+        <span class="icon is-small">
+          <i class="fas fa-code-branch" aria-hidden="true"></i>
+        </span>
+            <span>Pull Request Manager</span>
+        </a>
+    </li>
+
+{% endblock %}
+
 {% block repo_content %}
-    <h1 class="title is-1 has-text-centered">
-        Pull Request Manager
-    </h1>
+    <h2 class="title is-2 has-text-centered">
+        <span class="icon"><i class="fas fa-code-branch"></i></span>
+        <span>Pull Request Manager</span>
+    </h2>
 
     <p class="content is-size-5 has-text-weight-light has-text-centered">
         Generate PR descriptions for any of your repositories in seconds.

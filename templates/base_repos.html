@@ -1,16 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="columns">
+    <nav class="level p-5">
+        <p class="level-item has-text-centered">
+            <a class="button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}}" href="/">
+                <span class="icon"><i class="fas fa-home"></i></span>
+            </a>
+        </p>
+        <p class="level-item has-text-centered">
+            {% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id as task_url %}
+            <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "tasks" %}is-link is-static{% endif %}"
+               href="{{ task_url }}">
+                <span class="icon"><i class="fas fa-gears"></i></span>
+                <span>Tasks</span>
+            </a>
+        </p>
+        <p class="level-item has-text-centered">
+            {% url 'view_pull_requests' owner=repo_owner repo=repo_name as view_pull_requests_url %}
+            <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
+               href="{{ view_pull_requests_url }}">
+                <span class="icon"><i class="fas fa-code-branch"></i></span>
+                <span>Pull Requests</span>
+            </a>
+        </p>
 
+    </nav>
+</div>
     <div class="columns">
         <div class="column is-one-fifth">
+
             <aside class="menu">
                 {% for owner, owner_repos in repos.items %}
                     <p class="menu-label">{{ owner }}</p>
                     <ul class="menu-list">
                         {% for repo in owner_repos %}
                             <li class="">
-                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.name }}</a>
+                                {% if active_tab == "tasks" %}
+                                    {% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id as repo_link %}
+                                {% elif active_tab == "pull-request-manager" %}
+                                    {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                {% else %}
+                                    {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                {% endif %}
+                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="{{ repo_link }}">{{ repo.name }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -18,7 +51,10 @@
             </aside>
         </div>
         <div class="column">
-            {% block repo_content %}{% endblock %}
+
+            {% block repo_content %}
+
+            {% endblock %}
         </div>
     </div>
 
