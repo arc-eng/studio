@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+import pr_manager
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("pr_manager.urls"))
+    path("pull-request-manager/", include("pr_manager.urls")),
+    path("", pr_manager.views.index, name="repo_list"),
 ]
