@@ -23,33 +23,42 @@
         Generate beautiful reports based on your prompts.
     </p>
 
-    <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
-        {% csrf_token %}
-        <div class="field">
-            <label class="label">Prompt</label>
-            <div class="control">
-                <textarea class="textarea" name="prompt" placeholder="Enter your prompt here..."></textarea>
-            </div>
-        </div>
-        <div class="control">
-            <button type="submit" class="button is-primary">Generate Report</button>
-        </div>
-    </form>
-
-    <div class="columns is-centered mt-5">
-        <div class="column is-narrow">
-            <ul class="is-centered">
+    <div class="table-container p-3">
+        <table class="table is-fullwidth is-hoverable is-size-5">
+            <tbody>
                 {% for report in reports %}
-                    <li class="block">
-                        <a class="button is-rounded" href="{% url 'view_report' owner=repo_owner repo=repo_name report_id=report.id %}">
-                            <span class="icon">
-                                <i class="fas fa-file-alt"></i>
-                            </span>
-                            <span>Report {{ report.id }}</span>
-                        </a>
-                    </li>
+                    <tr>
+                        <td>
+                            <a class="button is-rounded" href="{% url 'view_report' owner=repo_owner repo=repo_name report_id=report.id %}">
+                                <span class="icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </span>
+                                <span>Report {{ report.id }}</span>
+                            </a>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </ul>
-        </div>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="content px-5">
+        <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
+            {% csrf_token %}
+            <div class="field">
+                <label class="label">Prompt</label>
+                <div class="control">
+                    <textarea class="textarea is-medium" name="prompt" placeholder="Enter your prompt here..."></textarea>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button type="submit" class="button is-primary">
+                        <span class="icon"><i class="fa fa-plus"></i></span>
+                        <span>Generate Report</span>
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
 {% endblock %}
