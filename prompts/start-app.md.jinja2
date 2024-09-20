@@ -1,0 +1,15 @@
+I want to start a new demo app. Here is what it should do:
+
+{{ env('APP_DESCRIPTION') }}
+
+First, read the following files of an existing app and use that as a reference:
+- `pr_manager/templates/index.html`
+- `pr_manager/urls.py`
+- `pr_manager/views.py`
+
+I want you to set up a new Django app named {{ env('DJANGO_APP_NAME') }} by doing the following:
+1. Create the view implementation in `{{ env('DJANGO_APP_NAME') }}/views.py`
+2. Create the URL configuration in `{{ env('DJANGO_APP_NAME') }}/urls.py`
+3. Create the template in `{{ env('DJANGO_APP_NAME') }}/templates/index.html`
+4. Add the new app to the project's URL configuration in `demo/urls.py`
+5. Add a link to the new app in the base template `templates/base_repo.html`
