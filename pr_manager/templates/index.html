@@ -3,10 +3,11 @@
 {% block title %}Pull Request Manager{% endblock %}
 
 {% block content %}
-    <h1 class="title is-1">
+    <h1 class="title is-1 has-text-centered">
         Pull Request Manager
     </h1>
-    <p class="content is-medium">
+
+    <p class="content is-size-5 has-text-weight-light has-text-centered">
         Generate PR descriptions for any of your repositories in seconds.
     </p>
     <nav class="level">
@@ -23,30 +24,47 @@
             </div>
         </div>
     </nav>
-    <div class="menu">
-        <ul class="menu-list">
-        {% for repo, prs in repos.items %}
-            <li>
-                <a class="menu-label" href="https://github.com/{{ repo }}" target="_blank">{{ repo }}</a>
-                <ul>
+
+    <div class="columns">
+        <div class="column is-one-third">
+            <aside class="menu">
+                <p class="menu-label">Your Repositories</p>
+                <ul class="menu-list">
+                    {% for repo in repos %}
+                        <li class="">
+                            <a class="{% if repo.full_name == selected_repo %}is-active{% endif %} menu-label" href="/pull-request-manager/{{ repo.full_name }}">{{ repo.full_name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </aside>
+        </div>
+        <div class="column">
+            <ul>
                 {% for pr in prs %}
                     <li class="block">
-                        <a href="{{ pr.html_url }}" target="_blank">{{ pr.title }}</a>
-                        <form method="post" action="{% url 'generate_description' %}" style="display:inline;">
+                        <form method="post" action="{% url 'generate_description' repo_owner repo_name %}" style="display:inline;">
                             {% csrf_token %}
                             <input type="hidden" name="repo" value="{{ repo }}">
                             <input type="hidden" name="pr_number" value="{{ pr.number }}">
-                            <button type="submit" class="button is-small is-info">
+                            <button type="submit" class="button is-medium is-primary is-dark">
                                 <span class="icon">
-                                    <i class="fas fa-magic"></i>
+                                    <i class="fas fa-wand-magic-sparkles"></i>
                                 </span>
+                                <span>Generate </span>
                             </button>
                         </form>
+                        <a class="button is-medium"  href="{{ pr.html_url }}" target="_blank">
+                            <span class="icon">
+                                <i class="fas fa-arrow-up-right-from-square"></i>
+                            </span>
+                            <span>{{ pr.title }}</span>
+                            
+                        </a>
                     </li>
                 {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-        </ul>
+            </ul>
+        </div>
     </div>
+
+
 {% endblock %}

@@ -27,42 +27,39 @@ def get_prs(repo_name):
     pulls = repo.get_pulls(state='open')
     logger.info(f"Found {pulls.totalCount} PRs in {repo.name}")
     for pr in pulls:
-        all_pulls.append({
-            'repo': repo.name,
-            'title': pr.title,
-            'html_url': pr.html_url,
-            'number': pr.number
-        })
+        all_pulls.append(pr)
+
     # Cache the result for 1 hour (3600 seconds)
     cache.set(f'pull_requests_{repo_name}', all_pulls, timeout=3600)
     return all_pulls
 
 
-def repo_list(request):
+def get_user_repos():
     user = g.get_user()
-    repos = user.get_repos()
-    repo_list = [repo.full_name for repo in repos]
-    return render(request, "repo_list.html", {
-        "repos": repo_list,
-    })
+    return user.get_repos()
 
 
-def index(request, owner, repo):
-    repo_name = f"{owner}/{repo}"
-    prs = get_prs(repo_name)
-    repos = {repo_name: prs}
+def index(request, owner=None, repo=None):
+    repos = get_user_repos()
+    if not owner or not repo:
+        prs = []
+    else:
+        prs = get_prs(f"{owner}/{repo}")
     return render(request, "index.html", {
         "repos": repos,
+        "prs": prs,
         "pr_count": len(prs),
-        "repo_count": 1
+        "repo_count": repos.totalCount,
+        "repo_owner": owner,
+        "repo_name": repo,
+        "selected_repo": f"{owner}/{repo}"
     })
 
 
 @require_POST
-def generate_description(request):
-    repo = request.POST.get('repo')
+def generate_description(request, owner, repo):
     pr_number = request.POST.get('pr_number')
     # Here you would add the logic to generate the PR description
     # For now, we'll just log the repo and PR number
     logger.info(f"Generating description for PR {pr_number} in repo {repo}")
-    return JsonResponse({'status': 'success'})
+    return redirect(reverse('show_repo', args=[owner, repo]))
