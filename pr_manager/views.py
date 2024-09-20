@@ -53,7 +53,6 @@ def index(request):
 
 
 @require_POST
-
 def generate_description(request):
     repo = request.POST.get('repo')
     pr_number = request.POST.get('pr_number')
