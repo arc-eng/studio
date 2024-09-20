@@ -1,11 +1,11 @@
 import markdown
 from arcane.engine import ArcaneEngine
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.views.decorators.http import require_POST
 
 from demo.github import list_repos_by_owner
 
 
-# Create your views here.
 def view_task(request, owner, repo, task_id):
     task = ArcaneEngine().get_task(task_id)
     task.result = markdown.markdown(task.result)
@@ -32,3 +32,14 @@ def list_tasks(request, owner, repo):
         "tasks": tasks,
         "active_tab": "tasks",
     })
+
+
+@require_POST
+def create_task(request, owner, repo):
+    if request.method == "POST":
+        task_description = request.POST.get("task_description")
+        if not task_description:
+            raise ValueError("Task description is required.")
+        else:
+            task = ArcaneEngine().create_task(f"{owner}/{repo}", task_description)
+            return redirect('view_task', owner=owner, repo=repo, task_id=task.id)
