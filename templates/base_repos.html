@@ -51,7 +51,7 @@
                                 {% elif active_tab == "reports" %}
                                     {% url 'view_reports' owner=owner repo=repo.name as repo_link %}
                                 {% else %}
-                                    {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                    {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
                                 {% endif %}
                                 <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="{{ repo_link }}">{{ repo.name }}</a>
                             </li>

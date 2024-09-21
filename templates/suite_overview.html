@@ -9,33 +9,46 @@
             Welcome to the Arcane Suite
         </h1>
 
-        <p class="content is-size-5 has-text-weight-light has-text-centered">
-            An extensible suite of productivity tools and automations for development teams.
-        </p>
     </section>
-    <section class="is-medium is-hidden">
-        <div class="grid">
-            <div class="cell p-5">
-                <div class="card">
-                    <div class="card-content">
-                        <p class="title">
-                            Pull Requests
-                        </p>
-                        <p>
-                            Generate PR descriptions for any of your repositories in seconds.
-                        </p>
-                    </div>
-                    <footer class="card-footer">
-                        <a href="{% url 'view_pull_requests' owner=None repo=None %}" class="card-footer-item">
-                            <span class="icon">
-                                <i class="fas fa-code-branch" aria-hidden="true"></i>
-                              </span>
-                            <span>Manage PRs</span>
-                        </a>
-                    </footer>
-                </div>
-            </div>
-
+    <article class="message m-5">
+        <div class="message-header">
+            <p>An extensible suite of productivity tools and automations for development teams.</p>
         </div>
-    </section>
+        <div class="message-body">
+
+            <div class="content p-3">
+                <p>
+                    <strong>TL;DR</strong> - This application is a collection of productivity-boosting tools built on top of the
+                    <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a><strong>. The engine takes
+                    natural language instructions (Tasks) and executes them on your behalf using its capabilities</strong>,
+                    which include:
+                </p>
+
+                <ul>
+                    <li>Reading, writing and editing code</li>
+                    <li>Interacting with issues, tickets, wikis, etc via <a href="https://docs.pr-pilot.ai/integrations.html">Integrations</a></li>
+                    <li>Searching the internet and scraping websites</li>
+                </ul>
+                <p>
+                    <strong>Select a repository on the left to get started!</strong>
+                </p>
+
+                <p class="">
+
+                    The entire suite is free and <a href="https://github.com/arc-eng/demo" target="_blank">open-source</a>, and we welcome contributions from the community.
+
+                    If you're interested in building a tool like this for your own team, check out our <a href="https://arcane.engineer/development-kit" target="_blank" class="has-font-weight-medium">Development Kit</a>
+                    and <a href="https://docs.pr-pilot.ai/user_guide.html#command-line-interface" target="_blank" class="has-font-weight-medium">CLI</a>.
+                </p>
+
+                To give you an idea of what the engine can do for you, here are some examples from our <a href="https://arcane.engineer/labs/" target="_blank">Lab</a>:
+                <ul>
+                    <li><i class="fa fa-file-code"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/">Read Helm chart and build scripts to generate docker-compose file</a></li>
+                    <li><i class="fa fa-code-branch"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/">Break down a large module into smaller ones in seconds</a></li>
+                    <li><i class="fa fa-book"></i> <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/">Scrape project to generate beautiful README file</a></li>
+                </ul>
+            </div>
+        </div>
+    </article>
+
 {% endblock %}

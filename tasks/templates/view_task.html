@@ -47,6 +47,7 @@
       </ul>
     </nav>
 
+
     <div class="has-text-centered">
         {% if task.pr_number %}
             <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button">
@@ -60,10 +61,7 @@
 
     {%  if task.status == "completed" %}
         <div class="content box is-size-6 mt-5">
-            <div class="is-size-4 is-spaced title">
-                <span class="icon is-large has-text-success"><i class="fa fa-robot"></i></span>
-                <span>{{ task.title }}</span>
-            </div>
+
 
             <div class="is-family-monospace p-3">
             {{ task.result | safe }}
@@ -106,7 +104,6 @@
     {% endif %}
 
 
-    {%  if task.status != "completed" %}
     <div class="content is-scrollable">
         <p class="is-size-6 has-text-weight-light has-text-centered">
             <span class="icon is-small"><i class="fab fa-github"></i></span> <b class="has-text-grey-dark">Instructions</b>
@@ -117,7 +114,6 @@
         </div>
 
     </div>
-    {% endif %}
 
     <script>
         $(document).ready(function() {

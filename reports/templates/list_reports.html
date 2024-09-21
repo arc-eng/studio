@@ -14,14 +14,17 @@
 {% endblock %}
 
 {% block repo_content %}
-    <h3 class="title is-3 has-text-centered">
-        <span class="icon"><i class="fas fa-file-alt"></i></span>
-        <span>Reports</span>
-    </h3>
+    <div class="p-3">
+        <h3 class="title">
+            <span class="icon"><i class="fas fa-file-alt"></i></span>
+            <span>Reports</span>
+        </h3>
 
-    <p class="content is-size-5 has-text-weight-light has-text-centered">
-        Generate instant reports for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
-    </p>
+        <p class="content is-size-5 has-text-weight-light">
+            Generate instant reports for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
+        </p>
+    </div>
+
 
     <div class="table-container p-3">
         <table class="table is-fullwidth is-hoverable is-size-5">
@@ -53,13 +56,13 @@
             <div class="field">
                 <label class="label">Title</label>
                 <div class="control">
-                    <input class="input" type="text" name="title" placeholder="Deployment Config Analysis">
+                    <input class="input is-medium" type="text" name="title" placeholder="Bug report for issue #254">
                 </div>
             </div>
             <div class="field">
-                <label class="label">Instructions</label>
+                <label class="label">Description of the Report and additional instructions</label>
                 <div class="control">
-                    <textarea class="textarea is-medium" name="prompt" placeholder="List the root directory, read all files related to CI/CD and report how this repo does deployments."></textarea>
+                    <textarea class="textarea is-medium" name="prompt" placeholder="Read Github issue #254, find and read relevant code files and create a comprehensive bug report with details like how to reproduce the issue, expected results, etc"></textarea>
                 </div>
             </div>
             <div class="field is-grouped">

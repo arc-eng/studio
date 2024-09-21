@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 
 def view_pull_requests(request, owner=None, repo=None):
-    repos = get_user_repos()
     repos_by_owner = list_repos_by_owner()
     if not owner or not repo:
         prs = []
@@ -24,8 +23,6 @@ def view_pull_requests(request, owner=None, repo=None):
     return render(request, "index.html", {
         "repos": repos_by_owner,
         "prs": prs,
-        "pr_count": len(prs),
-        "repo_count": repos.totalCount,
         "repo_owner": owner,
         "repo_name": repo,
         "selected_repo": f"{owner}/{repo}",
