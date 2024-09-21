@@ -24,6 +24,14 @@
                 <span>Pull Requests</span>
             </a>
         </p>
+        <p class="level-item has-text-centered">
+            {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
+            <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "reports" %}is-link is-static{% endif %}"
+               href="{{ view_reports_url }}">
+                <span class="icon"><i class="fas fa-file-alt"></i></span>
+                <span>Reports</span>
+            </a>
+        </p>
 
     </nav>
 </div>
@@ -40,6 +48,8 @@
                                     {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
                                 {% elif active_tab == "pull-request-manager" %}
                                     {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                {% elif active_tab == "reports" %}
+                                    {% url 'view_reports' owner=owner repo=repo.name as repo_link %}
                                 {% else %}
                                     {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
                                 {% endif %}
