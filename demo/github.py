@@ -29,22 +29,38 @@ def get_prs(repo_name):
     return all_pulls
 
 
-def get_user_repos():
+def get_cached_user():
+    """Caches Github user using hashed access token"""
+    cache_key = f'github_user_{hash(settings.GITHUB_PAT)}'
+    user = cache.get(cache_key)
+    if user:
+        logger.info("Returning cached user")
+        return user
+    user = g.get_user()
+    cache.set(cache_key, user, timeout=3600)
+    return user
 
+def get_user_repos():
+    user = get_cached_user()
     # Try fetching cached PRs first
-    cached_repos = cache.get('user_repos')
+    cached_repos = cache.get(f'user_repos_{user.login}')
 
     if cached_repos:
         logger.info("Returning cached user repos")
         return cached_repos
-    user = g.get_user()
-    repos = user.get_repos()
-    logger.info(f"Found {repos.totalCount} repos for user {user.login}")
-    cache.set('user_repos', repos, timeout=3600)
-    return repos
+
+    starred_repos = user.get_starred()
+    logger.info(f"Found {starred_repos.totalCount} starred repos for user {user.login}")
+    cache.set(f'user_repos_{user.login}', starred_repos, timeout=3600)
+    return starred_repos
 
 
 def list_repos_by_owner():
+    cache_key = f'user_repos_{hash(settings.GITHUB_PAT)}'
+    cached_repos = cache.get(cache_key)
+    if cached_repos:
+        logger.info("Returning cached user repos")
+        return cached_repos
     repos = get_user_repos()
     repos_by_owner = {}
     for repository in repos:
@@ -52,4 +68,5 @@ def list_repos_by_owner():
         if owner_name not in repos_by_owner:
             repos_by_owner[owner_name] = []
         repos_by_owner[owner_name].append(repository)
+    cache.set(cache_key, repos_by_owner, timeout=3600)
     return repos_by_owner

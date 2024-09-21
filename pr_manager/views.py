@@ -1,5 +1,7 @@
+import json
 import logging
 
+import arcane
 from arcane.engine import ArcaneEngine
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -35,7 +37,18 @@ def generate_description(request, owner, repo):
     pr_number = request.POST.get('pr_number')
     engine = ArcaneEngine()
     prompt = PR_DESCRIPTION.format(pr_number=pr_number)
-    task = engine.create_task(f"{owner}/{repo}", prompt)
+    try:
+        task = engine.create_task(f"{owner}/{repo}", prompt)
+    except arcane.exceptions.ApiException as e:
+        logger.error(f"Failed to create task: {e}")
+        msg = str(e)
+        parsed_json = json.loads(e.body)
+        if parsed_json.get('details'):
+            msg = parsed_json.get('details')
+        return render(request, "error.html", {
+            "repos": list_repos_by_owner(),
+            "error": msg
+        })
 
     return redirect(reverse('view_task', args=(owner, repo, task.id,)))
 
