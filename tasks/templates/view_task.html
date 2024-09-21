@@ -31,12 +31,19 @@
         <li>
           <a href="#">
             <span class="icon is-small">
-              <i class="fas fa-book" aria-hidden="true"></i>
+                {% if task.status == "running" or task.status == "scheduled" %}
+                    <i class="fas fa-rotate fa-spin"></i>
+                {% elif task.status == "completed" %}
+                    <i class="fas fa-book" aria-hidden="true"></i>
+                {% elif task.status == "failed" %}
+                    <i class="fas fa-exclamation-triangle"></i>
+                {% endif %}
+
             </span>
             <span id="breadcrumb-title">{{ task.title }}</span>
           </a>
         </li>
-    
+
       </ul>
     </nav>
 
@@ -79,10 +86,6 @@
 
 
     {% if task.status == "scheduled" or task.status == "running" %}
-    <div class="is-size-6 has-text-centered is-spaced title">
-        <span class="icon is-large has-text-info is-size-6"><i class="fa fa-rotate fa-spin"></i></span>
-        <span id="task-title-running"></span>
-    </div>
     <div class="content box mt-5">
 
         <!-- Render task events using BulmaCSS Table -->
@@ -179,7 +182,6 @@
                         }
 
                         if (msgType === "title_update") {
-                            $('#task-title-running').text(data['data']);
                             $('#task-progress-indicator-text').text(data['data']);
                             $('#breadcrumb-title').text(data['data']);
 

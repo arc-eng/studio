@@ -7,4 +7,5 @@ class Report(models.Model):
     result = models.TextField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=255, null=True, blank=True)  # New field for report title
+    title = models.CharField(max_length=255, null=True, blank=True)
+    repo = models.CharField(max_length=255, null=True, blank=True)

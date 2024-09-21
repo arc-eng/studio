@@ -13,7 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 def view_reports(request, owner, repo):
-    reports = Report.objects.all()
+    reports = Report.objects.filter(repo=f"{owner}/{repo}").all()
+    # Sorted by creation date
+    reports = sorted(reports, key=lambda x: x.created_at, reverse=True)
     return render(request, "list_reports.html", {
         "reports": reports,
         "repos": list_repos_by_owner(),
@@ -29,8 +31,8 @@ def generate_report(request, owner, repo):
     prompt = request.POST.get('prompt')
     title = request.POST.get('title')  # Get the title from the form
     engine = ArcaneEngine()
-    task = engine.create_task(f"{owner}/{repo}", GENERATE_REPORT.format(report_description=prompt))
-    report = Report.objects.create(prompt=prompt, task_id=task.id, title=title)  # Save the title
+    task = engine.create_task(f"{owner}/{repo}", GENERATE_REPORT.format(report_description=prompt, title=title))
+    report = Report.objects.create(prompt=prompt, task_id=task.id, title=title, repo=f"{owner}/{repo}")
     return redirect(reverse('view_report', args=(owner, repo, report.id,)))
 
 
@@ -57,5 +59,5 @@ def view_report(request, owner, repo, report_id):
             "repo_owner": owner,
             "repo_name": repo,
             "selected_repo": task.github_project,
-            "active_tab": "tasks",
+            "active_tab": "reports",
         })

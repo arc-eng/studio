@@ -48,6 +48,8 @@
                                     {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
                                 {% elif active_tab == "pull-request-manager" %}
                                     {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                {% elif active_tab == "reports" %}
+                                    {% url 'view_reports' owner=owner repo=repo.name as repo_link %}
                                 {% else %}
                                     {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
                                 {% endif %}

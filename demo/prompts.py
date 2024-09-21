@@ -40,6 +40,8 @@ I want to generate a report for the repository. This report should include the f
 
 {report_description}
 
+It should be called "{title}".
+
 Do the following:
 
 1. Use your capabilities to find the required information.

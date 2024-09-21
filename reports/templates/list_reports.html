@@ -38,7 +38,7 @@
                                 <span class="icon">
                                     <i class="fas fa-file-alt"></i>
                                 </span>
-                                <span>Report {{ report.id }}</span>
+                                <span>{{ report.title }}</span>
                             </a>
                         </td>
                     </tr>
@@ -51,14 +51,20 @@
         <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
             {% csrf_token %}
             <div class="field">
-                <label class="label">Describe what your report should look like</label>
+                <label class="label">Title</label>
+                <div class="control">
+                    <input class="input" type="text" name="title" placeholder="Deployment Config Analysis">
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Instructions</label>
                 <div class="control">
                     <textarea class="textarea is-medium" name="prompt" placeholder="List the root directory, read all files related to CI/CD and report how this repo does deployments."></textarea>
                 </div>
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <button type="submit" class="button is-link">
+                    <button type="submit" class="button is-link" id="generate-button">
                         <span class="icon"><i class="fa fa-plus"></i></span>
                         <span>Generate Report</span>
                     </button>
@@ -66,4 +72,11 @@
             </div>
         </form>
     </div>
+    <script>
+    $(document).ready(function() {
+        $('#generate-button').click(function() {
+            $(this).addClass('is-loading');
+        });
+    });
+    </script>
 {% endblock %}
