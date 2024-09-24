@@ -1,0 +1,16 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Select a Repository in {{ org_name }}</h1>
+  <ul>
+    {% for repo in repos %}
+      <li>
+        {{ repo.name }}
+        <form action="{% url 'repositories:bookmark_repo' org_name repo.name %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Bookmark</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
