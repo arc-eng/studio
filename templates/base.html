@@ -55,7 +55,40 @@
 
 <div class="container">
 
+    <div class="columns">
+        <nav class="level p-5">
+            <p class="level-item has-text-centered">
+                <a class="button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}}" href="/">
+                    <span class="icon"><i class="fas fa-home"></i></span>
+                </a>
+            </p>
+            <p class="level-item has-text-centered">
+                {% url 'list_tasks' owner=repo_owner repo=repo_name as task_url %}
+                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "tasks" %}is-link is-static{% endif %}"
+                   href="{{ task_url }}">
+                    <span class="icon"><i class="fas fa-gears"></i></span>
+                    <span>Tasks</span>
+                </a>
+            </p>
+            <p class="level-item has-text-centered">
+                {% url 'view_pull_requests' owner=repo_owner repo=repo_name as view_pull_requests_url %}
+                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
+                   href="{{ view_pull_requests_url }}">
+                    <span class="icon"><i class="fas fa-code-branch"></i></span>
+                    <span>Pull Requests</span>
+                </a>
+            </p>
+            <p class="level-item has-text-centered">
+                {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
+                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "reports" %}is-link is-static{% endif %}"
+                   href="{{ view_reports_url }}">
+                    <span class="icon"><i class="fas fa-file-alt"></i></span>
+                    <span>Reports</span>
+                </a>
+            </p>
 
+        </nav>
+    </div>
     {% block content %}{% endblock %}
 </div>
 <footer class="footer">

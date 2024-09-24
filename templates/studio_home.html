@@ -5,52 +5,50 @@
 
 {% block repo_content %}
     <section class="is-medium">
-        <p class="title is-1 has-text-centered">
+        <p class="title is-1">
             Arcane Studio
         </p>
-        <p class="subtitle is-3 has-text-centered">
+        <p class="subtitle is-3">
             Smart productivity tools and automations for development teams
         </p>
 
     </section>
-    <article class="m-5">
-        <div class="is-size-5">
+    <section class="is-medium mt-5">
+        <div class="content">
+            <p class="title is-4">
+                TL;DR
+            <p class="is-size-5">
+                This application is a collection of productivity-boosting tools built on top of the
+                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a>. The engine takes
+                natural language instructions (Tasks) and executes them on your behalf using its capabilities,
+                which include:
+            </p>
 
-            <div class="content p-3">
-                <p class="title is-4">
-                    TL;DR
-                <p>
-                    This application is a collection of productivity-boosting tools built on top of the
-                    <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a>. The engine takes
-                    natural language instructions (Tasks) and executes them on your behalf using its capabilities,
-                    which include:
-                </p>
+            <ul class="is-size-5">
+                <li>Reading, writing and editing code</li>
+                <li>Interacting with issues, tickets, wikis, etc via <a href="https://docs.pr-pilot.ai/integrations.html">Integrations</a></li>
+                <li>Searching the internet and scraping websites</li>
+            </ul>
+            <p class="p-5">
+                <a class="button is-large is-rounded" href="#">Get Started</a>
+            </p>
 
-                <ul>
-                    <li>Reading, writing and editing code</li>
-                    <li>Interacting with issues, tickets, wikis, etc via <a href="https://docs.pr-pilot.ai/integrations.html">Integrations</a></li>
-                    <li>Searching the internet and scraping websites</li>
-                </ul>
-                <p class="title is-4">
-                    Select a repository on the left to get started!
-                </p>
+            <p class="is-size-5">
+                The entire suite is free and <a href="https://github.com/arc-eng/demo" target="_blank">open-source</a>, and we welcome contributions from the community.
 
-                <p class="">
-
-                    The entire suite is free and <a href="https://github.com/arc-eng/demo" target="_blank">open-source</a>, and we welcome contributions from the community.
-
-                    If you're interested in building a tool like this for your own team, check out our <a href="https://arcane.engineer/development-kit" target="_blank" class="has-font-weight-medium">Development Kit</a>
-                    and <a href="https://docs.pr-pilot.ai/user_guide.html#command-line-interface" target="_blank" class="has-font-weight-medium">CLI</a>.
-                </p>
-
+                If you're interested in building a tool like this for your own team, check out our <a href="https://arcane.engineer/development-kit" target="_blank" class="has-font-weight-medium">Development Kit</a>
+                and <a href="https://docs.pr-pilot.ai/user_guide.html#command-line-interface" target="_blank" class="has-font-weight-medium">CLI</a>.
+            </p>
+            <p class="is-size-5">
                 To give you an idea of what the engine can do for you, here are some examples from our <a href="https://arcane.engineer/labs/" target="_blank">Lab</a>:
-                <ul>
-                    <li><i class="fa fa-file-code"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/">Read Helm chart and build scripts to generate docker-compose file</a></li>
-                    <li><i class="fa fa-code-branch"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/">Break down a large module into smaller ones in seconds</a></li>
-                    <li><i class="fa fa-book"></i> <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/">Scrape project to generate beautiful README file</a></li>
-                </ul>
-            </div>
+            </p>
+
+            <ul class="is-size-5">
+                <li><i class="fa fa-file-code"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/">Read Helm chart and build scripts to generate docker-compose file</a></li>
+                <li><i class="fa fa-code-branch"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/">Break down a large module into smaller ones in seconds</a></li>
+                <li><i class="fa fa-book"></i> <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/">Scrape project to generate beautiful README file</a></li>
+            </ul>
         </div>
-    </article>
+    </section>
 
 {% endblock %}

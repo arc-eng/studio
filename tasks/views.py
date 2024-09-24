@@ -41,5 +41,13 @@ def create_task(request, owner, repo):
         if not task_description:
             raise ValueError("Task description is required.")
         else:
-            task = ArcaneEngine().create_task(f"{owner}/{repo}", task_description)
+            try:
+                task = ArcaneEngine().create_task(f"{owner}/{repo}", task_description)
+            except Exception as e:
+                msg = str(e)
+                if e.data and e.data.error:
+                    msg = e.data.error
+                return render(request, "error.html", {
+                    "error": f"Failed to create task: {msg}",
+                })
             return redirect('view_task', owner=owner, repo=repo, task_id=task.id)
