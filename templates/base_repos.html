@@ -4,42 +4,46 @@
 
     <div class="columns">
         <div class="column is-one-fifth">
+{##}
+{#            <div class="content has-text-weight-light">#}
+{#            Repositories#}
+{#            </div>#}
 
             <aside class="menu">
-                {% for owner, owner_repos in repos.items %}
+                {% for owner, repos in bookmarked_repos.items %}
                     <p class="menu-label">
                         <span class="icon"><i class="fas fa-user"></i></span>
                         <span>{{ owner }}</span>
                     </p>
                     <ul class="menu-list">
-                        {% for repo in owner_repos %}
+                        {% for bookmark in repos %}
                             <li class="repo-menu-item">
                                 {% if active_tab == "tasks" %}
-                                    {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
+                                    {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                                 {% elif active_tab == "pull-request-manager" %}
-                                    {% url 'view_pull_requests' owner=owner repo=repo.name as repo_link %}
+                                    {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                                 {% elif active_tab == "reports" %}
-                                    {% url 'view_reports' owner=owner repo=repo.name as repo_link %}
+                                    {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                                 {% else %}
-                                    {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
+                                    {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                                 {% endif %}
-                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="{{ repo_link }}">
+                                
+                                <a class="{% if bookmark.full_name == selected_repo %}is-active is-light{% endif %}" href="{{ repo_link }}">
                                     <span class="icon"><i class="fab fa-github"></i></span>
-                                    <span>{{ repo.name }}</span>
+                                    <span>{{ bookmark.repo_name }}</span>
                                 </a>
                             </li>
                         {% endfor %}
                     </ul>
                 {% endfor %}
             </aside>
-        <div class="mt-3">
-            <a class="button is-rounded is-small is-dark" href="#">
+        <div class="mt-5">
+            <a class="button is-rounded is-light is-small is-page-loader is-flex" href="{% url 'repositories:show_repo_picker' %}">
                 <span class="icon"><i class="fas fa-plus"></i></span>
-                <span>Add Repo</span>
             </a>
         </div>
         </div>
-        <div class="column">
+        <div class="column ml-3">
 
             {% block repo_content %}
 

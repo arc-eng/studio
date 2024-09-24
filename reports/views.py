@@ -1,12 +1,12 @@
 import logging
 
 from arcane.engine import ArcaneEngine
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from demo.github import list_repos_by_owner
-from demo.prompts import GENERATE_REPORT
+from repositories.views import render_with_repositories
+from studio.prompts import GENERATE_REPORT
 from .models import Report
 
 logger = logging.getLogger(__name__)
@@ -16,14 +16,10 @@ def view_reports(request, owner, repo):
     reports = Report.objects.filter(repo=f"{owner}/{repo}").all()
     # Sorted by creation date
     reports = sorted(reports, key=lambda x: x.created_at, reverse=True)
-    return render(request, "list_reports.html", {
+    return render_with_repositories(request, "list_reports.html", {
         "reports": reports,
-        "repos": list_repos_by_owner(),
-        "repo_owner": owner,
-        "repo_name": repo,
-        "selected_repo": f"{owner}/{repo}",
         "active_tab": "reports",
-    })
+    }, owner, repo)
 
 
 @require_POST
@@ -43,21 +39,13 @@ def view_report(request, owner, repo, report_id):
     if task.status == "completed":
         report.result = task.result
         report.save()
-        return render(request, "view_report.html", {
+        return render_with_repositories(request, "view_report.html", {
             "report": report,
-            "repos": list_repos_by_owner(),
             "task": task,
-            "repo_owner": owner,
-            "repo_name": repo,
-            "selected_repo": f"{owner}/{repo}",
             "active_tab": "reports",
-        })
+        }, owner, repo)
     else:
-        return render(request, "view_task.html", {
-            "repos": list_repos_by_owner(),
+        return render_with_repositories(request, "view_task.html", {
             "task": task,
-            "repo_owner": owner,
-            "repo_name": repo,
-            "selected_repo": task.github_project,
             "active_tab": "reports",
-        })
+        }, owner, repo)

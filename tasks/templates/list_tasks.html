@@ -34,6 +34,9 @@
                         {% elif task.status == 'scheduled' or task.status == "running" %}
                             <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
                         {% endif %}
+                        <span class="has-font-weight-light is-family-monospace is-size-7">
+                            {{ task.created | timesince }}
+                        </span>
                     </td>
                     <td>
                         <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
@@ -41,16 +44,11 @@
                         </a>
                     </td>
                     <td>
-                        <a class="" href="https://github.com/{{ task.github_user }} " target="_blank">
+                        <a class="button is-small" href="https://github.com/{{ task.github_user }} " target="_blank">
                             <span class="icon is-dark"><i class="fab fa-github"></i></span>
                             <span>{{ task.github_user }}</span>
                         </a>
-                    <td>
-                        <span class="has-font-weight-light is-family-monospace is-size-6">
-                            {{ task.created | timesince }}
-                        </span>
                     </td>
-
                 </tr>
             {% endfor %}
         </tbody>
@@ -58,7 +56,7 @@
 </div>
 
 {% else %}
-<div class="has-text-centered">
+<div class="">
     <p class="content is-size-5 has-text-weight-light py-5">
         No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
     </p>
