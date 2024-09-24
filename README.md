@@ -1,11 +1,11 @@
-# Demo Application to Showcase the Arcane Dev Kit
+# Arcane Studio - Demo Application to Showcase the Arcane Dev Kit
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![Django](https://img.shields.io/badge/Django-3.2%2B-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ## 📋 Project Description
-This is a demo project to showcase the capabilities of the Arcane Engine, a platform that enables developers to create powerful tools and automations for their teams.
+Arcane Studio is a collection of productivity-boosting tools built on top of the Arcane Engine. The engine takes natural language instructions (Tasks) and executes them on the users' behalf using its capabilities, which include reading, writing, and editing code and interacting with issues, tickets, wikis, etc via integrations.
 
 ## 🛠️ Tech Stack
 - **Backend**: Python and Django
@@ -14,14 +14,14 @@ This is a demo project to showcase the capabilities of the Arcane Engine, a plat
 ## 📂 Project Structure
 
 ### Pull Request Manager
-A simple demo that lists all PRs of all repos you have access to on Github and lets you generate PR descriptions in seconds.
+Lists all open PRs of all repos you have access to on Github and lets you generate PR descriptions in seconds.
 - **Code**: `pr_manager/`
 - **Template**: `pr_manager/templates/index.html`
 - **Views**: `pr_manager/views.py`
 - **URLs**: `pr_manager/urls.py`
 
 ### Tasks Manager
-A simple demo that lists all tasks of all repos you have access to on Github and lets you create new tasks.
+Lists previous tasks and lets you create new tasks.
 - **Code**: `tasks/`
 - **Templates**: `tasks/templates/`
 - **Views**: `tasks/views.py`
