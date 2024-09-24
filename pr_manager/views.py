@@ -9,8 +9,8 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from github import Github
 
-from demo.github import get_prs, get_user_repos, list_repos_by_owner
-from demo.prompts import PR_DESCRIPTION
+from studio.github import get_prs, get_user_repos, list_repos_by_owner
+from studio.prompts import PR_DESCRIPTION
 
 g = Github(settings.GITHUB_PAT)
 logger = logging.getLogger(__name__)

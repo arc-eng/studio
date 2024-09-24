@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
-from demo.github import list_repos_by_owner
-from demo.prompts import GENERATE_REPORT
+from studio.github import list_repos_by_owner
+from studio.prompts import GENERATE_REPORT
 from .models import Report
 
 logger = logging.getLogger(__name__)

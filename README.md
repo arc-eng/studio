@@ -44,11 +44,11 @@ Lets users generate reports based on prompts.
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/arc-eng/demo.git
+   git clone https://github.com/arc-eng/studio.git
    ```
 2. Navigate to the project directory:
    ```sh
-   cd demo
+   cd studio
    ```
 3. Install the dependencies:
    ```sh

@@ -3,7 +3,7 @@ from arcane.engine import ArcaneEngine
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
-from demo.github import list_repos_by_owner
+from studio.github import list_repos_by_owner
 
 
 def view_task(request, owner, repo, task_id):

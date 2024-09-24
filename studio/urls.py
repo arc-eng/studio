@@ -1,5 +1,5 @@
 """
-URL configuration for demo project.
+URL configuration for studio project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 
 import tasks.views
-from demo import views
+from studio import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
     path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
-    path("", views.suite_overview, name="suite_overview"),
+    path("", views.studio_home, name="studio_home"),
 ]

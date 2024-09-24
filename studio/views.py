@@ -1,9 +1,9 @@
 from django.shortcuts import render
 
-from demo.github import list_repos_by_owner, get_cached_user
+from studio.github import list_repos_by_owner, get_cached_user
 
 
-def suite_overview(request, owner=None, repo=None):
+def studio_home(request, owner=None, repo=None):
     repos_by_owner = list_repos_by_owner()
     return render(request, "studio_home.html", {
         "repos": repos_by_owner,
