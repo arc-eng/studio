@@ -20,9 +20,30 @@
 
 {% include 'app_header.html' with title="Tasks" subtitle="View all tasks created for this repo and quickly create new ones" %}
 
+<!-- New Task Form -->
+<div class="content px-4">
+    <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
+        {% csrf_token %}
+        <div class="field">
+            <label class="label">Prompt (<a href="https://arcane.engineer/labs/" target="_blank">examples</a>) </label>
+            <div class="control">
+                <textarea class="textarea" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
+            </div>
+        </div>
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-link is-small" type="submit" id="generate-button">
+                    <span class="icon"><i class="fa fa-plus"></i></span>
+                    <span>Create Task for <span class="is-family-monospace has-text-weight-semibold has-text-light">{{ repo_name }}</span></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
 {%  if tasks %}
-<div class="table-container my-5">
-    <table class="table is-fullwidth is-hoverable">
+<div class="table-container">
+    <table class="table is-fullwidth is-hoverable is-rounded is-striped">
         <tbody>
             {% for task in tasks %}
                 <tr>
@@ -56,32 +77,13 @@
 </div>
 
 {% else %}
-<div class="">
-    <p class="content is-size-5 has-text-weight-light py-5">
+<div class="p-4">
+    <p class="content has-text-weight-light">
         No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
     </p>
 </div>
 {% endif %}
-<!-- New Task Form -->
-<div class="content">
-    <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
-        {% csrf_token %}
-        <div class="field">
-            <label class="label">Step-by-step instructions (<a href="https://arcane.engineer/labs/" target="_blank">examples</a>) </label>
-            <div class="control">
-                <textarea class="textarea is-medium" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
-            </div>
-        </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-link" type="submit" id="generate-button">
-                    <span class="icon"><i class="fa fa-plus"></i></span>
-                    <span>Create Task for <span class="is-family-monospace has-text-weight-semibold has-text-light">{{ repo_name }}</span></span>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+
 <script>
     $(document).ready(function() {
         $('#generate-button').click(function() {

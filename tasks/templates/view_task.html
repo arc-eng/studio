@@ -18,18 +18,20 @@
 
 {% block repo_content %}
 
-    <nav class="breadcrumb" aria-label="breadcrumbs">
-      <ul>
-        <li>
-          <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
+    <div class="p-4">
+
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li>
+                    <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
             <span class="icon is-small">
               <i class="fas fa-gears" aria-hidden="true"></i>
             </span>
-            <span>Tasks</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
+                        <span>Tasks</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
             <span class="icon is-small">
                 {% if task.status == "running" or task.status == "scheduled" %}
                     <i class="fas fa-rotate fa-spin"></i>
@@ -40,36 +42,40 @@
                 {% endif %}
 
             </span>
-            <span id="breadcrumb-title">{{ task.title }}</span>
-          </a>
-        </li>
+                        <span id="breadcrumb-title">{{ task.title }}</span>
+                    </a>
+                </li>
 
-      </ul>
-    </nav>
+            </ul>
+        </nav>
 
 
-    <div>
-        {% if task.pr_number %}
-            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button">
-                <span class="icon is-small"><i class="fab fa-github"></i></span> <span>View Pull Request</span>
+        <div>
+            <a href="https://app.pr-pilot.ai/dashboard/tasks/{{ task.id }}/" target="_blank" class="button">
+                <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
+            </a>
+            {% if task.pr_number %}
+            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-dark">
+                <span class="icon is-small"><i class="fab fa-github"></i></span> <span>Open PR</span>
             </a>
 
-        {% endif %}
-    </div>
+            {% endif %}
+
+        </div>
 
 
 
-    {%  if task.status == "completed" %}
-        <div class="content box is-size-6 mt-5">
+        {%  if task.status == "completed" %}
+        <div class="content mt-5">
 
 
             <div class="is-family-monospace p-3">
-            {{ task.result | safe }}
+                {{ task.result | safe }}
             </div>
         </div>
-    {% endif %}
+        {% endif %}
 
-    {% if task.status == "failed" %}
+        {% if task.status == "failed" %}
         <div class="content is-size-5 has-text-weight-light p-5 has-text-centered">
             The agent <b class="has-text-danger">{{ task.status }}</b> the task and responded:
         </div>
@@ -78,42 +84,42 @@
 
         </div>
 
+        {% endif %}
 
 
-    {% endif %}
+        {% if task.status == "scheduled" or task.status == "running" %}
+        <div class="content box mt-5">
 
-
-    {% if task.status == "scheduled" or task.status == "running" %}
-    <div class="content box mt-5">
-
-        <!-- Render task events using BulmaCSS Table -->
-        <div class="table-container">
-            <table class="table is-fullwidth">
-                <tbody>
+            <!-- Render task events using BulmaCSS Table -->
+            <div class="table-container">
+                <table class="table is-fullwidth">
+                    <tbody>
                     <tr>
                         <td><span id="second-counter" class="has-text-weight-light"></span></td>
                         <td><progress class="progress is-secondary is-small mt-2" max="100">15%</progress></td>
                         <td class="is-family-monospace is-blinking" id="task-progress-indicator-text"></td>
                     </tr>
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
-    </div>
-
-    {% endif %}
+        {% endif %}
 
 
-    <div class="content is-scrollable">
-        <p class="is-size-6 has-text-weight-light">
-            <span class="icon is-small"><i class="fab fa-github"></i></span> <b class="has-text-grey-dark">Instructions</b>
+        <div class="content is-scrollable pt-5">
+            <p class="is-size-6 has-text-weight-light">
+                <span class="icon is-small"><i class="fab fa-github"></i></span> <b class="has-text-grey-dark">Instructions</b>
 
-        </p>
-        <div class="is-size-7 is-family-monospace">
-            {{ task.user_request | safe}}
+            </p>
+            <div class="is-size-7 is-family-monospace">
+                {{ task.user_request | safe}}
+            </div>
+
         </div>
-
     </div>
+
 
     <script>
         $(document).ready(function() {

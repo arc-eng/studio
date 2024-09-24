@@ -3,13 +3,9 @@
 {% block content %}
 
     <div class="columns">
-        <div class="column is-one-fifth">
-{##}
-{#            <div class="content has-text-weight-light">#}
-{#            Repositories#}
-{#            </div>#}
+        <div class="column is-one-fifth has-background-light">
 
-            <aside class="menu">
+            <aside class="menu ml-2">
                 {% for owner, repos in bookmarked_repos.items %}
                     <p class="menu-label">
                         <span class="icon"><i class="fas fa-user"></i></span>
@@ -28,7 +24,7 @@
                                     {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                                 {% endif %}
                                 
-                                <a class="{% if bookmark.full_name == selected_repo %}is-active is-light{% endif %}" href="{{ repo_link }}">
+                                <a class="{% if bookmark.full_name == selected_repo %}is-active is-light{% else %}has-no-background{% endif %}" href="{{ repo_link }}">
                                     <span class="icon"><i class="fab fa-github"></i></span>
                                     <span>{{ bookmark.repo_name }}</span>
                                 </a>
@@ -37,13 +33,13 @@
                     </ul>
                 {% endfor %}
             </aside>
-        <div class="mt-5">
+        <div class=" p-4">
             <a class="button is-rounded is-light is-small is-page-loader is-flex" href="{% url 'repositories:show_repo_picker' %}">
                 <span class="icon"><i class="fas fa-plus"></i></span>
             </a>
         </div>
         </div>
-        <div class="column ml-3">
+        <div class="column has-background-white tiny-rounded p-0">
 
             {% block repo_content %}
 

@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block repo_content %}
-    <section class="is-medium">
+    <section class="is-medium p-5">
         <p class="title is-1">
             Arcane Studio
         </p>
@@ -13,7 +13,7 @@
         </p>
 
     </section>
-    <section class="is-medium mt-5">
+    <section class="is-medium mt-5 p-5">
         <div class="content">
             <p class="title is-4">
                 TL;DR
@@ -30,7 +30,7 @@
                 <li>Searching the internet and scraping websites</li>
             </ul>
             <p class="p-5">
-                <a class="button is-large is-rounded" href="#">Get Started</a>
+                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:show_repo_picker' %}">Get Started</a>
             </p>
         </div>
     </section>

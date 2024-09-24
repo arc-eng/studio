@@ -40,6 +40,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <style>
+        .tiny-rounded {
+            border: 1px solid rgb(228, 228, 228); /* Thin grey border */
+            border-radius: 5px;     /* Small rounded corners */
+        }
+        .has-no-background {
+            background-color: transparent !important;
+        }
+
         {% block css %}
         {% endblock %}
 
@@ -53,10 +61,10 @@
         });
     </script>
 </head>
-<body>
+<body class="has-background-light">
 
 
-<div class="container">
+<div>
 
     <div class="columns">
         <nav class="level p-5">
@@ -91,7 +99,7 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'contribute' as contribute_url %}
-                <a class="is-page-loader button is-rounded is-small  {% if active_tab == "contribute" %}is-static{% else %}is-light is-success{% endif %}"
+                <a class="is-page-loader button is-rounded is-small  {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
                    href="{{ contribute_url }}">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                 </a>
@@ -99,10 +107,12 @@
 
         </nav>
     </div>
-    {% block content %}{% endblock %}
+    <div class="has-background-white">
+        {% block content %}{% endblock %}
+    </div>
 
 </div>
-<footer class="footer">
+<footer class="footer has-background-light">
     <div class="content has-text-centered">
         <p>
             Made with <span class="icon has-text-danger"><i class="fa fa-heart"></i> </span> by <a href="https://arcane.engineer" target="_blank">Arcane Engineering</a>.

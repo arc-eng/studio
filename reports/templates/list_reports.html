@@ -17,7 +17,7 @@
     {% include 'app_header.html' with title="Reports" subtitle="Generate beautiful reports in seconds" %}
 
     <div class="table-container">
-        <table class="table is-fullwidth is-hoverable is-size-5">
+        <table class="table is-fullwidth is-hoverable is-size-5 is-striped">
             <tbody>
                 {% for report in reports %}
                     <tr>
@@ -40,19 +40,19 @@
         </table>
     </div>
 
-    <div class="content">
+    <div class="content p-4">
         <form method="post" action="{% url 'generate_report' owner=repo_owner repo=repo_name %}">
             {% csrf_token %}
             <div class="field">
                 <label class="label">Title</label>
                 <div class="control">
-                    <input class="input is-medium" type="text" name="title" placeholder="Bug report for issue #254">
+                    <input class="input" type="text" name="title" placeholder="Bug report for issue #254">
                 </div>
             </div>
             <div class="field">
                 <label class="label">Description of the Report and additional instructions</label>
                 <div class="control">
-                    <textarea class="textarea is-medium" name="prompt" placeholder="Read Github issue #254, find and read relevant code files and create a comprehensive bug report with details like how to reproduce the issue, expected results, etc"></textarea>
+                    <textarea class="textarea" name="prompt" placeholder="Read Github issue #254, find and read relevant code files and create a comprehensive bug report with details like how to reproduce the issue, expected results, etc"></textarea>
                 </div>
             </div>
             <div class="field is-grouped">
