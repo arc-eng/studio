@@ -47,6 +47,9 @@
 
     <script>
         $(document).ready(function() {
+            $('.is-page-loader').click(function() {
+                $(this).addClass('is-loading').attr('disabled', 'disabled');
+            });
         });
     </script>
 </head>
@@ -58,13 +61,13 @@
     <div class="columns">
         <nav class="level p-5">
             <p class="level-item has-text-centered">
-                <a class="button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}}" href="/">
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}}" href="/">
                     <span class="icon"><i class="fas fa-home"></i></span>
                 </a>
             </p>
             <p class="level-item has-text-centered">
                 {% url 'list_tasks' owner=repo_owner repo=repo_name as task_url %}
-                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "tasks" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "tasks" %}is-link is-static{% endif %}"
                    href="{{ task_url }}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
@@ -72,7 +75,7 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'view_pull_requests' owner=repo_owner repo=repo_name as view_pull_requests_url %}
-                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
                    href="{{ view_pull_requests_url }}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
@@ -80,16 +83,24 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
-                <a class="button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "reports" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "reports" %}is-link is-static{% endif %}"
                    href="{{ view_reports_url }}">
                     <span class="icon"><i class="fas fa-file-alt"></i></span>
                     <span>Reports</span>
+                </a>
+            </p>
+            <p class="level-item has-text-centered">
+                {% url 'contribute' as contribute_url %}
+                <a class="is-page-loader button is-rounded is-small  {% if active_tab == "contribute" %}is-static{% else %}is-light is-success{% endif %}"
+                   href="{{ contribute_url }}">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
                 </a>
             </p>
 
         </nav>
     </div>
     {% block content %}{% endblock %}
+
 </div>
 <footer class="footer">
     <div class="content has-text-centered">

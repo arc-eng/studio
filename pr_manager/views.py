@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 from github import Github
 
+from repositories.views import render_with_repositories
 from studio.github import get_prs, get_user_repos, list_repos_by_owner
 from studio.prompts import PR_DESCRIPTION
 
@@ -17,19 +18,14 @@ logger = logging.getLogger(__name__)
 
 
 def view_pull_requests(request, owner=None, repo=None):
-    repos_by_owner = list_repos_by_owner()
     if not owner or not repo:
         prs = []
     else:
         prs = get_prs(f"{owner}/{repo}")
-    return render(request, "index.html", {
-        "repos": repos_by_owner,
+    return render_with_repositories(request, "index.html", {
         "prs": prs,
-        "repo_owner": owner,
-        "repo_name": repo,
-        "selected_repo": f"{owner}/{repo}",
         "active_tab": "pull-request-manager",
-    })
+    }, owner, repo)
 
 
 @require_POST

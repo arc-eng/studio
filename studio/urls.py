@@ -25,5 +25,7 @@ urlpatterns = [
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
     path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
+    path("repositories/", include("repositories.urls")),
     path("", views.studio_home, name="studio_home"),
+    path("contribute/", views.contribute, name="contribute"),
 ]
