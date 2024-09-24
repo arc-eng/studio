@@ -48,7 +48,7 @@
     </nav>
 
 
-    <div class="has-text-centered">
+    <div>
         {% if task.pr_number %}
             <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button">
                 <span class="icon is-small"><i class="fab fa-github"></i></span> <span>View Pull Request</span>
@@ -105,11 +105,11 @@
 
 
     <div class="content is-scrollable">
-        <p class="is-size-6 has-text-weight-light has-text-centered">
+        <p class="is-size-6 has-text-weight-light">
             <span class="icon is-small"><i class="fab fa-github"></i></span> <b class="has-text-grey-dark">Instructions</b>
 
         </p>
-        <div class="is-size-7 is-family-monospace p-3">
+        <div class="is-size-7 is-family-monospace">
             {{ task.user_request | safe}}
         </div>
 
