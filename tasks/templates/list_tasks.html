@@ -17,24 +17,16 @@
 {% endblock %}
 
 {% block repo_content %}
-<div class="p-3">
-    <h3 class="title is-3">
-        <span class="icon"><i class="fa-solid fa-gears"></i></span>
-        <span>Tasks</span>
-    </h3>
 
-    <p class="content is-size-5 has-text-weight-light">
-        View and create tasks for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
-    </p>
-</div>
+{% include 'app_header.html' with title="Tasks" subtitle="View all tasks created for this repo and quickly create new ones" %}
 
-
-<div class="table-container p-3">
-    <table class="table is-fullwidth is-hoverable is-size-5">
+{%  if tasks %}
+<div class="table-container my-5">
+    <table class="table is-fullwidth is-hoverable">
         <tbody>
             {% for task in tasks %}
                 <tr>
-                    <td>
+                    <td class=" is-narrow">
                         {% if task.status == 'completed' %}
                             <span class="icon has-text-success"><i class="fa fa-square-check"></i></span>
                         {% elif task.status == 'failed' %}
@@ -42,6 +34,11 @@
                         {% elif task.status == 'scheduled' or task.status == "running" %}
                             <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
                         {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
+                            {{ task.title }}
+                        </a>
                     </td>
                     <td>
                         <a class="" href="https://github.com/{{ task.github_user }} " target="_blank">
@@ -53,23 +50,26 @@
                             {{ task.created | timesince }}
                         </span>
                     </td>
-                    <td>
-                        <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
-                            {{ task.title }}
-                        </a>
-                    </td>
+
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
 
+{% else %}
+<div class="">
+    <p class="content is-size-5 has-text-weight-light py-5">
+        No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
+    </p>
+</div>
+{% endif %}
 <!-- New Task Form -->
-<div class="content px-5">
+<div class="content">
     <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
         {% csrf_token %}
         <div class="field">
-            <label class="label">Detailed step-by-step instructions (<a href="https://arcane.engineer/labs/" target="_blank">examples</a>) </label>
+            <label class="label">Step-by-step instructions (<a href="https://arcane.engineer/labs/" target="_blank">examples</a>) </label>
             <div class="control">
                 <textarea class="textarea is-medium" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
             </div>

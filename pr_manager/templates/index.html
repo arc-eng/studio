@@ -4,16 +4,8 @@
 
 
 {% block repo_content %}
-    <div class="p-3">
-        <h3 class="title is-3">
-            <span class="icon"><i class="fas fa-code-branch"></i></span>
-            <span>Pull Requests</span>
-        </h3>
-
-        <p class="content is-size-5 has-text-weight-light">
-            Generate PR descriptions for <a href="https://github.com/{{ selected_repo }}" class="is-family-monospace" target="_blank">{{ selected_repo }}</a>
-        </p>
-    </div>
+    {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
+    {% if prs %}
     <div class="">
         <div class="column is-narrow">
             <ul class="is-centered">
@@ -40,6 +32,13 @@
             </ul>
         </div>
     </div>
+    {% else %}
+    <div class="">
+        <p class="content is-size-5 has-text-weight-light py-5">
+            No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
+        </p>
+    </div>
+    {% endif %}
     <script>
         $(document).ready(function() {
             $('.generate-button').click(function() {

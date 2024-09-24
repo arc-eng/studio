@@ -1,4 +1,5 @@
 import logging
+import re
 
 from django.conf import settings
 from django.core.cache import cache
@@ -6,6 +7,10 @@ from github import Github
 
 g = Github(settings.GITHUB_PAT)
 logger = logging.getLogger(__name__)
+
+
+# Regular expression to match owner and repo
+pattern = r'https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/commit\/[^\/]+'
 
 
 def get_prs(repo_name):
@@ -49,10 +54,28 @@ def get_user_repos():
         logger.info("Returning cached user repos")
         return cached_repos
 
-    starred_repos = user.get_starred()
-    logger.info(f"Found {starred_repos.totalCount} starred repos for user {user.login}")
-    cache.set(f'user_repos_{user.login}', starred_repos, timeout=3600)
-    return starred_repos
+    search_query = f"author:{user.login}"
+    commit_results = g.search_commits(query=search_query, sort="author-date", order="desc")
+
+    # Store the last 5 unique repositories where you made commits
+    recent_repos = set()
+    for commit in commit_results:
+        # Perform the regex search
+        match = re.search(pattern, commit.html_url)
+        if match:
+            owner = match.group(1)
+            repo = match.group(2)
+            repo_name = f"{owner}/{repo}"
+        else:
+            raise ValueError(f"Failed to match regex for {commit.html_url}")
+        if repo_name not in [repo.full_name for repo in recent_repos]:
+            logger.info(f"Found repo {repo_name}")
+            recent_repos.add(g.get_repo(repo_name))
+        if len(recent_repos) == 5:
+            break
+    logger.info(f"Found {len(recent_repos)} repos for user {user.login}")
+    cache.set(f'user_repos_{user.login}', recent_repos, timeout=3600)
+    return recent_repos
 
 
 def list_repos_by_owner():

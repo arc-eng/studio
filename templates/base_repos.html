@@ -40,10 +40,13 @@
 
             <aside class="menu">
                 {% for owner, owner_repos in repos.items %}
-                    <p class="menu-label">{{ owner }}</p>
+                    <p class="menu-label">
+                        <span class="icon"><i class="fas fa-user"></i></span>
+                        <span>{{ owner }}</span>
+                    </p>
                     <ul class="menu-list">
                         {% for repo in owner_repos %}
-                            <li class="">
+                            <li class="repo-menu-item">
                                 {% if active_tab == "tasks" %}
                                     {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
                                 {% elif active_tab == "pull-request-manager" %}
@@ -53,12 +56,21 @@
                                 {% else %}
                                     {% url 'list_tasks' owner=owner repo=repo.name as repo_link %}
                                 {% endif %}
-                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="{{ repo_link }}">{{ repo.name }}</a>
+                                <a class="{% if repo.full_name == selected_repo %}is-active{% endif %}" href="{{ repo_link }}">
+                                    <span class="icon"><i class="fab fa-github"></i></span>
+                                    <span>{{ repo.name }}</span>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
                 {% endfor %}
             </aside>
+        <div class="mt-3">
+            <a class="button is-rounded is-small is-dark" href="#">
+                <span class="icon"><i class="fas fa-plus"></i></span>
+                <span>Add Repo</span>
+            </a>
+        </div>
         </div>
         <div class="column">
 
@@ -67,5 +79,12 @@
             {% endblock %}
         </div>
     </div>
+    <script>
+    $(document).ready(function() {
+        $('.repo-menu-item').click(function() {
+            $(this).addClass('is-unselectable').attr('disabled', 'disabled');
+        });
+    });
+    </script>
 
 {% endblock %}
