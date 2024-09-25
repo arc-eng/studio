@@ -5,6 +5,19 @@ FROM python:3.10-slim
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+
+# Install system dependencies required for uWSGI compilation
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libc6-dev \
+    libpcre3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update && \
+    apt-get install -y --only-upgrade openssl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set work directory
 WORKDIR /code
 
@@ -14,11 +27,14 @@ RUN pip install --no-cache-dir poetry \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev
 
+# uwsgi.ini configuration
+COPY uwsgi.ini /usr/src/app/uwsgi.ini
+
 # Copy project
 COPY . /code/
 
-# Expose the port the app runs on
+# Expose port 8000 for uwsgi
 EXPOSE 8000
 
-# Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run uwsgi
+CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "studio.asgi:application"]
