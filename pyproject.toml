@@ -13,6 +13,7 @@ django = "^5.1.1"
 arcane-engine = "^1.9.2"
 pygithub = "^2.4.0"
 markdown = "^3.7"
+django-allauth = "^65.0.1"
 
 
 [build-system]

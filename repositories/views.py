@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-
-from studio import settings
-from .models import BookmarkedRepo
 from github import Github
+
+from studio.github import get_github_token
+from .models import BookmarkedRepo
 
 PAGE_SIZE = 10
 
@@ -12,7 +11,7 @@ def show_repo_picker(request, org_name=None):
 
     page = int(request.GET.get('page', 1))
 
-    g = Github(settings.GITHUB_PAT, per_page=PAGE_SIZE)
+    g = Github(get_github_token(request), per_page=PAGE_SIZE)
     github_user = g.get_user()
     orgs = github_user.get_orgs()
 

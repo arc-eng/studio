@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block content %}
+    <div class="is-flex has-background-light is-justify-content-center">
+        <div class="content has-background-light p-4">
+            <p class="title is-2">
+                Login
+            </p>
+            <p class="subtitle is-4">
+                Connect your Github account
+            </p>
+            <p>
+                Arcane Studio needs the following permissions in order to work:
+            <ul>
+                <li><strong>Read User</strong> - Basic information from your user account</li>
+                <li><strong>Read Repos</strong> - Access repositories, tickets, pull requests</li>
+            </ul>
+            You can revoke these permissions at any time from your Github account settings.
+            </p>
+            {% element form method="post" no_visible_fields=True %}
+                {% slot actions %}
+                    {% csrf_token %}
+                    {% element button type="submit" class="button is-large" %}
+                        <span class="icon">
+                        <i class="fab fa-github"></i>
+                    </span>
+                        <span>Login with Github</span>
+                    {% endelement %}
+                {% endslot %}
+            {% endelement %}
+        </div>
+
+    </div>
+
+
+{% endblock content %}

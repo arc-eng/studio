@@ -3,32 +3,35 @@
 {%  block css %}
 {% endblock %}
 
-{% block repo_content %}
-<div class="container p-5">
-    <p class="title is-2">
-        Customize Arcane Studio
-    </p>
-    <p class="subtitle is-4">
-        Create your own, custom productivity tools and automations
-    </p>
-    <div class="content">
-        <p class="">
-            The entire suite is free and <a href="https://github.com/arc-eng/studio" target="_blank">open-source</a>, and we welcome contributions from the community.
+{% block content %}
+<div class="is-flex has-background-light is-justify-content-center">
 
-            If you're interested in building a tool like this for your own team, check out our <a href="https://arcane.engineer/development-kit" target="_blank" class="has-font-weight-medium">Development Kit</a>
-            and <a href="https://docs.pr-pilot.ai/user_guide.html#command-line-interface" target="_blank" class="has-font-weight-medium">CLI</a>.
+    <div class="content" style="width: 70%; text-align: left;">
+        <p class="title is-2">
+            Customize Arcane Studio
         </p>
-        <p>
-            To give you an idea of what the engine can do for you, here are some examples from our <a href="https://arcane.engineer/labs/" target="_blank">Lab</a>:
+        <p class="subtitle is-4">
+            Create your own, custom productivity tools and automations
         </p>
+        <div class="content">
+            <p class="">
+                The entire suite is free and <a href="https://github.com/arc-eng/studio" target="_blank">open-source</a>, and we welcome contributions from the community.
 
-        <ul>
-            <li><i class="fa fa-file-code"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/">Read Helm chart and build scripts to generate docker-compose file</a></li>
-            <li><i class="fa fa-code-branch"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/">Break down a large module into smaller ones in seconds</a></li>
-            <li><i class="fa fa-book"></i> <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/">Scrape project to generate beautiful README file</a></li>
-        </ul>
+                If you're interested in building a tool like this for your own team, check out our <a href="https://arcane.engineer/development-kit" target="_blank" class="has-font-weight-medium">Development Kit</a>
+                and <a href="https://docs.pr-pilot.ai/user_guide.html#command-line-interface" target="_blank" class="has-font-weight-medium">CLI</a>.
+            </p>
+            <p>
+                To give you an idea of what the engine can do for you, here are some examples from our <a href="https://arcane.engineer/labs/" target="_blank">Lab</a>:
+            </p>
+
+            <ul>
+                <li><i class="fa fa-file-code"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/">Read Helm chart and build scripts to generate docker-compose file</a></li>
+                <li><i class="fa fa-code-branch"></i> <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/">Break down a large module into smaller ones in seconds</a></li>
+                <li><i class="fa fa-book"></i> <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/">Scrape project to generate beautiful README file</a></li>
+            </ul>
+        </div>
+
     </div>
-
 </div>
 
 {% endblock %}

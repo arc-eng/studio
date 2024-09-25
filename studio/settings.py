@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-1*68x3rd)7dqf3vh)gneyj0&k_8t*!lur1-tk!1n3ybi@cq8rv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'helping-willing-seasnail.ngrok-free.app']
+CSRF_TRUSTED_ORIGINS = [
+    "https://helping-willing-seasnail.ngrok-free.app",
+    "https://arcane.engineer",
+]
 
 LOGGING = {
     "version": 1,
@@ -68,6 +72,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
     'pr_manager',
     'tasks',
     'reports',
@@ -82,9 +90,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'studio.urls'
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 
 TEMPLATES = [
@@ -98,6 +115,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -165,3 +184,27 @@ GITHUB_PAT = os.environ.get("GITHUB_PAT")
 # TODO Make this available as parameter on ArcaneEngine
 if ARCANE_API_KEY:
     os.environ.setdefault('PR_PILOT_API_KEY', ARCANE_API_KEY)
+
+GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+LOGIN_REDIRECT_URL = "/"  # Redirect to home after login
+SOCIALACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_ALLOW_REGISTRATION = False
+ACCOUNT_EMAIL_VERIFICATION = "none"
+SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        # 'VERIFIED_EMAIL': True,
+        # 'EMAIL_AUTHENTICATION': True,
+        # 'EMAIL_AUTHENTICATION_AUTO_CONNECT': True,
+        "SCOPE": [
+            'user',
+            'repo',
+            'read:org',
+        ],
+        "APP": {
+            "client_id": GITHUB_CLIENT_ID,
+            "secret": GITHUB_CLIENT_SECRET,
+        },
+    }
+}

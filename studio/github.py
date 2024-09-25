@@ -1,6 +1,7 @@
 import logging
 import re
 
+from allauth.socialaccount.models import SocialAccount, SocialToken
 from django.conf import settings
 from django.core.cache import cache
 from github import Github
@@ -11,6 +12,19 @@ logger = logging.getLogger(__name__)
 
 # Regular expression to match owner and repo
 pattern = r'https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/commit\/[^\/]+'
+
+
+def get_github_token(request):
+    """Get the GitHub token for the current user. If the user is not authenticated, use the GitHub PAT from settings."""
+    if request.user.is_authenticated:
+        # Check if the user has a connected GitHub account
+        social_account = SocialAccount.objects.filter(user=request.user, provider='github').first()
+        if social_account:
+            # Get the GitHub token
+            social_token = SocialToken.objects.filter(account__user=request.user).first()
+            if social_token:
+                return social_token.token  # This is the GitHub access token
+    return settings.GITHUB_PAT
 
 
 def get_prs(repo_name):

@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.socialaccount.providers.github.views import oauth2_login
 from django.contrib import admin
 from django.urls import path, include
 
@@ -28,4 +29,7 @@ urlpatterns = [
     path("repositories/", include("repositories.urls")),
     path("", views.studio_home, name="studio_home"),
     path("contribute/", views.contribute, name="contribute"),
+    path('accounts/', include('allauth.urls')),
+    path("login/", oauth2_login, name="github_login"),
+    path("logout/", views.user_logout, name="user_logout"),
 ]
