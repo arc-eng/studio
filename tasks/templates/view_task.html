@@ -51,7 +51,7 @@
 
 
         <div>
-            <a href="https://app.pr-pilot.ai/dashboard/tasks/{{ task.id }}/" target="_blank" class="button">
+            <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button">
                 <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
             </a>
             {% if task.pr_number %}
@@ -173,7 +173,7 @@
             {% if task.status == "running" or task.status == "scheduled" or task.status == "created" %}
 
                 function connectWebSocket() {
-                    const ws = new WebSocket("wss://app.pr-pilot.ai/ws/tasks/{{ task.id }}/events/");
+                    const ws = new WebSocket("wss://arcane.engineer/ws/tasks/{{ task.id }}/events/");
 
                     ws.onmessage = function (event) {
                         const data = JSON.parse(event.data);
