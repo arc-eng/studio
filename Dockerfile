@@ -23,7 +23,7 @@ WORKDIR /code
 
 # Install dependencies
 COPY pyproject.toml poetry.lock /code/
-RUN pip install --no-cache-dir poetry \
+RUN pip install --no-cache-dir poetry uvicorn \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev
 
