@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: arcane_studio
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+
+volumes:
+  postgres_data:
