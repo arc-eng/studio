@@ -14,14 +14,6 @@ pattern = r'https:\/\/github\.com\/([^\/]+)\/([^\/]+)\/commit\/[^\/]+'
 
 
 def get_prs(repo_name):
-
-    # Try fetching cached PRs first
-    cached_pulls = cache.get(f'pull_requests_{repo_name}')
-
-    if cached_pulls:
-        logger.info("Returning cached pull requests")
-        return cached_pulls
-
     all_pulls = []
     repo = g.get_repo(repo_name)
     pulls = repo.get_pulls(state='open')
@@ -29,8 +21,6 @@ def get_prs(repo_name):
     for pr in pulls:
         all_pulls.append(pr)
 
-    # Cache the result for 1 hour (3600 seconds)
-    cache.set(f'pull_requests_{repo_name}', all_pulls, timeout=3600)
     return all_pulls
 
 
