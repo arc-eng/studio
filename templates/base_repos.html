@@ -2,51 +2,44 @@
 
 {% block content %}
 
-    <div class="columns mr-3">
-        <div class="column is-narrow has-background-light pl-3 pt-0">
+    <div class="tabs is-toggle is-fullwidth">
+        <ul>
+            {#  Repo Tabs  #}
+            <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
+                <a class="is-page-loader" href="{% url 'repositories:repo_overview' %}">
+                    <span class="icon"><i class="fas fa-gears"></i></span>
+                </a>
+            </li>
+            {% for owner, repos in bookmarked_repos.items %}
+                {% for bookmark in repos %}
+                    <li class="{% if  bookmark.full_name == selected_repo %}is-active{% endif %}">
+                        {% if active_tab == "tasks" %}
+                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% elif active_tab == "pull-request-manager" %}
+                            {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% elif active_tab == "reports" %}
+                            {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% else %}
+                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% endif %}
 
-            <aside class="menu ml-3">
-                {% for owner, repos in bookmarked_repos.items %}
-                    <p class="menu-label">
-                        <span>{{ owner }}</span>
-                    </p>
-                    <ul class="menu-list">
-                        {% for bookmark in repos %}
-                            <li class="repo-menu-item">
-                                {% if active_tab == "tasks" %}
-                                    {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                                {% elif active_tab == "pull-request-manager" %}
-                                    {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                                {% elif active_tab == "reports" %}
-                                    {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                                {% else %}
-                                    {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                                {% endif %}
-                                
-                                <a class="{% if bookmark.full_name == selected_repo %}is-active is-light{% else %}has-no-background{% endif %}" href="{{ repo_link }}">
-                                    <span class="icon"><i class="fab fa-github"></i></span>
-                                    <span>{{ bookmark.repo_name }}</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
+                        <a href="{{ repo_link }}">
+                            <span class="icon"><i class="fab fa-github"></i></span>
+                            <span>{{ bookmark.repo_name }}</span>
+                        </a>
+                    </li>
                 {% endfor %}
-            </aside>
-            <div class="p-4">
-                {%  if not bookmarked_repos|length %}
-                    <p class="p-4 has-text-centered has-text-weight-light">
-                        No Repositories
-                    </p>
-                {% endif %}
 
-            </div>
-        </div>
-        <div class="column has-background-white tiny-rounded p-0">
+            {% endfor %}
 
-            {% block repo_content %}
+        </ul>
+    </div>
 
-            {% endblock %}
-        </div>
+    <div class="has-background-white-bis tiny-rounded">
+
+        {% block repo_content %}
+
+        {% endblock %}
     </div>
     <script>
     $(document).ready(function() {

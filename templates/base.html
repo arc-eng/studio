@@ -83,19 +83,18 @@
 <body class="has-background-light">
 
 
-<div class="page-container">
-    <nav class="level p-2">
+<div class="page-container container is-max-tablet">
+    <nav class="level p-3">
+
+        <!-- Left side -->
+
         <div class="level-left">
             <p class="level-item has-text-centered">
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}" href="/">
                     <span class="icon"><i class="fas fa-home"></i></span>
                 </a>
             </p>
-            <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "bookmarks" %}is-link{% endif %}" href="{% url 'repositories:repo_overview' %}">
-                    <span class="icon"><i class="fas fa-bookmark"></i></span>
-                </a>
-            </p>
+
             <p class="level-item has-text-centered">
                 {% url 'list_tasks' owner=repo_owner repo=repo_name as task_url %}
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "tasks" %}is-link is-static{% endif %}"
@@ -158,7 +157,7 @@
         </div>
 
     </nav>
-    <div class="content-wrap">
+    <div class="content-wrap container">
         {% block content %}{% endblock %}
     </div>
 
