@@ -1,7 +1,7 @@
 {% extends 'base_repos.html' %}
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Bookmark Repositories" subtitle="Bookmark repos for quick access" %}
+    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Select Github repositories to work with" %}
 
     {%  if not bookmarked_repos|length %}
         <p class="px-4 is-size-5 has-text-weight-light mb-5">
@@ -16,7 +16,7 @@
 
 
     <div class="table-container">
-        <table class="table is-hoverable is-striped">
+        <table class="table is-hoverable has-background-white-bis ">
             <tbody>
             {% for owner, bookmarks in bookmarked_repos.items %}
                 {% for bookmark in bookmarks %}
