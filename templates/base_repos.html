@@ -3,15 +3,14 @@
 {% block content %}
 
     <div class="columns">
-        <div class="column is-one-fifth has-background-light">
-            <a href="{% url 'repositories:repo_overview' %}" class="button is-rounded is-light is-fullwidth has-text-grey">
+        <div class="column is-one-fifth has-background-light pl-3">
+            <a href="{% url 'repositories:repo_overview' %}" class="button is-rounded is-light is-fullwidth has-text-grey mb-5">
                 <span class="icon"><i class="fas fa-bookmark"></i></span>
                 <span>Bookmarks</span>
             </a>
-            <aside class="menu mt-3 ml-2">
+            <aside class="menu mt-5 ml-3">
                 {% for owner, repos in bookmarked_repos.items %}
                     <p class="menu-label">
-                        <span class="icon"><i class="fas fa-user"></i></span>
                         <span>{{ owner }}</span>
                     </p>
                     <ul class="menu-list">
