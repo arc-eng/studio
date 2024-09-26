@@ -90,7 +90,7 @@
 
         <div class="level-left">
             <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}" href="/">
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}" href="{% url 'studio_home' %}">
                     <span class="icon"><i class="fas fa-home"></i></span>
                 </a>
             </p>
@@ -142,7 +142,7 @@
 
 
                 {% else %}
-                    <a class="button is-dark is-small is-rounded" href="/login/">
+                    <a class="button is-dark is-small is-rounded" href="{% url 'github_login' %}">
                         <span class="icon"><i class="fab fa-github"></i></span>
                          <span>Login</span>
                     </a>

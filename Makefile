@@ -12,3 +12,10 @@ docker-push: docker
 	docker tag $(IMAGE):$(VERSION) $(IMAGE):latest
 	docker push $(IMAGE):$(VERSION)
 	docker push $(IMAGE):latest
+
+create-k8s-secrets:
+	kubectl delete secret arcane-studio-secret
+	kubectl create secret generic arcane-studio-secret --from-env-file=.env
+
+deploy:
+	helm upgrade --install arcane-studio ./helm-chart --set image.tag=$(VERSION)

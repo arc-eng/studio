@@ -27,14 +27,10 @@ RUN pip install --no-cache-dir poetry uvicorn \
     && poetry config virtualenvs.create false \
     && poetry install --no-dev
 
-# uwsgi.ini configuration
-COPY uwsgi.ini /usr/src/app/uwsgi.ini
-
 # Copy project
 COPY . /code/
 
 # Expose port 8000 for uwsgi
 EXPOSE 8000
 
-# Run uwsgi
-CMD ["uvicorn", "--host", "0.0.0.0", "--port", "8000", "studio.asgi:application"]
+CMD ["sh", "-c", "uvicorn --host 0.0.0.0 --port 8000 studio.asgi:application"]

@@ -14,17 +14,33 @@ spec:
     spec:
       containers:
       - name: arcane-studio
-        image: your-docker-image:latest
+        image: "arceng/studio:{{ .Values.image.tag }}"
         ports:
         - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /healthz/
+            port: 8000
+          initialDelaySeconds: 5  # Delay before the first probe
+          periodSeconds: 10       # How often to perform the probe
+        livenessProbe:
+          httpGet:
+            path: /healthz/
+            port: 8000
+          initialDelaySeconds: 15  # Delay before the first probe to allow for application startup
+          periodSeconds: 20        # How often to perform the probe
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "1"
+          requests:
+            memory: "200Mi"
+            cpu: "0.2"
         env:
-        - name: GITHUB_CLIENT_ID
-          valueFrom:
-            secretKeyRef:
-              name: github-secrets
-              key: client-id
-        - name: GITHUB_CLIENT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: github-secrets
-              key: client-secret
+          - name: DJANGO_SETTINGS_MODULE
+            value: "studio.settings"
+          - name: ROOT_PATH
+            value: "/studio"
+        envFrom:
+          - secretRef:
+              name: arcane-studio-secret

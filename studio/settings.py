@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1*68x3rd)7dqf3vh)gneyj0&k_8t*!lur1-tk!1n3ybi@cq8rv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'helping-willing-seasnail.ngrok-free.app']
+ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     "https://helping-willing-seasnail.ngrok-free.app",
     "https://arcane.engineer",
@@ -208,3 +208,9 @@ SOCIALACCOUNT_PROVIDERS = {
         },
     }
 }
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False
+APPEND_SLASH = False
+ROOT_PATH = os.getenv('ROOT_PATH', '/')
+LOGIN_URL = ROOT_PATH + '/accounts/github/login/?process=login'
