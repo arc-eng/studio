@@ -14,13 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from allauth.socialaccount.providers.github.views import oauth2_login
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
-import tasks.views
 from studio import views
 
 urlpatterns = [
+    # Redirect default account login to GitHub login URL
+    path(
+        "accounts/login/",
+        RedirectView.as_view(
+            url="/accounts/github/login/?process=login", permanent=True
+        ),
+    ),
+    path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
@@ -28,4 +37,6 @@ urlpatterns = [
     path("repositories/", include("repositories.urls")),
     path("", views.studio_home, name="studio_home"),
     path("contribute/", views.contribute, name="contribute"),
+    path("login/", oauth2_login, name="github_login"),
+    path("logout/", views.user_logout, name="user_logout"),
 ]

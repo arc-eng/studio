@@ -29,6 +29,7 @@
         <option value="$MODULE_DIR$/pr_manager/templates" />
         <option value="$MODULE_DIR$/tasks/templates" />
         <option value="$MODULE_DIR$/reports/templates" />
+        <option value="$MODULE_DIR$/repositories/templates" />
       </list>
     </option>
   </component>

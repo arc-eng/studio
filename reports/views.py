@@ -1,6 +1,7 @@
 import logging
 
 from arcane.engine import ArcaneEngine
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -12,6 +13,7 @@ from .models import Report
 logger = logging.getLogger(__name__)
 
 
+@login_required
 def view_reports(request, owner, repo):
     reports = Report.objects.filter(repo=f"{owner}/{repo}").all()
     # Sorted by creation date
@@ -22,6 +24,7 @@ def view_reports(request, owner, repo):
     }, owner, repo)
 
 
+@login_required
 @require_POST
 def generate_report(request, owner, repo):
     prompt = request.POST.get('prompt')
@@ -32,6 +35,7 @@ def generate_report(request, owner, repo):
     return redirect(reverse('view_report', args=(owner, repo, report.id,)))
 
 
+@login_required
 def view_report(request, owner, repo, report_id):
     report = Report.objects.get(id=report_id)
     engine = ArcaneEngine()

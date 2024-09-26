@@ -1,6 +1,10 @@
 {% load static %}
+{% load socialaccount %}
+{% load i18n %}
+{% load allauth %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="has-background-light">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PVNMNEWKS"></script>
@@ -13,7 +17,7 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
+    <title>{% block title %}Arcane Studio{% endblock %}</title>
 
     <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.ico' %}"/>
 
@@ -47,6 +51,21 @@
         .has-no-background {
             background-color: transparent !important;
         }
+        /* Ensure the body takes the full height of the viewport */
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        /* Flexbox layout for the page */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensures the container fills the viewport */
+        }
+        /* Make the main content take up available space */
+        .content-wrap {
+            flex: 1; /* Takes up all available space above the footer */
+        }
 
         {% block css %}
         {% endblock %}
@@ -64,10 +83,9 @@
 <body class="has-background-light">
 
 
-<div>
-
-    <div class="columns">
-        <nav class="level p-5">
+<div class="page-container">
+    <nav class="level p-2">
+        <div class="level-left">
             <p class="level-item has-text-centered">
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}}" href="/">
                     <span class="icon"><i class="fas fa-home"></i></span>
@@ -99,26 +117,49 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'contribute' as contribute_url %}
-                <a class="is-page-loader button is-rounded is-small  {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
+                <a class="is-page-loader button is-rounded is-small is-outlined {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
                    href="{{ contribute_url }}">
                     <span class="icon"><i class="fas fa-plus"></i></span>
                 </a>
             </p>
+        </div>
 
-        </nav>
-    </div>
-    <div class="has-background-white">
+        <!-- Right side -->
+        <div class="level-right">
+            <p class="level-item has-text-centered">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'user_logout' %}" class="has-text-dark">Logout</a>
+                    <figure class="image is-24x24 mr-2">
+                        <img
+                                src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                                alt="{{ user.username }}"
+                                class="is-rounded" />
+                    </figure>
+
+
+                {% else %}
+                    <a class="button is-dark is-small is-rounded" href="/login/">
+                        <span class="icon"><i class="fab fa-github"></i></span>
+                         <span>Login</span>
+                    </a>
+                {% endif %}
+            </p>
+        </div>
+
+    </nav>
+    <div class="content-wrap">
         {% block content %}{% endblock %}
     </div>
 
+
+    <footer class="footer has-background-light">
+        <div class="content has-text-centered">
+            <p>
+                Made with <span class="icon has-text-danger"><i class="fa fa-heart"></i> </span> by <a href="https://arcane.engineer" target="_blank">Arcane Engineering</a>.
+                All rights reserved.
+            </p>
+        </div>
+    </footer>
 </div>
-<footer class="footer has-background-light">
-    <div class="content has-text-centered">
-        <p>
-            Made with <span class="icon has-text-danger"><i class="fa fa-heart"></i> </span> by <a href="https://arcane.engineer" target="_blank">Arcane Engineering</a>.
-            All rights reserved.
-        </p>
-    </div>
-</footer>
 </body>
 </html>

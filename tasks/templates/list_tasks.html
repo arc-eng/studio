@@ -18,7 +18,7 @@
 
 {% block repo_content %}
 
-{% include 'app_header.html' with title="Tasks" subtitle="View all tasks created for this repo and quickly create new ones" %}
+{% include 'app_header.html' with title="Tasks" subtitle="Hand over work to the Arcane Engine" %}
 
 <!-- New Task Form -->
 <div class="content px-4">
@@ -32,9 +32,9 @@
         </div>
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-link is-small" type="submit" id="generate-button">
-                    <span class="icon"><i class="fa fa-plus"></i></span>
-                    <span>Create Task for <span class="is-family-monospace has-text-weight-semibold has-text-light">{{ repo_name }}</span></span>
+                <button class="button is-success is-small" type="submit" id="generate-button">
+                    <span class="icon"><i class="fa fa-play"></i></span>
+                    <span>Run Task</span>
                 </button>
             </div>
         </div>

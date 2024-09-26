@@ -1,36 +1,36 @@
-{% extends "base_repos.html" %}
+{% extends "base.html" %}
 
+{% block title %}Arcane Studio{% endblock %}
 {%  block css %}
 {% endblock %}
 
-{% block repo_content %}
-    <section class="is-medium p-5">
-        <p class="title is-2">
-            Arcane Studio
-        </p>
-        <p class="subtitle is-4">
-            Smart productivity tools and automations for development teams
-        </p>
-
-    </section>
-    <section class="is-medium p-5">
-        <div class="content">
-            <p class="is-size-5">
-                This application is a collection of productivity-boosting tools built on top of the
-                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a>. The engine takes
+{% block content %}
+    <div class="is-flex has-background-light is-justify-content-center">
+        <div class="content" style="width: 70%; text-align: left;">
+            <p class="title is-2 has-text-centered">
+                Arcane Studio
+            </p>
+            <p class="subtitle is-4 has-text-centered">
+                Smart automations for development teams
+            </p>
+            <p class="p-3 has-text-centered">
+                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:repo_overview' %}">Get Started</a>
+            </p>
+            <p>
+                Arcane Studio is a collection of productivity-boosting tools built on top of the
+                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a>. In a nutshell: The engine takes
                 natural language instructions (Tasks) and executes them on your behalf using its capabilities,
                 which include:
             </p>
 
-            <ul class="is-size-5">
+            <ul>
                 <li>Reading, writing and editing code</li>
                 <li>Interacting with issues, tickets, wikis, etc via <a href="https://docs.pr-pilot.ai/integrations.html">Integrations</a></li>
                 <li>Searching the internet and scraping websites</li>
             </ul>
-            <p class="p-5">
-                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:show_repo_picker' %}">Get Started</a>
-            </p>
+
         </div>
-    </section>
+    </div>
+
 
 {% endblock %}
