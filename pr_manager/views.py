@@ -4,6 +4,7 @@ import logging
 import arcane
 from arcane.engine import ArcaneEngine
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -17,6 +18,7 @@ g = Github(settings.GITHUB_PAT)
 logger = logging.getLogger(__name__)
 
 
+@login_required
 def view_pull_requests(request, owner=None, repo=None):
     if not owner or not repo:
         prs = []
@@ -28,6 +30,7 @@ def view_pull_requests(request, owner=None, repo=None):
     }, owner, repo)
 
 
+@login_required
 @require_POST
 def generate_description(request, owner, repo):
     pr_number = request.POST.get('pr_number')

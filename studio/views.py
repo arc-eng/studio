@@ -1,4 +1,5 @@
 from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 
@@ -20,6 +21,7 @@ def contribute(request, owner=None, repo=None):
     })
 
 
+@login_required
 def user_logout(request):
     # Log out the user
     logout(request)

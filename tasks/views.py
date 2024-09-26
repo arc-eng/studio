@@ -1,11 +1,13 @@
 import markdown
 from arcane.engine import ArcaneEngine
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
 from repositories.views import render_with_repositories
 
 
+@login_required
 def view_task(request, owner, repo, task_id):
     task = ArcaneEngine().get_task(task_id)
     task.result = markdown.markdown(task.result)
@@ -17,6 +19,7 @@ def view_task(request, owner, repo, task_id):
     }, owner, repo)
 
 
+@login_required
 def list_tasks(request, owner, repo):
     tasks = [t for t in ArcaneEngine().list_tasks() if t.github_project == f"{owner}/{repo}"]
 
@@ -26,6 +29,7 @@ def list_tasks(request, owner, repo):
     }, owner, repo)
 
 
+@login_required
 @require_POST
 def create_task(request, owner, repo):
     if request.method == "POST":

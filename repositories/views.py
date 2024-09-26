@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from github import Github
 
@@ -7,6 +8,7 @@ from .models import BookmarkedRepo
 PAGE_SIZE = 10
 
 
+@login_required
 def show_repo_picker(request, org_name=None):
 
     page = int(request.GET.get('page', 1))
@@ -51,16 +53,19 @@ def show_repo_picker(request, org_name=None):
     })
 
 
+@login_required
 def repo_overview(request):
     return render_with_repositories(request, 'repositories/overview.html', {
     })
 
 
+@login_required
 def bookmark_repo(request, org_name, repo_name):
     BookmarkedRepo.objects.create(owner=org_name, repo_name=repo_name)
     return redirect('repositories:repo_overview')
 
 
+@login_required
 def unbookmark_repo(request, org_name, repo_name):
     BookmarkedRepo.objects.filter(owner=org_name, repo_name=repo_name).delete()
     return redirect('repositories:repo_overview')
