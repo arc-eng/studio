@@ -1,0 +1,54 @@
+{% extends 'base_repos.html' %}
+
+{% block repo_content %}
+    {% include 'app_header.html' with title="Bookmark Repositories" subtitle="Bookmark repos for quick access" %}
+
+    {%  if not bookmarked_repos|length %}
+        <p class="px-4 is-size-5 has-text-weight-light mb-5">
+            Before you can use any of the tools, you must bookmark a repository to work with.
+
+
+        </p>
+        <p class="px-4 is-size-5 has-text-weight-light mb-5">
+            <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader">Let's go</a>
+        </p>
+    {% endif %}
+
+
+    <div class="table-container">
+        <table class="table is-fullwidth is-hoverable is-striped">
+            <tbody>
+            {% for owner, bookmarks in bookmarked_repos.items %}
+                {% for bookmark in bookmarks %}
+                <tr>
+                    <td class="is-narrow">
+                        <a class="button is-danger is-small is-outlined is-page-loader"
+                           href="{% url 'repositories:unbookmark_repo' org_name=owner repo_name=bookmark.repo_name %}">
+                            <span class="icon"><i class="fas fa-trash"></i></span>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="https://github.com/{{ bookmark.full_name }}"
+                           class="is-family-monospace"
+                           target="_blank">
+                            {{ bookmark.full_name }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+            {%  if bookmarked_repos|length %}
+            <tr>
+                <td class="is-narrow">
+                    <a class="button is-outlined is-page-loader is-small is-dark is-light" href="{% url 'repositories:show_repo_picker' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                    </a>
+                </td>
+                <td></td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

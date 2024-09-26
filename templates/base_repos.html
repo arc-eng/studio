@@ -4,8 +4,11 @@
 
     <div class="columns">
         <div class="column is-one-fifth has-background-light">
-
-            <aside class="menu ml-2">
+            <a href="{% url 'repositories:repo_overview' %}" class="button is-rounded is-light is-fullwidth has-text-grey">
+                <span class="icon"><i class="fas fa-bookmark"></i></span>
+                <span>Bookmarks</span>
+            </a>
+            <aside class="menu mt-3 ml-2">
                 {% for owner, repos in bookmarked_repos.items %}
                     <p class="menu-label">
                         <span class="icon"><i class="fas fa-user"></i></span>
@@ -33,11 +36,14 @@
                     </ul>
                 {% endfor %}
             </aside>
-        <div class=" p-4">
-            <a class="button is-rounded is-light is-small is-page-loader is-flex" href="{% url 'repositories:show_repo_picker' %}">
-                <span class="icon"><i class="fas fa-plus"></i></span>
-            </a>
-        </div>
+            <div class="p-4">
+                {%  if not bookmarked_repos|length %}
+                    <p class="p-4 has-text-centered has-text-weight-light">
+                        No Repositories
+                    </p>
+                {% endif %}
+
+            </div>
         </div>
         <div class="column has-background-white tiny-rounded p-0">
 

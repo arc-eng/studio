@@ -51,11 +51,19 @@ def show_repo_picker(request, org_name=None):
     })
 
 
+def repo_overview(request):
+    return render_with_repositories(request, 'repositories/overview.html', {
+    })
+
+
 def bookmark_repo(request, org_name, repo_name):
-    if request.method == 'POST':
-        BookmarkedRepo.objects.create(owner=org_name, repo_name=repo_name)
-        return redirect('repositories:show_repo_picker_for_org', org_name=org_name)
-    return redirect('repositories:show_repo_picker')
+    BookmarkedRepo.objects.create(owner=org_name, repo_name=repo_name)
+    return redirect('repositories:repo_overview')
+
+
+def unbookmark_repo(request, org_name, repo_name):
+    BookmarkedRepo.objects.filter(owner=org_name, repo_name=repo_name).delete()
+    return redirect('repositories:repo_overview')
 
 
 def render_with_repositories(request, template_name, context, org=None, repo_name=None):
