@@ -1,19 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: arcane-studio
+  name: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: arcane-studio
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: arcane-studio
+        app: {{ .Release.Name }}
     spec:
+      initContainers:
+        - name: {{ .Release.Name }}-migrate
+          image: "arceng/studio:{{ .Values.image.tag }}"
+          command: [ "python", "manage.py", "migrate" ]
+          envFrom:
+            - secretRef:
+                name: {{ .Release.Name }}-secret
+          env:
+            - name: POSTGRES_HOST
+              value: {{ .Release.Name }}-postgresql
+            - name: POSTGRES_DB
+              value: {{ .Values.postgresql.auth.database }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgresql.auth.username }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-postgresql
+                  key: password
       containers:
-      - name: arcane-studio
+      - name: {{ .Release.Name }}
         image: "arceng/studio:{{ .Values.image.tag }}"
         ports:
         - containerPort: 8000
@@ -41,6 +60,17 @@ spec:
             value: "studio.settings"
           - name: ROOT_PATH
             value: "/studio"
+          - name: POSTGRES_HOST
+            value: {{ .Release.Name }}-postgresql
+          - name: POSTGRES_DB
+            value: {{ .Values.postgresql.auth.database }}
+          - name: POSTGRES_USER
+            value: {{ .Values.postgresql.auth.username }}
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-postgresql
+                key: password
         envFrom:
           - secretRef:
-              name: arcane-studio-secret
+              name: {{ .Release.Name }}-secret

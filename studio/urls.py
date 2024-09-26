@@ -24,6 +24,7 @@ from studio import views
 from studio.views import health_check
 
 urlpatterns = [
+    path("", health_check, name="health_check_root"),
     path("healthz/", health_check, name="health_check"),
     path('studio/', include([
         # Redirect default account login to GitHub login URL

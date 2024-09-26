@@ -1,5 +1,6 @@
 # Variables
 VERSION := $(shell poetry version -s)
+POSTGRES_PASSWORD := $(shell grep POSTGRES_PASSWORD .env | cut -d '=' -f2)
 IMAGE := arceng/studio
 
 # Phony Targets
@@ -18,4 +19,4 @@ create-k8s-secrets:
 	kubectl create secret generic arcane-studio-secret --from-env-file=.env
 
 deploy:
-	helm upgrade --install arcane-studio ./helm-chart --set image.tag=$(VERSION)
+	helm upgrade --install arcane-studio ./helm-chart --set image.tag=$(VERSION) --values values.yaml
