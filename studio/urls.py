@@ -15,28 +15,35 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from allauth.socialaccount.providers.github.views import oauth2_login
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
 from studio import views
+from studio.views import health_check
 
 urlpatterns = [
-    # Redirect default account login to GitHub login URL
-    path(
-        "accounts/login/",
-        RedirectView.as_view(
-            url="/accounts/github/login/?process=login", permanent=True
+    path("", health_check, name="health_check_root"),
+    path("healthz/", health_check, name="health_check"),
+    path('studio/', include([
+        # Redirect default account login to GitHub login URL
+        path(
+            "accounts/login/",
+            RedirectView.as_view(
+                url=f"{settings.ROOT_PATH}/github/login/?process=login", permanent=True
+            ),
         ),
-    ),
-    path('accounts/', include('allauth.urls')),
-    path('admin/', admin.site.urls),
-    path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
-    path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
-    path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
-    path("repositories/", include("repositories.urls")),
-    path("", views.studio_home, name="studio_home"),
-    path("contribute/", views.contribute, name="contribute"),
-    path("login/", oauth2_login, name="github_login"),
-    path("logout/", views.user_logout, name="user_logout"),
+        path('accounts/', include('allauth.urls')),
+        path('admin/', admin.site.urls),
+        path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
+        path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
+        path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
+        path("repositories/", include("repositories.urls")),
+        path("", views.studio_home, name="studio_home"),
+        path("contribute/", views.contribute, name="contribute"),
+        path("login/", oauth2_login, name="github_login"),
+        path("logout/", views.user_logout, name="user_logout"),
+    ])),
+
 ]

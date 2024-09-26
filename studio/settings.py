@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1*68x3rd)7dqf3vh)gneyj0&k_8t*!lur1-tk!1n3ybi@cq8rv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', 'helping-willing-seasnail.ngrok-free.app']
+ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     "https://helping-willing-seasnail.ngrok-free.app",
     "https://arcane.engineer",
@@ -128,12 +128,25 @@ WSGI_APPLICATION = 'studio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "postgres"),
+            "USER": os.getenv("POSTGRES_USER", "postgres"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": "5432",
+        }
+    }
+
 
 
 # Password validation
@@ -208,3 +221,9 @@ SOCIALACCOUNT_PROVIDERS = {
         },
     }
 }
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = False
+APPEND_SLASH = False
+ROOT_PATH = os.getenv('ROOT_PATH', '/')
+LOGIN_URL = ROOT_PATH + '/accounts/github/login/?process=login'
