@@ -79,6 +79,7 @@ def render_with_repositories(request, template_name, context, org=None, repo_nam
         if repo.owner not in bookmarked_repos_by_owner:
             bookmarked_repos_by_owner[repo.owner] = []
         bookmarked_repos_by_owner[repo.owner].append(repo)
+
     context['bookmarked_repos'] = bookmarked_repos_by_owner
     context['repo_owner'] = org
     context['repo_name'] = repo_name

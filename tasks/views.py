@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
+from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 
 
@@ -21,6 +22,13 @@ def view_task(request, owner, repo, task_id):
 
 @login_required
 def list_tasks(request, owner, repo):
+    if not owner or owner == 'None':
+        first_bookmark = BookmarkedRepo.objects.first()
+        if first_bookmark:
+            owner = first_bookmark.owner
+            repo = first_bookmark.repo_name
+        else:
+            redirect('repositories:repo_overview')
     tasks = [t for t in ArcaneEngine().list_tasks() if t.github_project == f"{owner}/{repo}"]
 
     return render_with_repositories(request, "list_tasks.html", {

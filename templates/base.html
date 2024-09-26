@@ -98,7 +98,7 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'list_tasks' owner=repo_owner repo=repo_name as task_url %}
-                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "tasks" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "tasks" %}is-link is-static{% endif %}"
                    href="{{ task_url }}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
@@ -106,7 +106,7 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'view_pull_requests' owner=repo_owner repo=repo_name as view_pull_requests_url %}
-                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
                    href="{{ view_pull_requests_url }}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
@@ -114,7 +114,7 @@
             </p>
             <p class="level-item has-text-centered">
                 {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
-                <a class="is-page-loader button is-rounded is-small {% if not repo_owner %}is-static{% endif %} {% if active_tab == "reports" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "reports" %}is-link is-static{% endif %}"
                    href="{{ view_reports_url }}">
                     <span class="icon"><i class="fas fa-file-alt"></i></span>
                     <span>Reports</span>
@@ -148,6 +148,12 @@
                          <span>Login</span>
                     </a>
                 {% endif %}
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="is-page-loader button is-rounded is-small is-outlined {% if active_tab == "help" %}is-static{% else %}is-dark{% endif %}"
+                   href="#">
+                    <span class="icon"><i class="fas fa-question"></i></span>
+                </a>
             </p>
         </div>
 
