@@ -56,6 +56,7 @@ def show_repo_picker(request, org_name=None):
 @login_required
 def repo_overview(request):
     return render_with_repositories(request, 'repositories/overview.html', {
+        'active_tab': 'bookmarks',
     })
 
 
