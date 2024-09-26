@@ -48,6 +48,23 @@ docker-compose up --build
    python manage.py runserver
    ```
 
+## 🚀 Deployment with Helm
+This project includes a Helm chart for deploying the Arcane Studio application.
+
+### Prerequisites
+- Kubernetes cluster
+- Helm installed
+
+### Deployment Steps
+1. Create Kubernetes secrets from the `.env` file:
+   ```sh
+   make create-k8s-secrets
+   ```
+2. Deploy the application using Helm:
+   ```sh
+   make deploy
+   ```
+
 ## 🤝 Contributing
 Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) first.
 
