@@ -1,4 +1,5 @@
 import markdown
+from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -42,15 +43,16 @@ def list_tasks(request, owner, repo, api_key):
 
 @login_required
 @require_POST
-def create_task(request, owner, repo):
+@needs_api_key
+def create_task(request, owner, repo, api_key):
     if request.method == "POST":
         task_description = request.POST.get("task_description")
         if not task_description:
             raise ValueError("Task description is required.")
         else:
             try:
-                task = ArcaneEngine().create_task(f"{owner}/{repo}", task_description)
-            except Exception as e:
+                task = ArcaneEngine(api_key).create_task(f"{owner}/{repo}", task_description)
+            except ApiException as e:
                 msg = str(e)
                 if e.data and e.data.error:
                     msg = e.data.error

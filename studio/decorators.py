@@ -8,7 +8,6 @@ from django.urls import reverse
 
 from studio.github import get_github_token
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -20,7 +19,8 @@ def needs_api_key(view_func):
         if not api_key:
             github_token = get_github_token(request)
             try:
-                api_key = ArcaneEngine().create_api_key(github_token, "Arcane Studio (auto-generated)")
+                logger.info(f"Creating API key for user {request.user}")
+                api_key = ArcaneEngine.create_api_key(github_token, "Arcane Studio (auto-generated)")
             except ApiException as e:
                 logger.error(f"Failed to create API key: {e}")
             if api_key:

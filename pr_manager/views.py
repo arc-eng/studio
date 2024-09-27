@@ -11,6 +11,7 @@ from github import Github
 
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
+from studio.decorators import needs_api_key
 from studio.github import get_github_token
 from studio.prompts import PR_DESCRIPTION
 
@@ -40,9 +41,10 @@ def view_pull_requests(request, owner=None, repo=None):
 
 @login_required
 @require_POST
-def generate_description(request, owner, repo):
+@needs_api_key
+def generate_description(request, owner, repo, api_key):
     pr_number = request.POST.get('pr_number')
-    engine = ArcaneEngine()
+    engine = ArcaneEngine(api_key)
     prompt = PR_DESCRIPTION.format(pr_number=pr_number)
     try:
         task = engine.create_task(f"{owner}/{repo}", prompt)

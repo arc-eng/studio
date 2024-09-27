@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "arcane-engine"
-version = "1.10.1"
+version = "1.10.4"
 description = "Python SDK for Arcane Engine, a text-to-task automation platform."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "arcane_engine-1.10.1-py3-none-any.whl", hash = "sha256:01742cd5f3288aaa965ac1ff34bed0b181555ffe1fb2828cef5914d92ee55906"},
-    {file = "arcane_engine-1.10.1.tar.gz", hash = "sha256:c348a9a7a923ad1937cfd4f8e48e2832202b02bb55cc79ff2de3ccb9c4ed108b"},
+    {file = "arcane_engine-1.10.4-py3-none-any.whl", hash = "sha256:7aac78277441a5716a105d8dc071205bf146e74a8d801434c795819504376c00"},
+    {file = "arcane_engine-1.10.4.tar.gz", hash = "sha256:6bd839e91c6dc7b69f761531b1f5aa59d88db286f032a19b678dceaf88086934"},
 ]
 
 [package.dependencies]
@@ -333,12 +333,12 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 name = "django-allauth"
-version = "65.0.1"
+version = "65.0.2"
 description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "django_allauth-65.0.1.tar.gz", hash = "sha256:1f8281e2dc17d3b977bcd95b99538f128c5cd2fb2551346a7f8ad31aa76f17cc"},
+    {file = "django_allauth-65.0.2.tar.gz", hash = "sha256:6b5b3a7a65b1c28078b6eb0dd234310b58a44e8addfd187dc30437b0b2bc41a5"},
 ]
 
 [package.dependencies]
@@ -681,21 +681,21 @@ six = ">=1.5"
 
 [[package]]
 name = "redis"
-version = "5.0.8"
+version = "5.1.0"
 description = "Python client for Redis database and key-value store"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "redis-5.0.8-py3-none-any.whl", hash = "sha256:56134ee08ea909106090934adc36f65c9bcbbaecea5b21ba704ba6fb561f8eb4"},
-    {file = "redis-5.0.8.tar.gz", hash = "sha256:0c5b10d387568dfe0698c6fad6615750c24170e548ca2deac10c649d463e9870"},
+    {file = "redis-5.1.0-py3-none-any.whl", hash = "sha256:fd4fccba0d7f6aa48c58a78d76ddb4afc698f5da4a2c1d03d916e4fd7ab88cdd"},
+    {file = "redis-5.1.0.tar.gz", hash = "sha256:b756df1e4a3858fcc0ef861f3fc53623a96c41e2b1f5304e09e0fe758d333d40"},
 ]
 
 [package.dependencies]
 async-timeout = {version = ">=4.0.3", markers = "python_full_version < \"3.11.3\""}
 
 [package.extras]
-hiredis = ["hiredis (>1.0.0)"]
-ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
+hiredis = ["hiredis (>=3.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==23.2.1)", "requests (>=2.31.0)"]
 
 [[package]]
 name = "requests"
@@ -879,4 +879,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "3c63c61a06708cb8e50d056fdc220e634f914f11df548e0d8cba1e8d7488755d"
+content-hash = "74b96fc379c4ccd3485616065fef3fba20b6ee2c8fd8a630db9413720536ee02"

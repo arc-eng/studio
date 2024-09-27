@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from repositories.views import render_with_repositories
+from studio.decorators import needs_api_key
 from studio.prompts import GENERATE_REPORT
 from .models import Report
 
@@ -26,19 +27,21 @@ def view_reports(request, owner, repo):
 
 @login_required
 @require_POST
-def generate_report(request, owner, repo):
+@needs_api_key
+def generate_report(request, owner, repo, api_key):
     prompt = request.POST.get('prompt')
     title = request.POST.get('title')  # Get the title from the form
-    engine = ArcaneEngine()
+    engine = ArcaneEngine(api_key)
     task = engine.create_task(f"{owner}/{repo}", GENERATE_REPORT.format(report_description=prompt, title=title))
     report = Report.objects.create(prompt=prompt, task_id=task.id, title=title, repo=f"{owner}/{repo}")
     return redirect(reverse('view_report', args=(owner, repo, report.id,)))
 
 
 @login_required
-def view_report(request, owner, repo, report_id):
+@needs_api_key
+def view_report(request, owner, repo, report_id, api_key):
     report = Report.objects.get(id=report_id)
-    engine = ArcaneEngine()
+    engine = ArcaneEngine(api_key)
     task = engine.get_task(report.task_id)
     if task.status == "completed":
         report.result = task.result

@@ -18,7 +18,8 @@ def user_profile(request):
     if not api_key:
         github_token = get_github_token(request)
         try:
-            api_key = ArcaneEngine().create_api_key(github_token, "Arcane Studio (auto-generated)")
+            logger.info(f"Creating API key for user {request.user}")
+            api_key = ArcaneEngine.create_api_key(github_token, "Arcane Studio (auto-generated)")
             if api_key:
                 request.user.api_key = api_key
                 request.user.save()
