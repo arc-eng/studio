@@ -8,18 +8,17 @@
     <div class="">
         <div class="content">
             <p class="title is-2 has-text-centered">
-                Arcane Studio
+                <span class="icon is-large"><i class="fas fa-cube"></i></span>
+                <span>Arcane Studio</span>
             </p>
             <p class="subtitle is-4 has-text-centered">
                 Smart automations for development teams
             </p>
-            <p class="p-3 has-text-centered">
-                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:repo_overview' %}">Get Started</a>
-            </p>
+
             <p>
                 Arcane Studio is a collection of productivity-boosting tools built on top of the
-                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a>. In a nutshell: The engine takes
-                natural language instructions (Tasks) and executes them on your behalf using its capabilities,
+                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a> - it takes
+                natural language instructions - <strong>Tasks</strong> - and executes them on your behalf using its capabilities,
                 which include:
             </p>
 
@@ -29,6 +28,14 @@
                 <li>Searching the internet and scraping websites</li>
             </ul>
 
+            <p>
+                This studio uses tasks as a basic unit of work to create higher-level automations that can
+                be shared and reused across teams. Everything you see is built using our <a href="https://arcane.engineer/development-kit" target="_blank">Development Kit</a>,
+                which makes it easy for you to build your own tools.
+            </p>
+            <p class="p-3 has-text-centered">
+                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:repo_overview' %}">Get Started</a>
+            </p>
         </div>
     </div>
 

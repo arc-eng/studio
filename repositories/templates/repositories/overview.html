@@ -1,16 +1,18 @@
 {% extends 'base_repos.html' %}
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Select Github repositories to work with" %}
+    {% include 'app_header.html' with title="Repositories" subtitle="Create your personal workspace" %}
 
     {%  if not bookmarked_repos|length %}
         <p class="px-4 is-size-5 has-text-weight-light mb-5">
-            Before you can use any of the tools, you must bookmark a repository to work with.
-
-
+            Start by picking the repositories you want to work with.
         </p>
         <p class="px-4 is-size-5 has-text-weight-light mb-5">
             <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader">Let's go</a>
+        </p>
+    {% else %}
+        <p class="px-4 is-size-5 has-text-weight-light mb-5">
+            Bookmarking repositories makes them available to use in the studio.
         </p>
     {% endif %}
 

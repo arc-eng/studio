@@ -25,7 +25,6 @@
     <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
         {% csrf_token %}
         <div class="field">
-            <label class="label">Prompt (<a href="https://arcane.engineer/labs/" target="_blank">examples</a>) </label>
             <div class="control">
                 <textarea class="textarea" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
             </div>
@@ -65,10 +64,12 @@
                         </a>
                     </td>
                     <td>
-                        <a class="button is-small" href="https://github.com/{{ task.github_user }} " target="_blank">
-                            <span class="icon is-dark"><i class="fab fa-github"></i></span>
-                            <span>{{ task.github_user }}</span>
-                        </a>
+                        {% if task.pr_number %}
+                            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
+                                <span class="icon is-small"><i class="fab fa-github"></i></span> <span>#{{ task.pr_number }}</span>
+                            </a>
+
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

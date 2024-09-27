@@ -16,3 +16,4 @@ volumes
 embedEtcd.yaml
 helm-chart
 values.yaml
+*.env
