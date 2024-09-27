@@ -240,7 +240,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False
 APPEND_SLASH = False
 ROOT_PATH = os.getenv('ROOT_PATH', '/')
-LOGIN_URL = ROOT_PATH + '/accounts/github/login/?process=login'
+LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', '/')
 
 if SHARED_SESSIONS_ENABLED:
     SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", None)

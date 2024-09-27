@@ -63,7 +63,7 @@ spec:
           - name: SHARED_SESSIONS_ENABLED
             value: {{ .Values.session.shared_sessions_enabled }}
           - name: ROOT_PATH
-            value: "/studio"
+            value: {{ .Values.root_path }}
           - name: POSTGRES_HOST
             value: {{ .Release.Name }}-postgresql
           - name: POSTGRES_DB
