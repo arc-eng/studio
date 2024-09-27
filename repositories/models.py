@@ -1,8 +1,10 @@
 from django.db import models
 
+
 class BookmarkedRepo(models.Model):
     owner = models.CharField(max_length=255)
     repo_name = models.CharField(max_length=255)
+    user = models.ForeignKey("users.StudioUser", on_delete=models.CASCADE)
 
     @property
     def full_name(self):

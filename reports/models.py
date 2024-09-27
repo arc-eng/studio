@@ -9,3 +9,4 @@ class Report(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     repo = models.CharField(max_length=255, null=True, blank=True)
+    user = models.ForeignKey("users.StudioUser", on_delete=models.CASCADE)

@@ -62,18 +62,18 @@ def repo_overview(request):
 
 @login_required
 def bookmark_repo(request, org_name, repo_name):
-    BookmarkedRepo.objects.create(owner=org_name, repo_name=repo_name)
+    BookmarkedRepo.objects.create(owner=org_name, repo_name=repo_name, user=request.user)
     return redirect('repositories:repo_overview')
 
 
 @login_required
 def unbookmark_repo(request, org_name, repo_name):
-    BookmarkedRepo.objects.filter(owner=org_name, repo_name=repo_name).delete()
+    BookmarkedRepo.objects.filter(owner=org_name, repo_name=repo_name, user=request.user).delete()
     return redirect('repositories:repo_overview')
 
 
 def render_with_repositories(request, template_name, context, org=None, repo_name=None):
-    repos = BookmarkedRepo.objects.all()
+    repos = BookmarkedRepo.objects.filter(user=request.user)
     if len(repos) == 0 and template_name != 'repositories/overview.html':
         return redirect('repositories:repo_overview')
     bookmarked_repos_by_owner = {}
