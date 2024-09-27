@@ -55,10 +55,24 @@ LOGGING = {
     },
 }
 
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", 6379)
+
+SHARED_SESSIONS_ENABLED = os.getenv("SHARED_SESSIONS_ENABLED", "false").lower() == "true"
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(BASE_DIR, '.cache'),  # Path to the cache directory
+    },
+    "session": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/1",  # Update with your Redis server address
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "arcane_engineer_sessions"
     }
 }
 
@@ -227,3 +241,9 @@ SECURE_SSL_REDIRECT = False
 APPEND_SLASH = False
 ROOT_PATH = os.getenv('ROOT_PATH', '/')
 LOGIN_URL = ROOT_PATH + '/accounts/github/login/?process=login'
+
+if SHARED_SESSIONS_ENABLED:
+    SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", None)
+    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+    SESSION_CACHE_ALIAS = "session"
+    SESSION_COOKIE_NAME = "arcane_engineer_session"

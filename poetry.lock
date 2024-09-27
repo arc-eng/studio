@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "arcane-engine"
-version = "1.9.2"
+version = "1.10.1"
 description = "Python SDK for Arcane Engine, a text-to-task automation platform."
 optional = false
 python-versions = ">=3.10"
 files = [
-    {file = "arcane_engine-1.9.2-py3-none-any.whl", hash = "sha256:cee62e5f5b352315c8b66000ede9428d1d9b2bc58abc35d8a1779b9834cd265b"},
-    {file = "arcane_engine-1.9.2.tar.gz", hash = "sha256:c219c8d056d8820a782fc95e7f049110243b9c0c9bd62ba7143343c5dde95eb0"},
+    {file = "arcane_engine-1.10.1-py3-none-any.whl", hash = "sha256:01742cd5f3288aaa965ac1ff34bed0b181555ffe1fb2828cef5914d92ee55906"},
+    {file = "arcane_engine-1.10.1.tar.gz", hash = "sha256:c348a9a7a923ad1937cfd4f8e48e2832202b02bb55cc79ff2de3ccb9c4ed108b"},
 ]
 
 [package.dependencies]
@@ -44,6 +44,17 @@ typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
 
 [package.extras]
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
+
+[[package]]
+name = "async-timeout"
+version = "4.0.3"
+description = "Timeout context manager for asyncio programs"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "async-timeout-4.0.3.tar.gz", hash = "sha256:4640d96be84d82d02ed59ea2b7105a0f7b33abe8703703cd0ab0bf87c427522f"},
+    {file = "async_timeout-4.0.3-py3-none-any.whl", hash = "sha256:7405140ff1230c310e51dc27b3145b9092d659ce68ff733fb0cefe3ee42be028"},
+]
 
 [[package]]
 name = "certifi"
@@ -339,6 +350,24 @@ openid = ["python3-openid (>=3.0.8)"]
 saml = ["python3-saml (>=1.15.0,<2.0.0)"]
 socialaccount = ["pyjwt[crypto] (>=1.7)", "requests (>=2.0.0)", "requests-oauthlib (>=0.3.0)"]
 steam = ["python3-openid (>=3.0.8)"]
+
+[[package]]
+name = "django-redis"
+version = "5.4.0"
+description = "Full featured redis cache backend for Django."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "django-redis-5.4.0.tar.gz", hash = "sha256:6a02abaa34b0fea8bf9b707d2c363ab6adc7409950b2db93602e6cb292818c42"},
+    {file = "django_redis-5.4.0-py3-none-any.whl", hash = "sha256:ebc88df7da810732e2af9987f7f426c96204bf89319df4c6da6ca9a2942edd5b"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+redis = ">=3,<4.0.0 || >4.0.0,<4.0.1 || >4.0.1"
+
+[package.extras]
+hiredis = ["redis[hiredis] (>=3,!=4.0.0,!=4.0.1)"]
 
 [[package]]
 name = "idna"
@@ -651,6 +680,24 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "redis"
+version = "5.0.8"
+description = "Python client for Redis database and key-value store"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "redis-5.0.8-py3-none-any.whl", hash = "sha256:56134ee08ea909106090934adc36f65c9bcbbaecea5b21ba704ba6fb561f8eb4"},
+    {file = "redis-5.0.8.tar.gz", hash = "sha256:0c5b10d387568dfe0698c6fad6615750c24170e548ca2deac10c649d463e9870"},
+]
+
+[package.dependencies]
+async-timeout = {version = ">=4.0.3", markers = "python_full_version < \"3.11.3\""}
+
+[package.extras]
+hiredis = ["hiredis (>1.0.0)"]
+ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==20.0.1)", "requests (>=2.26.0)"]
+
+[[package]]
 name = "requests"
 version = "2.32.3"
 description = "Python HTTP for Humans."
@@ -832,4 +879,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "8c5b5a741907de78b32eae2947e228436ce2d6d81625896cef25d378078bd1b3"
+content-hash = "3c63c61a06708cb8e50d056fdc220e634f914f11df548e0d8cba1e8d7488755d"

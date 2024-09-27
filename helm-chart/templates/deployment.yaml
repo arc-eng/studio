@@ -58,6 +58,10 @@ spec:
         env:
           - name: DJANGO_SETTINGS_MODULE
             value: "studio.settings"
+          - name: SESSION_COOKIE_DOMAIN
+            value: {{ .Values.session.cookie_domain }}
+          - name: SHARED_SESSIONS_ENABLED
+            value: {{ .Values.session.shared_sessions_enabled }}
           - name: ROOT_PATH
             value: "/studio"
           - name: POSTGRES_HOST
