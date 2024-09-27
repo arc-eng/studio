@@ -206,7 +206,7 @@
                             const converter = new showdown.Converter();
                             const htmlMessage = converter.makeHtml(event.message);
                             $('.table tbody').append(`
-                                <tr>
+                                <tr class="has-background-white-bis">
                                     <td class="has-text-weight-light">${counter}</td>
                                     <td><span class="icon"><i class="fa fa-${event.icon}"></i></span></td>
                                     <td>${htmlMessage}</td>

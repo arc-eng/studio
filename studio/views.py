@@ -29,11 +29,13 @@ def user_logout(request):
     # Redirect to home page (or any other page you prefer)
     return redirect("/")
 
+
 @login_required
 def user_profile(request):
     return render(request, "user_profile.html", {
         "active_tab": "profile",
     })
+
 
 def health_check(request):
     return HttpResponse("OK")
