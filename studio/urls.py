@@ -41,6 +41,7 @@ all_patterns = [
     path("contribute/", views.contribute, name="contribute"),
     path("login/", oauth2_login, name="github_login"),
     path("logout/", views.user_logout, name="user_logout"),
+    path("profile/", views.user_profile, name="user_profile"),
 ]
 
 if settings.ROOT_PATH == '/':

@@ -66,6 +66,10 @@
         .content-wrap {
             flex: 1; /* Takes up all available space above the footer */
         }
+        .has-circle {
+            border-radius: 50%;
+            border: 1px solid rgb(143, 143, 143); /* Thin grey border */
+        }
 
         {% block css %}
         {% endblock %}
@@ -130,16 +134,16 @@
 
         <!-- Right side -->
         <div class="level-right">
-            <p class="level-item has-text-centered">
+            <p class="level-item">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'user_logout' %}" class="has-text-dark">Logout</a>
-                    <figure class="image is-24x24 mr-2">
-                        <img
-                                src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
-                                alt="{{ user.username }}"
-                                class="is-rounded" />
-                    </figure>
-
+                    <a href="{% url 'user_profile' %}">
+                        <figure class="image is-48x48 has-circle">
+                            <img
+                                    src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                                    alt="{{ user.username }}"
+                                    class="is-rounded" />
+                        </figure>
+                    </a>
 
                 {% else %}
                     <a class="button is-dark is-small is-rounded" href="{% url 'github_login' %}">
@@ -147,12 +151,6 @@
                          <span>Login</span>
                     </a>
                 {% endif %}
-            </p>
-            <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small is-outlined {% if active_tab == "help" %}is-static{% else %}is-dark{% endif %}"
-                   href="#">
-                    <span class="icon"><i class="fas fa-question"></i></span>
-                </a>
             </p>
         </div>
 

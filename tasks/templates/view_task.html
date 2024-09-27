@@ -1,5 +1,6 @@
 {% extends "base_repos.html" %}
 
+{% block title %}Arcane Studio - {{ task.title }}{% endblock %}
 {%  block css %}
     .is-scrollable {
         max-height: 400px;      /* Set a max height */
@@ -104,29 +105,25 @@
         {% endif %}
 
 
-        {% if task.status == "scheduled" or task.status == "running" %}
-        <div class="content box mt-5">
 
-            <!-- Render task events using BulmaCSS Table -->
-            <div class="table-container">
-                <table class="table is-fullwidth">
-                    <tbody>
-                    <tr>
-                        <td><span id="second-counter" class="has-text-weight-light"></span></td>
-                        <td><progress class="progress is-secondary is-small mt-2" max="100">15%</progress></td>
-                        <td class="is-family-monospace is-blinking" id="task-progress-indicator-text"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        {% endif %}
 
     </div>
 
+    {% if task.status == "scheduled" or task.status == "running" %}
+        <!-- Render task events using BulmaCSS Table -->
+        <div class="table-container has-background-white-bis">
+            <table class="table is-fullwidth">
+                <tbody>
+                <tr class="has-background-white-bis">
+                    <td><span id="second-counter" class="has-text-weight-light"></span></td>
+                    <td><progress class="progress is-secondary is-small mt-2" max="100">15%</progress></td>
+                    <td class="is-family-monospace is-blinking" id="task-progress-indicator-text"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
+    {% endif %}
     <script>
         $(document).ready(function() {
 

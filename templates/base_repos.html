@@ -7,7 +7,7 @@
             {#  Repo Tabs  #}
             <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
                 <a class="is-page-loader" href="{% url 'repositories:repo_overview' %}">
-                    <span class="icon"><i class="fas fa-gears"></i></span>
+                    <span class="icon"><i class="fas fa-link"></i></span>
                 </a>
             </li>
             {% for owner, repos in bookmarked_repos.items %}
