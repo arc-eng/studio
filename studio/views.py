@@ -30,11 +30,7 @@ def user_logout(request):
     return redirect("/")
 
 
-@login_required
-def user_profile(request):
-    return render(request, "user_profile.html", {
-        "active_tab": "profile",
-    })
+
 
 
 def health_check(request):

@@ -36,12 +36,13 @@ all_patterns = [
     path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
     path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
+    path("user/", include("users.urls")),
     path("repositories/", include("repositories.urls")),
     path("", views.studio_home, name="studio_home"),
     path("contribute/", views.contribute, name="contribute"),
     path("login/", oauth2_login, name="github_login"),
     path("logout/", views.user_logout, name="user_logout"),
-    path("profile/", views.user_profile, name="user_profile"),
+
 ]
 
 if settings.ROOT_PATH == '/':

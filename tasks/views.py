@@ -6,11 +6,13 @@ from django.views.decorators.http import require_POST
 
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
+from studio.decorators import needs_api_key
 
 
 @login_required
-def view_task(request, owner, repo, task_id):
-    task = ArcaneEngine().get_task(task_id)
+@needs_api_key
+def view_task(request, owner, repo, task_id, api_key):
+    task = ArcaneEngine(api_key).get_task(task_id)
     task.result = markdown.markdown(task.result)
     task.user_request = markdown.markdown(task.user_request)
     return render_with_repositories(request, "view_task.html", {
@@ -21,7 +23,8 @@ def view_task(request, owner, repo, task_id):
 
 
 @login_required
-def list_tasks(request, owner, repo):
+@needs_api_key
+def list_tasks(request, owner, repo, api_key):
     if not owner or owner == 'None':
         first_bookmark = BookmarkedRepo.objects.first()
         if first_bookmark:
@@ -29,7 +32,7 @@ def list_tasks(request, owner, repo):
             repo = first_bookmark.repo_name
         else:
             redirect('repositories:repo_overview')
-    tasks = [t for t in ArcaneEngine().list_tasks() if t.github_project == f"{owner}/{repo}"]
+    tasks = [t for t in ArcaneEngine(api_key).list_tasks() if t.github_project == f"{owner}/{repo}"]
 
     return render_with_repositories(request, "list_tasks.html", {
         "tasks": tasks,

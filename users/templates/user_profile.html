@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="has-background-white-bis tiny-rounded p-4">
+        <a href="{% url 'user_logout' %}" class="button is-small is-pulled-right">Logout</a>
+        <div class="content">
+            <p class="title is-4">{{ user.username }}</p>
+            <p class="subtitle is-6">{{ user.email }}</p>
+        </div>
+        {% if needs_engine_login %}
+            <div class="content">
+            Looks like you're new to the platform.
+
+                To get you started, we need to connect your Github account the <a href="https://arcane.engineer/engine" target="_blank">Engine</a>.
+
+            </div>
+            <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-page-loader">Connect</a>
+        {% endif %}
+
+    </div>
+    <script>
+        $(document).ready(function() {
+
+        });
+    </script>
+
+{% endblock %}
