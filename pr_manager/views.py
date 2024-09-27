@@ -27,7 +27,7 @@ def view_pull_requests(request, owner=None, repo=None):
             owner = first_bookmark.owner
             repo = first_bookmark.repo_name
         else:
-            redirect('repositories:repo_overview')
+            return redirect('repositories:repo_overview')
     if not owner or not repo:
         prs = []
     else:

@@ -40,7 +40,7 @@ def show_repo_picker(request, org_name=None):
         else:
             page_buttons = [page - 1, page, page + 1]
 
-    return render_with_repositories(request, 'repositories/repo_picker.html', {
+    return render(request, 'repositories/repo_picker.html', {
         'selected_org': org_name,
         'orgs': [github_user, *orgs],
         'repositories': org_repos.get_page(page - 1),
@@ -74,6 +74,8 @@ def unbookmark_repo(request, org_name, repo_name):
 
 def render_with_repositories(request, template_name, context, org=None, repo_name=None):
     repos = BookmarkedRepo.objects.all()
+    if len(repos) == 0 and template_name != 'repositories/overview.html':
+        return redirect('repositories:repo_overview')
     bookmarked_repos_by_owner = {}
     for repo in repos:
         if repo.owner not in bookmarked_repos_by_owner:
