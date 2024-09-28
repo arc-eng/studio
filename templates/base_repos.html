@@ -24,7 +24,14 @@
                         {% endif %}
 
                         <a href="{{ repo_link }}">
-                            <span class="icon"><i class="fab fa-github"></i></span>
+{#                            <span class="icon"><i class="fab fa-github"></i></span>#}
+                            <span>
+                                <figure class="image is-24x24 mr-2">
+                                    <img
+                                            src="{{ bookmark.img_url }}"
+                                            class="is-rounded" />
+                                </figure>
+                            </span>
                             <span>{{ bookmark.repo_name }}</span>
                         </a>
                     </li>

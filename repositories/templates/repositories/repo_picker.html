@@ -10,34 +10,33 @@
                 <span class="icon"><i class="fab fa-github"></i></span>
                 Add Repositories
             </p>
-            <div class="panel-block is-hidden">
-                <p class="control has-icons-left">
-                    <input class="input" type="text" placeholder="Search" />
-                    <span class="icon is-left">
-                    <i class="fas fa-search" aria-hidden="true"></i>
-                  </span>
-                </p>
+            <div class="panel-block">
+                <div class="field has-addons">
+                    <div class="control has-icons-left">
+                        <input class="input" type="text" name="query" placeholder="owner / repo" value="{% if search_query %}{{ search_query }}{% endif %}" />
+                        <span class="icon is-left"><i class="fas fa-search" aria-hidden="true"></i></span>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link" id="search-button">
+                            Search
+                        </button>
+                    </div>
+                </div>
             </div>
-
-            <p class="panel-tabs">
-                {% for org in orgs %}
-                <a href="{% url 'repositories:show_repo_picker_for_org' org.login %}" class="is-page-loader is-rounded m-2 is-small button {% if org.login == selected_org %}is-link{% endif %}">{{ org.login }}</a>
-                {% endfor %}
-            </p>
 
             {# Pagination #}
 
             <div class="panel-block {% if total_page_count <= 1 %}is-hidden{% endif %}">
                 <nav class="pagination is-small" role="navigation" aria-label="pagination">
-                    <a href="?page={{ prev_page }}" class="pagination-previous is-page-loader">Previous</a>
-                    <a href="?page={{ next_page }}" class="pagination-next is-page-loader">Next page</a>
+                    <a href="?page={{ prev_page }}{% if search_query %}&query={{ search_query }}{% endif %}" class="pagination-previous is-page-loader">Previous</a>
+                    <a href="?page={{ next_page }}{% if search_query %}&query={{ search_query }}{% endif %}" class="pagination-next is-page-loader">Next page</a>
                     <ul class="pagination-list">
-                        <li><a href="?page=1" class="pagination-link is-page-loader {% if current_page == 1 %}is-current{% endif %}" aria-label="Goto page 1">1</a></li>
+                        <li><a href="?page=1{% if search_query %}&query={{ search_query }}{% endif %}" class="pagination-link is-page-loader {% if current_page == 1 %}is-current{% endif %}" aria-label="Goto page 1">1</a></li>
 
                         {% if total_page_count < 8 %}
                         {% for middle_page in page_buttons %}
                         <li>
-                            <a href="?page={{ middle_page }}"
+                            <a href="?page={{ middle_page }}{% if search_query %}&query={{ search_query }}{% endif %}"
                                class="pagination-link is-page-loader {% if current_page == middle_page %}is-current{% endif %}"
                                aria-label="Goto page {{ middle_page }}">
                                 {{ middle_page }}
@@ -48,7 +47,7 @@
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
                         {% for middle_page in page_buttons %}
                         <li>
-                            <a href="?page={{ middle_page }}"
+                            <a href="?page={{ middle_page }}{% if search_query %}&query={{ search_query }}{% endif %}"
                                class="pagination-link is-page-loader {% if current_page == middle_page %}is-current{% endif %}"
                                aria-label="Goto page {{ middle_page }}">
                                 {{ middle_page }}
@@ -58,7 +57,7 @@
                         <li><span class="pagination-ellipsis">&hellip;</span></li>
                         {% endif %}
 
-                        <li><a href="?page={{ total_page_count }}" class="pagination-link is-page-loader {% if current_page == total_page_count %}is-current{% endif %}" aria-label="Goto page {{ total_page_count }}">{{ total_page_count }}</a></li>
+                        <li><a href="?page={{ total_page_count }}{% if search_query %}&query={{ search_query }}{% endif %}" class="pagination-link is-page-loader {% if current_page == total_page_count %}is-current{% endif %}" aria-label="Goto page {{ total_page_count }}">{{ total_page_count }}</a></li>
                     </ul>
                 </nav>
             </div>
@@ -67,29 +66,39 @@
             {% for repo in repositories %}
             <span class="panel-block">
 
-            <form action="{% url 'repositories:bookmark_repo' repo.owner.login repo.name %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="repo_name" value="{{ repo.name }}" />
-                <input type="hidden" name="repo_owner" value="{{ repo.owner.login }}" />
-                <button type="submit" class="is-small button mr-3" aria-label="Add Repo">
-                    <span class="icon"><i class="fas fa-plus"></i></span>
-                </button>
-            </form>
+                <form action="{% url 'repositories:bookmark_repo' repo.owner.login repo.name %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="repo_name" value="{{ repo.name }}" />
+                    <input type="hidden" name="repo_owner" value="{{ repo.owner.login }}" />
+                    <input type="hidden" name="img_url" value="{{ repo.owner.avatar_url }}" />
+                    <button type="submit" class="is-small button mr-3" aria-label="Add Repo">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                    </button>
+                </form>
 
-            <figure class="image is-24x24 mr-2">
-              <img
-                      src="{{ repo.owner.avatar_url }}"
-                      alt="{{ repo.owner.login }}"
-                      class="is-rounded" />
-            </figure>
+                <figure class="image is-24x24 mr-2">
+                  <img
+                          src="{{ repo.owner.avatar_url }}"
+                          alt="{{ repo.owner.login }}"
+                          class="is-rounded" />
+                </figure>
 
-            <a href="{{ repo.html_url }}" target="_blank">
-                {{ repo.name }}
-            </a>
+                <a href="{{ repo.html_url }}" target="_blank">
+                    {{ repo.full_name }}
+                </a>
 
-        </span>
+            </span>
 
             {% endfor %}
+
+            {% if not repositories %}
+
+            <div class="panel-block">
+                <p class="has-text-centered">No repositories found.</p>
+            </div>
+
+            {% endif %}
+
             <div class="panel-block">
                 <a class="button is-dark is-outlined is-fullwidth" href="{% url 'repositories:repo_overview' %}">
                     Close
@@ -104,8 +113,20 @@
 
     <script>
         $(document).ready(function() {
-            $('.is-page-loader').click(function() {
-                $(this).addClass('is-loading').attr('disabled', 'disabled');
+            const searchButton = $('#search-button');
+
+            function search() {
+                var query = $('input[name="query"]').val();
+                searchButton.addClass('is-loading').attr('disabled', 'disabled');
+                window.location.href = "{% url 'repositories:find_repositories' %}?query=" + query;
+            }
+
+            searchButton.click(search);
+
+            $(document).on('keypress', function(e) {
+                if (e.which === 13) { // 13 is the key code for ENTER
+                    search();
+                }
             });
         });
     </script>

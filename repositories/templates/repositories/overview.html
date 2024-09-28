@@ -23,17 +23,26 @@
             {% for owner, bookmarks in bookmarked_repos.items %}
                 {% for bookmark in bookmarks %}
                 <tr>
+
                     <td class="is-narrow">
-                        <a class="button is-danger is-small is-outlined is-page-loader"
-                           href="{% url 'repositories:unbookmark_repo' org_name=owner repo_name=bookmark.repo_name %}">
-                            <span class="icon"><i class="fas fa-trash"></i></span>
-                        </a>
+                        <figure class="image is-24x24 mt-1 ml-1">
+                            <img
+                                    src="{{ bookmark.img_url }}"
+                                    class="is-rounded" />
+                        </figure>
                     </td>
                     <td>
+
                         <a href="https://github.com/{{ bookmark.full_name }}"
                            class="is-size-5"
                            target="_blank">
                             {{ bookmark.full_name }}
+                        </a>
+                    </td>
+                    <td class="is-narrow">
+                        <a class="button is-danger is-small is-outlined is-light is-page-loader"
+                           href="{% url 'repositories:unbookmark_repo' org_name=owner repo_name=bookmark.repo_name %}">
+                            <span class="icon"><i class="fas fa-trash"></i></span>
                         </a>
                     </td>
                 </tr>
@@ -42,11 +51,13 @@
             {%  if bookmarked_repos|length %}
             <tr>
                 <td class="is-narrow">
-                    <a class="button is-outlined is-page-loader is-small is-dark is-light" href="{% url 'repositories:show_repo_picker' %}">
+                    <a class="button is-rounded is-outlined is-page-loader is-small is-dark is-light" href="{% url 'repositories:show_repo_picker' %}">
                         <span class="icon"><i class="fas fa-plus"></i></span>
                     </a>
                 </td>
                 <td></td>
+                <td></td>
+
             </tr>
             {% endif %}
             </tbody>
