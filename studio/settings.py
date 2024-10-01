@@ -218,7 +218,7 @@ if ARCANE_API_KEY:
 
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
-LOGIN_REDIRECT_URL = "/repositories/"  # Redirect to home after login
+LOGIN_REDIRECT_URL = "/studio/repositories/"  # Redirect to home after login
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_ALLOW_REGISTRATION = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
