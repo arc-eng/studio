@@ -89,8 +89,30 @@
             </div>
             <div class="column is-11 content is-family-monospace">
                 {{ task.result | safe }}
+
+                <!-- Follo-up Form -->
+                <div class="content">
+                    <form action="{% url 'create_followup_task' owner=repo_owner repo=repo_name task_id=task.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="field">
+                            <div class="control">
+                                <textarea class="textarea" name="task_description" placeholder="Now, use that information to ..."></textarea>
+                            </div>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-link is-small" type="submit" id="generate-button">
+                                    <span class="icon"><i class="fa fa-play"></i></span>
+                                    <span>Run Follow-Up Task</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
+
+
         {% endif %}
 
         {% if task.status == "failed" %}

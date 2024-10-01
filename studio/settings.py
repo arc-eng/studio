@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     'reports',
     'repositories',
     'users',
+    'chat',
 ]
 
 MIDDLEWARE = [

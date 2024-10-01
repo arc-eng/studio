@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Arcane Studio - Chat{% endblock %}
+
+{% block content %}
+
+
+<div class="container is-max-desktop">
+    <div class="columns">
+        <div class="column is-3">
+            <p class="has-text-centered has-text-grey my-4">
+                <span>past 7 days</span>
+            </p>
+            {%  for chat in chats %}
+                <div class="buttons m-1">
+                    <a href="{% url 'view_chat' chat.id %}"
+                       class="button is-small is-fullwidth {% if chat == selected_chat %}is-static{% endif %}">
+                        {{ chat.title }}
+                    </a>
+                </div>
+
+
+            {% endfor %}
+            <a href="{% url 'start_conversation' %}"
+               class="button is-light is-fullwidth is-small mt-3">
+                <span class="icon"><i class="fa fa-plus"></i></span>
+            </a>
+        </div>
+        <div class="column is-9">
+            {% block chat_content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+    });
+</script>
+{% endblock %}

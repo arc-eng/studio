@@ -5,7 +5,7 @@
 
 {% block repo_content %}
     {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
-    {% if prs %}
+    
         <div class="table-container">
             <table class="table is-hoverable has-background-white-bis ">
                 <tbody>
@@ -43,7 +43,7 @@
                 </tbody>
             </table>
         </div>
-    {% else %}
+    {% if not prs %}
     <div class="p-4">
         <p class="content has-text-weight-light">
             No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>

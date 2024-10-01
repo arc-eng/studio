@@ -1,0 +1,156 @@
+{% extends "chat_base.html" %}
+{% block title %}Arcane Studio - Chat{% endblock %}
+
+{% block css %}
+    #chat-wrapper {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+
+    .sticky-form {
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        z-index: 10; /* Ensures it's above other elements */
+    }
+{% endblock %}
+
+{% block chat_content %}
+    <nav class="level">
+
+        <!-- Left side -->
+
+        <div class="level-left">
+
+            <p class="level-item has-text-centered title is-4">
+                {{ selected_chat.title }}
+            </p>
+        </div>
+        <div class="level-right">
+            <p class="level-item has-text-centered">
+                <a href="https://github.com/{{ selected_chat.repo.full_name }}"
+                   class="button is-small is-rounded is-outlined is-dark"
+                    target="_blank">
+                    <span class="icon is-small">
+                        <i class="fab fa-github"></i>
+                    </span>
+                    <span class="is-family-monospace">{{ selected_chat.repo.full_name }}</span>
+                </a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a href="{% url 'delete_chat' selected_chat.id %}" class="button is-small is-rounded">
+            <span class="icon is-small">
+                <i class="fa fa-trash"></i>
+            </span>
+                </a>
+            </p>
+        </div>
+    </nav>
+    <div class="buttons mb-3">
+
+
+    </div>
+    <div id="chat-wrapper" class="m-3">
+        {% for message in messages %}
+            <!-- User Message -->
+            <div class="box is-shadowless has-background-grey-lighter ml-5">
+                <figure class="image is-24x24 is-inline-block is-pulled-right">
+                    <img
+                            src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                            alt="{{ user.username }}"
+                            class="is-rounded" />
+                </figure>
+                {{ message.message | safe }}
+            </div>
+            <!-- Response -->
+            <div class="content p-3 ">
+                {% if not message.result %}
+                    <div class="columns">
+                        <div class="column is-narrow">
+                            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                        </div>
+                        <div class="column">
+                            <span id="in-progress-message" data-task-id="{{ message.task_id }}">Processing...</span>
+                        </div>
+                    </div>
+
+                {% else %}
+                    {{ message.result | safe }}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <!-- Message Form -->
+        <div class="content p-3 sticky-form">
+            <form method="post">
+                {% csrf_token %}
+                <div class="field has-addons">
+                    <div class="control is-expanded">
+                        <input class="input is-rounded" type="text" name="message" placeholder="Do this and respond with that" />
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-rounded" type="submit" id="send-button">
+                            <span class="icon"><i class="fa fa-paper-plane"></i></span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script>
+    function receiveTaskUpdates(taskId) {
+        const ws = new WebSocket("wss://arcane.engineer/ws/tasks/" + taskId +"/events/");
+
+        ws.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            const msgType = data['type'];
+
+            if (msgType === "status_update") {
+                window.location.reload();
+            }
+
+            if (msgType === "event") {
+                const event = data['data'];
+                const converter = new showdown.Converter();
+                const htmlMessage = converter.makeHtml(event.message);
+                $('#in-progress-message').html(`<span>${htmlMessage}<span>`);
+            }
+        };
+
+        ws.onclose = function () {
+            console.log('WebSocket closed. Reconnecting in 1 second...');
+            // Try to reconnect after 1 seconds
+            setTimeout(function () {
+                receiveTaskUpdates(taskId);
+            }, 1000);
+        };
+
+        ws.onerror = function (error) {
+            console.error('WebSocket error:', error);
+            ws.close(); // Close the WebSocket to trigger the reconnect
+        };
+    }
+
+    if ($('#in-progress-message').length) {
+        const taskId = $('#in-progress-message').data('task-id');
+        receiveTaskUpdates(taskId);
+    }
+
+    $('form').on('submit', function() {
+        // Disable the button
+        $('#send-button').prop('disabled', true);
+        // Make the input read-only to prevent further input but allow the form to submit it
+        $('input[name="message"]').prop('readonly', true);
+    });
+
+    // Focus on the input field
+    $('input[name="message"]').focus();
+    $(document).ready(function() {
+        var container = $('#chat-wrapper'); // Change this to your container's class or ID
+        container.scrollTop(container.prop("scrollHeight"));
+    });
+    </script>
+{% endblock %}

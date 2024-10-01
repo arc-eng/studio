@@ -37,6 +37,7 @@ all_patterns = [
     path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
     path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
     path("user/", include("users.urls")),
+    path("chat/", include("chat.urls")),
     path("repositories/", include("repositories.urls")),
     path("", views.studio_home, name="studio_home"),
     path("contribute/", views.contribute, name="contribute"),
