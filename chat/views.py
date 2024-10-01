@@ -77,7 +77,7 @@ def start_conversation(request, api_key):
             return redirect("view_chat", chat_id=chat.id)
 
     return render(request, "start_conversation.html", {
-        "bookmarked_repos": BookmarkedRepo.objects.all(),
+        "bookmarked_repos": BookmarkedRepo.objects.filter(user=request.user).all(),
         "chats": ChatConversation.objects.filter(user=request.user).order_by('-id').all(),
         "active_tab": "chat",
    })
