@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST
 
+from chat.models import ChatConversation, ChatMessage
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
@@ -60,3 +61,17 @@ def create_task(request, owner, repo, api_key):
                     "error": f"Failed to create task: {msg}",
                 })
             return redirect('view_task', owner=owner, repo=repo, task_id=task.id)
+
+
+@login_required
+@require_POST
+@needs_api_key
+def create_followup_task(request, owner, repo, task_id):
+    task = ArcaneEngine().get_task(task_id)
+
+    chat = ChatConversation.objects.create(user=request.user,
+                                           repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user))
+    ChatMessage.objects.create(conversation=chat, message=task.user_request, task_id=task.id, result=task.result)
+    chat.continue_conversation(request.POST.get('task_description'))
+
+    return redirect('chat_overview')

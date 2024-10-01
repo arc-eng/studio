@@ -1,0 +1,42 @@
+{% extends "chat_base.html" %}
+{% block title %}Arcane Studio - New Conversation{% endblock %}
+
+{% block chat_content %}
+
+    <!-- Message Form -->
+    <div class="content">
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- Repo selector -->
+            <div class="field">
+                <label class="label">New conversation</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select name="repo_id">
+                            <option value="">Select a repository</option>
+                            {% for repo in bookmarked_repos %}
+                            <option value="{{ repo.id }}">{{ repo.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="field">
+                <div class="control">
+                    <textarea class="textarea" name="message" placeholder="Do this and return that"></textarea>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-link is-small" type="submit" id="send-button">
+                        <span class="icon"><i class="fa fa-play"></i></span>
+                        <span>Start Conversation</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

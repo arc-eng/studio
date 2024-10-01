@@ -87,7 +87,7 @@
 <body class="has-background-light">
 
 
-<div class="page-container container is-max-tablet">
+<div class="page-container container is-max-desktop">
     <nav class="level p-3">
 
         <!-- Left side -->
@@ -96,6 +96,15 @@
             <p class="level-item has-text-centered">
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}" href="{% url 'studio_home' %}">
                     <span class="icon"><i class="fas fa-home"></i></span>
+                </a>
+            </p>
+
+            <p class="level-item has-text-centered">
+                {% url 'start_conversation' as view_chats_url %}
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "chat" %}is-link is-static{% endif %}"
+                   href="{{ view_chats_url }}">
+                    <span class="icon"><i class="fas fa-comment"></i></span>
+                    <span>Chat</span>
                 </a>
             </p>
 
@@ -115,6 +124,7 @@
                     <span>Pull Requests</span>
                 </a>
             </p>
+            
             <p class="level-item has-text-centered">
                 {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "reports" %}is-link is-static{% endif %}"
