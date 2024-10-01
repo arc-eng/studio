@@ -2,15 +2,15 @@
 {% block title %}Arcane Studio - New Conversation{% endblock %}
 
 {% block chat_content %}
-
+    {% include 'app_header.html' with title="Chat" subtitle="Start a conversation in the context of a repository" classes="p-0"%}
     <!-- Message Form -->
-    <div class="content">
+    <div class="content mt-3">
+
         <form method="post">
             {% csrf_token %}
 
             <!-- Repo selector -->
             <div class="field">
-                <label class="label">New conversation</label>
                 <div class="control">
                     <div class="select is-fullwidth">
                         <select name="repo_id">
@@ -39,4 +39,13 @@
             </div>
         </form>
     </div>
+    <script>
+        $('form').on('submit', function() {
+            // Disable the button
+            $('#send-button').prop('disabled', true);
+            // Make the input read-only to prevent further input but allow the form to submit it
+            $('textarea[name="message"]').prop('readonly', true);
+        });
+
+    </script>
 {% endblock %}
