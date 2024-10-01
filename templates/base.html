@@ -100,39 +100,28 @@
             </p>
 
             <p class="level-item has-text-centered">
-                {% url 'start_conversation' as view_chats_url %}
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "chat" %}is-link is-static{% endif %}"
-                   href="{{ view_chats_url }}">
+                   href="{% url 'chat_home' %}">
                     <span class="icon"><i class="fas fa-comment"></i></span>
                     <span>Chat</span>
                 </a>
             </p>
 
             <p class="level-item has-text-centered">
-                {% url 'list_tasks' owner=repo_owner repo=repo_name as task_url %}
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "tasks" %}is-link is-static{% endif %}"
-                   href="{{ task_url }}">
+                   href="{% url 'tasks_home' %}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
                 </a>
             </p>
             <p class="level-item has-text-centered">
-                {% url 'view_pull_requests' owner=repo_owner repo=repo_name as view_pull_requests_url %}
                 <a class="is-page-loader button is-rounded is-small {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
-                   href="{{ view_pull_requests_url }}">
+                   href="{% url 'pr_manager_home' %}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
                 </a>
             </p>
-            
-            <p class="level-item has-text-centered">
-                {% url 'view_reports' owner=repo_owner repo=repo_name as view_reports_url %}
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "reports" %}is-link is-static{% endif %}"
-                   href="{{ view_reports_url }}">
-                    <span class="icon"><i class="fas fa-file-alt"></i></span>
-                    <span>Reports</span>
-                </a>
-            </p>
+
             <p class="level-item has-text-centered">
                 {% url 'contribute' as contribute_url %}
                 <a class="is-page-loader button is-rounded is-small is-outlined {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
@@ -168,14 +157,36 @@
     <div class="content-wrap container">
         {% block content %}{% endblock %}
     </div>
+    <hr/>
 
+    <footer class="footer has-background-light  has-text-grey">
+        <div class="columns">
+            <div class="column is-three-fifths">
+                <p class="title is-5 has-text-grey">
+                    <span class="icon"><i class="fas fa-cube"></i></span>
+                    <span>Arcane Studio</span>
+                </p>
+                <p>
+                    Copyright © 2024 <a href="https://arcane.engineer" target="_blank">Arcane Engineering</a>. All Rights Reserved.
+                </p>
+            </div>
+            <div class="column">
 
-    <footer class="footer has-background-light">
-        <div class="content has-text-centered">
-            <p>
-                Made with <span class="icon has-text-danger"><i class="fa fa-heart"></i> </span> by <a href="https://arcane.engineer" target="_blank">Arcane Engineering</a>.
-                All rights reserved.
-            </p>
+            </div>
+            <div class="column">
+                <p class="title is-6 has-text-grey">
+                    Legal
+                </p>
+                <p>
+                    <a href="{% url 'code_policy' %}" class="has-text-dark">Code Policy</a>
+                </p>
+                <p>
+                    <a href="{% url 'privacy_policy' %}" class="has-text-dark">Privacy Policy</a>
+                </p>
+                <p>
+                    <a href="{% url 'terms_of_service' %}" class="has-text-dark">Terms of Service</a>
+                </p>
+            </div>
         </div>
     </footer>
 </div>

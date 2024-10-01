@@ -31,18 +31,20 @@ all_patterns = [
             url=f"{settings.ROOT_PATH}/github/login/?process=login", permanent=True
         ),
     ),
+    path("", views.studio_home, name="studio_home"),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
-    path("<str:owner>/<str:repo>/pull-request-manager/", include("pr_manager.urls")),
-    path("<str:owner>/<str:repo>/tasks/", include("tasks.urls")),
-    path("<str:owner>/<str:repo>/reports/", include("reports.urls")),
+    path("pull-request-manager/", include("pr_manager.urls")),
+    path("tasks/", include("tasks.urls")),
     path("user/", include("users.urls")),
     path("chat/", include("chat.urls")),
     path("repositories/", include("repositories.urls")),
-    path("", views.studio_home, name="studio_home"),
     path("contribute/", views.contribute, name="contribute"),
     path("login/", oauth2_login, name="github_login"),
     path("logout/", views.user_logout, name="user_logout"),
+    path("terms-of-service/", views.terms_of_service, name="terms_of_service"),
+    path("privacy-policy/", views.privacy_policy, name="privacy_policy"),
+    path("code-policy/", views.code_policy, name="code_policy"),
 
 ]
 

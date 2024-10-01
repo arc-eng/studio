@@ -13,6 +13,8 @@ class ChatConversation(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey("users.StudioUser", on_delete=models.CASCADE)
     repo = models.ForeignKey("repositories.BookmarkedRepo", on_delete=models.CASCADE)
+    pr_number = models.IntegerField(null=True, blank=True)
+    branch = models.CharField(max_length=255, null=True, blank=True)
 
     def assemble_chat_history(self):
         """Assembles a string of all messages in the conversation"""
@@ -22,7 +24,9 @@ class ChatConversation(models.Model):
         instructions = ("Read the chat history above and react + respond to the user's last message. "
                         "Only return the response, nothing else.")
         task_description = f"{self.assemble_chat_history()}\n---\nUSER:\n{message}\n---\n{instructions}"
-        new_task = ArcaneEngine(api_key).create_task(self.repo.full_name, task_description)
+        new_task = ArcaneEngine(api_key).create_task(self.repo.full_name, task_description,
+                                                     pr_number=self.pr_number,
+                                                     branch=self.branch)
         return ChatMessage.objects.create(conversation=self, message=message, task_id=new_task.id)
 
     def generate_title(self, api_key):

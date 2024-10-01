@@ -4,6 +4,17 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 
+def terms_of_service(request):
+    return render(request, "legal/terms_of_service.html")
+
+
+def privacy_policy(request):
+    return render(request, "legal/privacy_policy.html")
+
+def code_policy(request):
+    return render(request, "legal/code_policy.html")
+
+
 def studio_home(request, owner=None, repo=None):
     return render(request, "studio_home.html", {
         "repo_owner": owner,

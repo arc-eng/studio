@@ -5,39 +5,138 @@
 {% endblock %}
 
 {% block content %}
-    <div class="">
-        <div class="content">
-            <p class="title is-2 has-text-centered">
-                <span class="icon is-large"><i class="fas fa-cube"></i></span>
-                <span>Arcane Studio</span>
-            </p>
-            <p class="subtitle is-4 has-text-centered">
-                Smart automations for development teams
-            </p>
-
-            <p>
-                Arcane Studio is a collection of productivity-boosting tools built on top of the
-                <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine</a> - it takes
-                natural language instructions - <strong>Tasks</strong> - and executes them on your behalf using its capabilities,
-                which include:
-            </p>
-
-            <ul>
-                <li>Reading, writing and editing code</li>
-                <li>Interacting with issues, tickets, wikis, etc via <a href="https://docs.pr-pilot.ai/integrations.html">Integrations</a></li>
-                <li>Searching the internet and scraping websites</li>
-            </ul>
-
-            <p>
-                This studio uses tasks as a basic unit of work to create higher-level automations that can
-                be shared and reused across teams. Everything you see is built using our <a href="https://arcane.engineer/development-kit" target="_blank">Development Kit</a>,
-                which makes it easy for you to build your own tools.
-            </p>
-            <p class="p-3 has-text-centered">
-                <a class="button is-large is-rounded is-page-loader" href="{% url 'repositories:repo_overview' %}">Get Started</a>
-            </p>
+    <section class="hero is-dark is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    <span class="icon is-large"><i class="fas fa-cube"></i></span>
+                    <span>Arcane Studio</span>
+                </h1>
+                <h2 class="subtitle">
+                    Generative AI tools to support common workflows in software development
+                </h2>
+            </div>
         </div>
+    </section>
+    <section class="section p-0 mt-5">
+        <div class="fixed-grid has-4-cols">
+
+            <div class="grid content is-gap-2">
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card ">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-code-branch"></i></span>
+                                PR Descriptions
+                            </p>
+                            <p>Codify your guidelines and automate pull request descriptions</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-bug"></i></span>
+                                Bug Reporting
+                            </p>
+                            <p>Analyze stack traces and create comprehensive bug reports quickly</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-file"></i></span>
+                                Documents
+                            </p>
+                            <p>Pull information from tickets, code, wikis and more to create documents</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-triangle-exclamation"></i></span>
+                                Error Analysis
+                            </p>
+                            <p>Triage errors with your code and provide insights</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fab fa-readme"></i></span>
+                                README
+                            </p>
+                            <p>Generate consistent and beautiful README files for your projects in seconds</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-user"></i></span>
+                                User Stories
+                            </p>
+                            <p>Create user stories from feature requests and feedback</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-code"></i></span>
+                                Code Reviews
+                            </p>
+                            <p>Analyze code changes and provide feedback</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-clipboard-list"></i></span>
+                                Release Notes
+                            </p>
+                            <p>Generate release notes from your commits and PRs</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-flask"></i></span>
+                                Research
+                            </p>
+                            <p>Easily do research across your wikis, tickets, code, and other data sources</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell  is-flex is-flex-direction-column">
+                    <div class="card  is-flex-grow-1">
+                        <div class="card-content">
+                            <p class="title is-5">
+                                <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                                Diagrams
+                            </p>
+                            <p>Generate beautiful diagrams from your code and documentation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="has-text-centered p-5">
+        <a href="{% url 'github_login' %}" class="button is-link is-large is-rounded">Get Started</a>
     </div>
-
-
 {% endblock %}

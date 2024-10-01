@@ -11,6 +11,14 @@ from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
 
 
+def home(request):
+    if not request.user.is_authenticated:
+        return render(request, "tasks_preview.html", {
+            "active_tab": "tasks",
+        })
+    return redirect("list_tasks", owner=None, repo=None)
+
+
 @login_required
 @needs_api_key
 def view_task(request, owner, repo, task_id, api_key):
@@ -26,7 +34,7 @@ def view_task(request, owner, repo, task_id, api_key):
 
 @login_required
 @needs_api_key
-def list_tasks(request, owner, repo, api_key):
+def list_tasks(request, owner=None, repo=None, api_key=None):
     if not owner or owner == 'None':
         first_bookmark = BookmarkedRepo.objects.first()
         if first_bookmark:

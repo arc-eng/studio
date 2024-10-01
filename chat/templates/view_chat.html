@@ -1,5 +1,5 @@
 {% extends "chat_base.html" %}
-{% block title %}Arcane Studio - Chat{% endblock %}
+{% block title %}{{ selected_chat.title }}{% endblock %}
 
 {% block css %}
     #chat-wrapper {
@@ -16,87 +16,119 @@
 {% endblock %}
 
 {% block chat_content %}
-    <nav class="level">
+    <div class="box">
+        <nav class="level">
 
-        <!-- Left side -->
+            <!-- Left side -->
 
-        <div class="level-left">
+            <div class="level-left">
 
-            <p class="level-item has-text-centered title is-4">
-                {{ selected_chat.title }}
-            </p>
-        </div>
-        <div class="level-right">
-            <p class="level-item has-text-centered">
-                <a href="https://github.com/{{ selected_chat.repo.full_name }}"
-                   class="button is-small is-rounded is-outlined is-dark"
-                    target="_blank">
-                    <span class="icon is-small">
-                        <i class="fab fa-github"></i>
-                    </span>
-                    <span class="is-family-monospace">{{ selected_chat.repo.full_name }}</span>
-                </a>
-            </p>
-            <p class="level-item has-text-centered">
-                <a href="{% url 'delete_chat' selected_chat.id %}" class="button is-small is-rounded">
+                <p class="level-item has-text-centered">
+                    <a href="{% url 'delete_chat' selected_chat.id %}" class="button is-small is-rounded">
             <span class="icon is-small">
                 <i class="fa fa-trash"></i>
             </span>
-                </a>
+                    </a>
+                </p>
+                <p class="level-item has-text-centered title is-5" id="chat-title">
+                    {{ selected_chat.title }}
+                </p>
+            </div>
+
+            <!-- Right side -->
+            <div class="level-right">
+                <p class="level-item has-text-centered">
+                    <a href="https://github.com/{{ selected_chat.repo.full_name }}"
+                       class="button is-small is-rounded"
+                       target="_blank">
+                    <span class="icon is-small">
+                        <i class="fab fa-github"></i>
+                    </span>
+                        <span class="is-family-monospace">
+                        {% if selected_chat.branch %}
+                            {{ selected_chat.repo.full_name }}/{{ selected_chat.branch }}
+
+                        {% else %}
+                            {{ selected_chat.repo.full_name }}
+                        {% endif %}
+                    </span>
+                    </a>
+                </p>
+            </div>
+        </nav>
+
+        <div id="chat-wrapper" class="m-3">
+            <p class="has-text-centered is-size-7 has-text-weight-bold has-text-grey p-5">
+                {{ selected_chat.created_at }}
             </p>
-        </div>
-    </nav>
-    <div class="buttons mb-3">
-
-
-    </div>
-    <div id="chat-wrapper" class="m-3">
-        {% for message in messages %}
-            <!-- User Message -->
-            <div class="box is-shadowless has-background-grey-lighter ml-5">
-                <figure class="image is-24x24 is-inline-block is-pulled-right">
-                    <img
-                            src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
-                            alt="{{ user.username }}"
-                            class="is-rounded" />
-                </figure>
-                {{ message.message | safe }}
-            </div>
-            <!-- Response -->
-            <div class="content p-3 ">
-                {% if not message.result %}
-                    <div class="columns">
-                        <div class="column is-narrow">
-                            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
-                        </div>
-                        <div class="column">
-                            <span id="in-progress-message" data-task-id="{{ message.task_id }}">Processing...</span>
-                        </div>
-                    </div>
-
-                {% else %}
-                    {{ message.result | safe }}
-                {% endif %}
-            </div>
-        {% endfor %}
-        <!-- Message Form -->
-        <div class="content p-3 sticky-form">
-            <form method="post">
-                {% csrf_token %}
-                <div class="field has-addons">
-                    <div class="control is-expanded">
-                        <input class="input is-rounded" type="text" name="message" placeholder="Do this and respond with that" />
-                    </div>
-                    <div class="control">
-                        <button class="button is-link is-rounded" type="submit" id="send-button">
-                            <span class="icon"><i class="fa fa-paper-plane"></i></span>
-                        </button>
-                    </div>
+            {% for message in messages %}
+                <!-- User Message -->
+                <div class="box is-shadowless has-background-white-ter ml-5">
+                    <figure class="image is-24x24 is-inline-block has-circle is-pulled-right">
+                        <img
+                                src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                                alt="{{ user.username }}"
+                                class="is-rounded" />
+                    </figure>
+                    {{ message.message | safe }}
                 </div>
-            </form>
-        </div>
-    </div>
+                <!-- Response -->
+                <div class="content p-3">
+                    {% if not message.result %}
+                        <div class="columns">
+                            <div class="column is-narrow">
+                                <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                            </div>
+                            <div class="column">
+                                <span id="in-progress-message" data-task-id="{{ message.task_id }}">Processing...</span>
+                            </div>
+                        </div>
 
+                    {% else %}
+                        <div class="columns">
+                            <div class="column is-narrow">
+                                <button class="button is-static is-rounded has-text-dark is-light is-small is-outlined">
+                                    <span class="icon"><i class="fa fa-cube"></i></span>
+                                </button>
+                            </div>
+                            <div class="column">
+                                {{ message.result | safe }}
+                            </div>
+                        </div>
+
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <!-- Message Form -->
+            <div class="content p-3 sticky-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="field has-addons">
+                        {% if selected_chat.branch %}
+                            <div class="control">
+                                <a class="button is-rounded"
+                                   href="https://github.com/{{ selected_chat.repo.full_name }}/pull/{{ selected_chat.pr_number }}/files"
+                                    target="_blank">
+                                    <span class="icon"><i class="fa fa-code-branch"></i></span>
+                                    <span>#{{ selected_chat.pr_number }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div class="control is-expanded">
+                            <input class="input is-rounded" type="text" name="message" placeholder="Do this and respond with that" />
+                        </div>
+                        <div class="control">
+                            <button class="button is-link is-rounded" type="submit" id="send-button">
+                                <span class="icon"><i class="fa fa-arrow-up"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
 
 
 
@@ -117,6 +149,10 @@
                 const converter = new showdown.Converter();
                 const htmlMessage = converter.makeHtml(event.message);
                 $('#in-progress-message').html(`<span>${htmlMessage}<span>`);
+            }
+
+            if (msgType === "title_update" && $('#chat-title').innerText==="New Chat") {
+                $('#chat-title').html(data['data']);
             }
         };
 

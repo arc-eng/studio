@@ -18,6 +18,14 @@ from studio.prompts import PR_DESCRIPTION
 logger = logging.getLogger(__name__)
 
 
+def home(request):
+    if not request.user.is_authenticated:
+        return render(request, "pr_manager_preview.html", {
+            "active_tab": "pull-request-manager",
+        })
+    return redirect("view_pull_requests", owner=None, repo=None)
+
+
 @login_required
 def view_pull_requests(request, owner=None, repo=None):
     if not owner or owner == 'None':

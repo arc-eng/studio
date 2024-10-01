@@ -10,6 +10,14 @@ from repositories.models import BookmarkedRepo
 from studio.decorators import needs_api_key
 
 
+def home(request):
+    if not request.user.is_authenticated:
+        return render(request, "chat_preview.html", {
+            "active_tab": "chat",
+        })
+    return redirect("start_conversation")
+
+
 @login_required
 @needs_api_key
 def view_chat(request, chat_id, api_key):
@@ -26,9 +34,15 @@ def view_chat(request, chat_id, api_key):
     messages = chat.messages.all()
     for message in messages:
         if not message.result:
+            # Fetch the result from the task
             task = ArcaneEngine(api_key).get_task(message.task_id)
             message.result = task.result
             message.save()
+            if task.pr_number and not chat.pr_number:
+                # The task opened a new pull request
+                chat.pr_number = task.pr_number
+                chat.branch = task.branch
+                chat.save()
         if message.result:
             message.result = markdown.markdown(message.result, extensions=['nl2br', 'fenced_code', 'extra'])
         message.message = markdown.markdown(message.message, extensions=['nl2br', 'fenced_code', 'extra'])

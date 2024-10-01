@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Arcane Engineering - Code Policy{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <section class="hero is-dark is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">
+                    <span>Code Policy</span>
+                </h1>
+                <h2 class="subtitle">
+                    Effective Date: August 2024
+                </h2>
+            </div>
+        </div>
+    </section>
+    <section class="section content is-size-5">
+        <div class="container">
+            <div class="box">
+                <h3 class="title is-4">1. Code Ownership</h3>
+                <p>At Arcane Engineering, we recognize that your code is one of your most valuable assets. You retain full ownership of all code generated, processed, or interacted with by Arcane Engine. We do not claim any rights, ownership, or licenses to your code. Our role is to assist you, not to take possession of your intellectual property.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">2. Code Access and Interaction</h3>
+                <h4 class="title is-5">2.1 Access to Code</h4>
+                <p>Arcane Engine interacts with your codebase only after you have granted us explicit access. This interaction is conducted through Git, where Arcane Engine checks out the code from your repository and creates code within the repository as needed. Arcane Engine does not execute any scripts, binaries, or any other forms of executable files. Our interaction is limited to reading and writing textual information within your codebase and connected third-party integrations.</p>
+                <h4 class="title is-5">2.2 Temporary Code Checkout</h4>
+                <p>Code is checked out temporarily in an isolated environment on our servers specifically for the task at hand. Once the task is completed, the checked-out code is promptly removed from disk. This ensures that your code is only present on our servers for the minimal time necessary to perform the requested operations.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">3. Data Security and Storage</h3>
+                <h4 class="title is-5">3.1 Secure Environments</h4>
+                <p>All interactions with your code are conducted in secure, isolated environments. We utilize state-of-the-art security measures to protect your code during its temporary presence on our servers.</p>
+                <h4 class="title is-5">3.2 No Persistent Storage</h4>
+                <p>Arcane Engine does not store your code on a persistent basis. After a task is completed, any checked-out code is removed from our systems. This practice ensures that your code remains secure and under your control.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">4. Transparency and Auditing</h3>
+                <p>Arcane Engine provides detailed logs of all actions taken within your repositories. These logs are accessible to you via the command-line interface (CLI) or on the Arcane Engine dashboard. This transparency allows you to audit and review all interactions Arcane Engine has with your code, ensuring that you remain fully informed and in control.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">5. Compliance with Best Practices</h3>
+                <p>We are committed to adhering to industry best practices for security, privacy, and code management. Arcane Engine is designed with these principles in mind to ensure that your code is handled with the highest standards of care and confidentiality.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">6. Third-Party Integrations</h3>
+                <p>Arcane Engine connects with third-party tools and services using state-of-the-art mechanisms, such as OAuth2, which give you full control over permissions and access rights. You can review and remove these integrations at any time through the Arcane Engine dashboard, ensuring that you maintain control over how and when your code is accessed.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">7. User Control and Permissions</h3>
+                <p>You have full control over the code that Arcane Engine interacts with. You can manage which repositories or files Arcane Engine can access, and you can remove any integrations directly from the dashboard. This ensures that you are always in command of your code and its associated data.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">8. Incident Response</h3>
+                <p>In the unlikely event of a security incident involving your code, Arcane Engine has a robust incident response plan in place. We will promptly investigate any issues, take necessary corrective actions, and communicate with you to ensure transparency and resolution.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">9. Policy Updates</h3>
+                <p>We reserve the right to update or modify this Code Policy at any time. Any changes will be effective immediately upon posting. Continued use of Arcane Engine following any changes to this policy constitutes your acceptance of those changes.</p>
+            </div>
+            <div class="box">
+                <h3 class="title is-4">10. Contact Us</h3>
+                <p>If you have any questions or concerns about this Code Policy, please contact us at support@arcane.engineer.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
