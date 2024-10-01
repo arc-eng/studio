@@ -28,10 +28,13 @@
         </div>
         <div class="level-right">
             <p class="level-item has-text-centered">
-                <a href="https://github.com/{{ selected_chat.repo.full_name }}" class="button is-small is-rounded is-outlined is-dark">
+                <a href="https://github.com/{{ selected_chat.repo.full_name }}"
+                   class="button is-small is-rounded is-outlined is-dark"
+                    target="_blank">
                     <span class="icon is-small">
                         <i class="fab fa-github"></i>
                     </span>
+                    <span class="is-family-monospace">{{ selected_chat.repo.full_name }}</span>
                 </a>
             </p>
             <p class="level-item has-text-centered">
