@@ -218,7 +218,6 @@ if ARCANE_API_KEY:
 
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
-LOGIN_REDIRECT_URL = "/studio/repositories/"  # Redirect to home after login
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_ALLOW_REGISTRATION = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -245,6 +244,8 @@ SECURE_SSL_REDIRECT = False
 APPEND_SLASH = False
 ROOT_PATH = os.getenv('ROOT_PATH', '/')
 LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', '/')
+# Redirect to home after login
+LOGIN_REDIRECT_URL = f"{ROOT_PATH}/repositories/".replace('//', '/')
 
 if SHARED_SESSIONS_ENABLED:
     SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", None)
