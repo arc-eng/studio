@@ -24,6 +24,7 @@ class ChatConversation(models.Model):
         instructions = ("Read the chat history above and react + respond to the user's last message. "
                         "Only return the response, nothing else.")
         task_description = f"{self.assemble_chat_history()}\n---\nUSER:\n{message}\n---\n{instructions}"
+        logger.info(f"Creating task for chat {self.pk} [branch={self.branch}, pr_number={self.pr_number}]")
         new_task = ArcaneEngine(api_key).create_task(self.repo.full_name, task_description,
                                                      pr_number=self.pr_number,
                                                      branch=self.branch)
@@ -31,10 +32,10 @@ class ChatConversation(models.Model):
 
     def generate_title(self, api_key):
         logger.info(f"Generating title for chat {self.pk}")
-        instructions = ("Read the chat history above and generate a title for the conversation. "
-                        "The title should have a maximum of 4 words and start with an emoji."
-                        "Only return the title, nothing else.")
-        task_description = f"{self.assemble_chat_history()}\n---\n{instructions}"
+        instructions = ("Read the chat history above. IMPORTANT: DO NOT USE ANY OF YOUR FUNCTIONS OR READ/WRITE FILES. "
+                        "ONLY generate a title for the conversation. The title should have a maximum of 4 words and start with an emoji."
+                        "Return only the title, nothing else.")
+        task_description = f"```\n{self.assemble_chat_history()}\n```\n---\n{instructions}"
         engine = ArcaneEngine(api_key)
         task = engine.create_task(self.repo.full_name, task_description)
         while task.status not in ["completed", "failed"]:
