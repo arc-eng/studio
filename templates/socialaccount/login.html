@@ -5,31 +5,55 @@
     {% trans "Sign In" %}
 {% endblock head_title %}
 {% block content %}
-    <section class="section has-text-centered content">
-        <p class="title is-2 has-text-centered has-text-success-25">
-            <span>Get Started</span>
-        </p>
-        <p class="subtitle is-4 has-text-centered">
-            Boost your Productivity
-        </p>
-        <p class="has-text-grey">
-        <div class="m-5">
-            {% element form method="post" no_visible_fields=True %}
-                {% slot actions %}
-                    {% csrf_token %}
-                    {% element button type="submit" class="button is-large" %}
-                        <span class="icon">
-                        <i class="fab fa-github"></i>
-                    </span>
-                        <span>Login with Github</span>
+
+    <div class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title is-2">Almost there, just one more step</p>
+            </header>
+            <section class="modal-card-body">
+                <p>
+                    Arcane Studio and the underlying engine are built around Github's
+                    APIs. To use the studio, you need to authorize the application to access your Github account.
+                </p>
+            </section>
+            <footer class="modal-card-foot">
+                <div class="buttons is-fullwidth">
+                    {% element form method="post" no_visible_fields=True %}
+                        {% slot actions %}
+                            {% csrf_token %}
+                            {% element button type="submit" class=" is-fullwidth button is-medium" %}
+                                <span class="icon">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                                <span>Login with Github</span>
+                            {% endelement %}
+                        {% endslot %}
                     {% endelement %}
-                {% endslot %}
-            {% endelement %}
+
+                </div>
+
+            </footer>
+        </div>
+        <button class="modal-close is-large" aria-label="close">
+
+        </button>
     </div>
-            <span class="has-text-grey p-3">
-                You can revoke access at any time from your Github account settings.
-            </span>
-        </p>
-    </section>
+
+
+
+    <script>
+        $(document).ready(function() {
+            $('.modal-close').click(function() {
+                window.location.href = "{{ request.META.HTTP_REFERER }}";
+            });
+            $('.modal-background').click(function() {
+                window.location.href = "{{ request.META.HTTP_REFERER }}";
+            });
+        });
+    </script>
+
+
 
 {% endblock content %}
