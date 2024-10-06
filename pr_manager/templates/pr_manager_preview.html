@@ -5,17 +5,28 @@
 
 
 <!--Hero-->
-<section class="hero is-success is-bold">
+<section class="hero is-success is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
                 Pull Request Manager
             </h1>
             <h2 class="subtitle">
-                Write comprehensive PR descriptions in seconds
+                Create comprehensive PR descriptions in seconds
             </h2>
         </div>
     </div>
+</section>
+<section class="section content is-size-4">
+    <p>
+        Writing good PR descriptions is important, but can take up a lot of time.
+        Use the PR Manager to codify your guidelines and generate PR descriptions
+        that meet your quality standards.
+    </p>
+    <a href="{% url 'github_login' %}" class="button is-large is-rounded">
+        <span>Login and view open PRs</span>
+        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+    </a>
 </section>
 <script>
     $(document).ready(function() {
