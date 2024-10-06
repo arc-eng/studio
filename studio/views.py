@@ -15,6 +15,23 @@ def code_policy(request):
     return render(request, "legal/code_policy.html")
 
 
+def how_it_works(request):
+    tools = [{
+        'name': 'Chat',
+        'icon': 'fa-comment',
+        'description': 'Imagine ChatGPT, but with access your code, wikis and other sources.',
+    }, {
+        'name': 'Tasks',
+        'icon': 'fa-gears has-text-info-35',
+        'description': 'A quick and easy way to hand off work to the engine.'
+    }, {
+        'name': 'Pull Requests',
+        'icon': 'fa-code-branch has-text-success-35',
+        'description': 'Generate comprehensive and beautiful PR descriptions in seconds.'
+    }]
+    return render(request, "how_it_works.html", {'tools': tools})
+
+
 def studio_home(request, owner=None, repo=None):
     return render(request, "studio_home.html", {
         "repo_owner": owner,

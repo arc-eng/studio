@@ -70,6 +70,19 @@
             border-radius: 50%;
             border: 1px solid rgb(143, 143, 143); /* Thin grey border */
         }
+        .is-blinking {
+            animation: blinkAnimation 2s infinite;
+        }
+
+        @keyframes blinkAnimation {
+            0%   { opacity: 1; }
+            50%  { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        .has-round-corners {
+            border-radius: 10px;
+        }
 
         {% block css %}
         {% endblock %}

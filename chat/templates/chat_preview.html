@@ -5,17 +5,33 @@
 
 
 <!--Hero-->
-<section class="hero is-dark is-bold">
+<section class="hero is-dark is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
                 Chat
             </h1>
             <h2 class="subtitle">
-                Work with the Arcane Engine in real-time
+                Imagine ChatGPT, but with access to your code
             </h2>
         </div>
     </div>
+</section>
+<section class="section content is-size-4">
+    <p>
+        Say good-bye to juggling multiple tools and browser windows. Chat is a single interface that
+        allows you to interact with your codebase, your team, and your tools. Save time and avoid
+        context switching by using Chat to manage your daily work.
+
+    </p>
+    <a href="{% url 'github_login' %}" class="button is-large is-rounded">
+        <span>Login and start a conversation</span>
+        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+    </a>
+</section>
+<section class="section content">
+
+
 </section>
 <script>
     $(document).ready(function() {
