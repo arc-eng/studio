@@ -12,6 +12,19 @@ logger = logging.getLogger(__name__)
 
 
 def needs_api_key(view_func):
+    """
+    Decorator to ensure a view function has access to a valid API key.
+
+    This function attempts to retrieve the API key from the user's profile. If the API key is not present,
+    it tries to create one using the user's GitHub token. If successful, the new API key is saved to the user's profile.
+    If the API key cannot be created or retrieved, the user is redirected to the 'user_profile' page.
+
+    Args:
+        view_func (function): The view function to be decorated.
+
+    Returns:
+        function: The wrapped view function with an API key passed as an additional argument.
+    """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         # Fetch the API key from the user's profile or another source
