@@ -2,10 +2,12 @@ import json
 import logging
 
 import arcane
+import requests
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 from github import Github, GithubException
 
@@ -27,7 +29,7 @@ def home(request):
 
 
 @login_required
-def view_pull_requests(request, owner=None, repo=None):
+def view_pull_requests(request, owner=None, repo=None, pr_number=None):
     if not owner or owner == 'None':
         first_bookmark = BookmarkedRepo.objects.first()
         if first_bookmark:
@@ -44,8 +46,21 @@ def view_pull_requests(request, owner=None, repo=None):
         except GithubException as e:
             return render(request, "error.html", {"error": str(e)})
         prs = github_repo.get_pulls(state='open')
-    return render_with_repositories(request, "build_home.html", {
+        if not pr_number:
+            selected_pr = prs[0]
+        else:
+            for pr in prs:
+                if pr.number == pr_number:
+                    selected_pr = pr
+                    break
+    diff_url = selected_pr.diff_url  # This gives us the URL to fetch the diff
+    headers = {'Accept': 'application/vnd.github.v3.diff'}
+    diff_data = requests.get(diff_url, headers=headers).text
+
+    return render_with_repositories(request, "index.html", {
         "prs": prs,
+        "selected_pr": selected_pr,
+        "diff_data": diff_data,
         "active_tab": "pull-request-manager",
     }, owner, repo)
 
@@ -53,8 +68,10 @@ def view_pull_requests(request, owner=None, repo=None):
 @login_required
 @require_POST
 @needs_api_key
-def generate_description(request, owner, repo, api_key):
+def generate_description(request, api_key):
     pr_number = request.POST.get('pr_number')
+    owner = request.POST.get('owner')
+    repo = request.POST.get('repo')
     engine = ArcaneEngine(api_key)
     prompt = PR_DESCRIPTION.format(pr_number=pr_number)
     try:
