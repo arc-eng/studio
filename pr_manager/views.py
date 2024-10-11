@@ -17,8 +17,9 @@ from studio.decorators import needs_api_key
 from studio.github import get_github_token
 from studio.prompts import PR_DESCRIPTION
 
-logger = logging.getLogger(__name__)
+from .models import PullRequestDescription
 
+logger = logging.getLogger(__name__)
 
 def home(request):
     if not request.user.is_authenticated:
@@ -72,10 +73,30 @@ def generate_description(request, api_key):
     pr_number = request.POST.get('pr_number')
     owner = request.POST.get('owner')
     repo = request.POST.get('repo')
+    emojis = request.POST.get('emojis')
+    content_size = request.POST.get('content_size')
+    structure = request.POST.get('structure')
+    additional_instructions = request.POST.get('additional_instructions', '')
+    add_emoji_to_title = request.POST.get('add_emoji_to_title', 'off') == 'on'
+
     engine = ArcaneEngine(api_key)
-    prompt = PR_DESCRIPTION.format(pr_number=pr_number)
+    prompt = PR_DESCRIPTION.format(
+        pr_number=pr_number,
+        structure=structure,
+        emoji_in_title="Include an emoji in the title." if add_emoji_to_title else "Do not include an emoji in the title."
+    )
+
     try:
         task = engine.create_task(f"{owner}/{repo}", prompt)
+        # Create a new PullRequestDescription instance
+        PullRequestDescription.objects.create(
+            title=f"PR #{pr_number}",
+            user=request.user,
+            repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo),
+            pr_number=pr_number,
+            description=prompt,
+            task_id=task.id
+        )
     except arcane.exceptions.ApiException as e:
         logger.error(f"Failed to create task: {e}")
         msg = str(e)
@@ -87,5 +108,3 @@ def generate_description(request, api_key):
         })
 
     return redirect(reverse('view_task', args=(owner, repo, task.id,)))
-
-
