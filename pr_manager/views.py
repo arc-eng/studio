@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from github import Github
+from github import Github, GithubException
 
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
@@ -38,8 +38,11 @@ def view_pull_requests(request, owner=None, repo=None):
     if not owner or not repo:
         prs = []
     else:
-        g = Github(get_github_token(request))
-        github_repo = g.get_repo(f"{owner}/{repo}")
+        try:
+            g = Github(get_github_token(request))
+            github_repo = g.get_repo(f"{owner}/{repo}")
+        except GithubException as e:
+            return render(request, "error.html", {"error": str(e)})
         prs = github_repo.get_pulls(state='open')
     return render_with_repositories(request, "build_home.html", {
         "prs": prs,
