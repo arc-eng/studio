@@ -1,4 +1,5 @@
 import logging
+import os
 from functools import wraps
 
 from arcane import ApiException
@@ -31,6 +32,7 @@ def needs_api_key(view_func):
             return redirect(reverse('user_profile'))
 
         # If API key is found, pass it to the view as an additional argument
+        os.environ.setdefault('ARCANE_API_KEY', api_key)
         return view_func(request, api_key=api_key, *args, **kwargs)
 
     return _wrapped_view

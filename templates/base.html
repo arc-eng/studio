@@ -100,20 +100,20 @@
 <body class="has-background-light">
 
 
-<div class="page-container container is-max-desktop">
-    <nav class="level p-3">
+<div class="page-container container is-fullwidth">
+    <nav class="level pt-2 mb-2">
 
         <!-- Left side -->
 
         <div class="level-left">
             <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "home" %}is-link{% endif %}" href="{% url 'studio_home' %}">
+                <a class="is-page-loader button is-small {% if active_tab == "home" %}is-link{% endif %}" href="{% url 'studio_home' %}">
                     <span class="icon"><i class="fas fa-home"></i></span>
                 </a>
             </p>
 
             <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "chat" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-small {% if active_tab == "chat" %}is-link is-static{% endif %}"
                    href="{% url 'chat_home' %}">
                     <span class="icon"><i class="fas fa-comment"></i></span>
                     <span>Chat</span>
@@ -121,35 +121,43 @@
             </p>
 
             <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "tasks" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-small {% if active_tab == "tasks" %}is-link is-static{% endif %}"
                    href="{% url 'tasks_home' %}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
                 </a>
             </p>
             <p class="level-item has-text-centered">
-                <a class="is-page-loader button is-rounded is-small {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
+                <a class="is-page-loader button is-small {% if active_tab == "pull-request-manager" %}is-link is-static{% endif %}"
                    href="{% url 'pr_manager_home' %}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
                 </a>
             </p>
-
             <p class="level-item has-text-centered">
-                {% url 'contribute' as contribute_url %}
-                <a class="is-page-loader button is-rounded is-small is-outlined {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
-                   href="{{ contribute_url }}">
-                    <span class="icon"><i class="fas fa-plus"></i></span>
+                <a class="is-page-loader button is-small {% if active_tab == "build" %}is-link is-static{% endif %}"
+                   href="{% url 'build_home' %}">
+                    <span class="icon"><i class="fas fa-hammer"></i></span>
+                    <span>Build</span>
                 </a>
             </p>
+
         </div>
 
         <!-- Right side -->
         <div class="level-right">
+
+            <p class="level-item has-text-centered">
+                {% url 'contribute' as contribute_url %}
+                <a class="is-page-loader button is-small is-outlined {% if active_tab == "contribute" %}is-static{% else %}is-dark{% endif %}"
+                   href="{{ contribute_url }}">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                </a>
+            </p>
             <p class="level-item">
                 {% if user.is_authenticated %}
                     <a href="{% url 'user_profile' %}">
-                        <figure class="image is-48x48 has-circle">
+                        <figure class="image is-32x32 has-circle">
                             <img
                                     src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
                                     alt="{{ user.username }}"

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Arcane Studio - Chat{% endblock %}
+{% block title %}Arcane Studio - Pull Requests{% endblock %}
 
 {% block content %}
 
@@ -22,6 +22,20 @@
         Writing good PR descriptions is important, but can take up a lot of time.
         Use the PR Manager to codify your guidelines and generate PR descriptions
         that meet your quality standards.
+    </p>
+    <p>
+       Here are some real-life examples from the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>:
+        <ul>
+            <li>
+                <a href="https://github.com/arc-eng/studio/pull/12" target="_blank">💬 Implement chat application</a>
+            </li>
+            <li>
+                <a href="https://github.com/arc-eng/studio/pull/9" target="_blank">🔒 Implement login via allauth</a>
+            </li>
+            <li>
+                <a href="https://github.com/arc-eng/studio/pull/10" target="_blank">🚀 Add Helm Chart for Deployment</a>
+            </li>
+        </ul>
     </p>
     <a href="{% url 'github_login' %}" class="button is-large is-rounded">
         <span>Login and view open PRs</span>

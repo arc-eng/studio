@@ -13,7 +13,7 @@
 {% include 'app_header.html' with title="Tasks" subtitle="Hand over work to the Arcane Engine" %}
 
 <!-- New Task Form -->
-<div class="content px-4">
+<div class="content">
     <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
         {% csrf_token %}
         <div class="field">
@@ -34,7 +34,7 @@
 
 {%  if tasks %}
 <div class="table-container">
-    <table class="table is-fullwidth is-hoverable is-rounded has-background-white-bis ">
+    <table class="table is-fullwidth is-striped is-rounded is-striped">
         <tbody>
             {% for task in tasks %}
                 <tr>

@@ -1,7 +1,7 @@
 {% extends 'base_repos.html' %}
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Repositories" subtitle="Create your personal workspace" %}
+    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Select repositories to work with in Arcane Studio" %}
 
     {%  if not bookmarked_repos|length %}
         <p class="px-4 is-size-5 has-text-weight-light mb-5">
@@ -10,15 +10,11 @@
         <p class="px-4 is-size-5 has-text-weight-light mb-5">
             <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader">Let's go</a>
         </p>
-    {% else %}
-        <p class="px-4 is-size-5 has-text-weight-light mb-5">
-            Once you've picked your repositories, choose a tool from the top bar.
-        </p>
     {% endif %}
 
 
     <div class="table-container">
-        <table class="table is-hoverable has-background-white-bis ">
+        <table class="table is-striped ">
             <tbody>
             {% for owner, bookmarks in bookmarked_repos.items %}
                 {% for bookmark in bookmarks %}

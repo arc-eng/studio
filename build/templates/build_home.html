@@ -1,0 +1,107 @@
+{% extends "base_repos.html" %}
+
+{% block title %}Arcane Studio - Build{% endblock %}
+
+
+{% block repo_content %}
+
+    {% if system.is_loading %}
+        <section class="section content">
+            <p class="title is-2">
+                <span class="icon has-text-info is-large"><i class="fa fa-rotate fa-spin"></i></span>
+                <span>Detecting build scripts and config files ...</span>
+            </p>
+        </section>
+
+    {% elif system.error %}
+        <section class="section is-error content">
+            <p>Failed to collect system information:</p>
+            <p>{{ system.error }}</p>
+        </section>
+    {% else %}
+
+        <div class="content">
+            {% include 'app_header.html' with title="Build Scripts & Config Files" subtitle="AI-generated recommendations for optimizations and improvements" classes="mb-5" %}
+            <p>
+                {{ system.description }}
+            </p>
+            <div class="table-container has-background-white">
+                <table class="table is-fullwidth is-striped is-narrow">
+                    <tbody>
+                    {% for file in system.files.all %}
+                        <tr>
+                            <td class="is-narrow">
+                                <span class="icon"><i class="fas {{ file.icon }}"></i></span>
+                            </td>
+                            <td class="is-narrow"><code>{{ file.path }}</code></td>
+                            <td>{{ file.purpose }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="title is-5">Recommendations</p>
+            <p>
+                In the table below you'll find auto-generated, actionable recommendations on how to improve or optimize
+                your scripts and configurations. Use the buttons on the left to apply them.
+            </p>
+        <div class="table-container has-background-white mt-3">
+            <table class="table is-fullwidth is-striped">
+                <thead>
+                    <tr>
+                        <th><abbr title="Apply Recommended Action">Apply</abbr></th>
+                        <th><abbr title="Project File">File</abbr></th>
+                        <th><abbr title="Recommended Action">Recommendation</abbr></th>
+                        <th><abbr title="Benefit">Benefit</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for file in system.files.all %}
+                    {% for rec in file.recommendations.all %}
+                        <tr>
+                            <td class="is-narrow has-text-centered">
+
+                                {% if rec.task_id %}
+                                    {% with rec.build_system_file.build_system.repo as repo %}
+                                        <a href="{% url 'view_task' owner=repo.owner repo=repo.repo_name task_id=rec.task_id %}" class="button is-small is-success apply-button">
+                                            <span class="icon"><i class="fas fa-check"></i></span>
+                                        </a>
+                                    {% endwith %}
+
+                                {% else %}
+
+                                    <form method="post" action="{% url 'apply_recommendation' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="recommendation_id" value="{{ rec.id }}">
+                                        <button type="submit" class="button is-small is-link apply-button">
+                                            <span class="icon"><i class="fas {{ rec.icon }}"></i></span>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td class="is-narrow">
+                                <a href="{{ file.github_link }}" target="_blank">
+                                    <span>{{ file.title }}</span>
+                                </a>
+                            </td>
+                            <td>{{ rec.action }}</td>
+                            <td>{{ rec.benefit }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function() {
+            $('.apply-button').click(function() {
+                $(this).addClass('is-loading');
+            });
+        });
+    </script>
+
+{% endblock %}
