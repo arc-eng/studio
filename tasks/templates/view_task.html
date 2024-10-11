@@ -18,77 +18,77 @@
 {% endblock %}
 
 {% block repo_content %}
+    <nav class="breadcrumb ml-2" aria-label="breadcrumbs">
+        <ul>
+            <li>
+                <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
+                    {#                        <span class="icon is-small">#}
+                    {#                          <i class="fas fa-gears" aria-hidden="true"></i>#}
+                    {#                        </span>#}
+                    <span>Tasks</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span id="breadcrumb-title">{{ task.title }}</span>
+                    <span class="icon is-small">
+                            {% if task.status == "running" or task.status == "scheduled" %}
+                                <i class="fas fa-rotate fa-spin"></i>
+                            {% elif task.status == "completed" %}
+                                <i class="fas fa-check" aria-hidden="true"></i>
+                            {% elif task.status == "failed" %}
+                                <i class="fas fa-exclamation-triangle"></i>
+                            {% endif %}
 
-    <div class="p-4">
+                        </span>
 
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-            <ul>
-                <li>
-                    <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
-            <span class="icon is-small">
-              <i class="fas fa-gears" aria-hidden="true"></i>
-            </span>
-                        <span>Tasks</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-            <span class="icon is-small">
-                {% if task.status == "running" or task.status == "scheduled" %}
-                    <i class="fas fa-rotate fa-spin"></i>
-                {% elif task.status == "completed" %}
-                    <i class="fas fa-book" aria-hidden="true"></i>
-                {% elif task.status == "failed" %}
-                    <i class="fas fa-exclamation-triangle"></i>
-                {% endif %}
+                </a>
+            </li>
 
-            </span>
-                        <span id="breadcrumb-title">{{ task.title }}</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
-
-
-        <div class="buttons">
-            <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-small">
-                <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
-            </a>
-            <a class="button is-small" id="view-prompt-button">
-                <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
-            </a>
-            {% if task.pr_number %}
-            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
-                <span class="icon is-small has-text-success-40"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>#{{ task.pr_number }}</span>
-            </a>
-
-            {% endif %}
-
-        </div>
+        </ul>
+    </nav>
+    <div class="content">
 
 
 
-        <div class="content is-hidden" id="prompt-box">
+        <div class="is-hidden" id="prompt-box">
             <div class="columns">
                 <div class="column is-1 has-text-centered is-size-4">
                     <span class="icon is-large"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="column is-11 content is-family-monospace">
                     {{ task.user_request | safe }}
+                    <hr/>
                 </div>
+
             </div>
         </div>
 
 
 
         {%  if task.status == "completed" %}
-        <div class="columns" id="result-box">
+        <div class="columns">
             <div class="column is-1 content has-text-centered is-size-4 has-text-success">
-                <span class="icon is-large"><i class="fas fa-check-circle"></i></span>
+                <span class="icon"><i class="fas fa-check-circle"></i></span>
             </div>
             <div class="column is-11 content is-family-monospace">
+                <div class="buttons">
+                    <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-small">
+                        <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
+                    </a>
+                    <a class="button is-small" id="view-prompt-button">
+                        <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
+                    </a>
+                    {% if task.pr_number %}
+                        <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
+                            <span class="icon is-small has-text-success-40"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>#{{ task.pr_number }}</span>
+                        </a>
+
+                    {% endif %}
+
+                </div>
                 {{ task.result | safe }}
+
 
                 <!-- Follo-up Form -->
                 <div class="content">
@@ -133,10 +133,10 @@
 
     {% if task.status == "scheduled" or task.status == "running" %}
         <!-- Render task events using BulmaCSS Table -->
-        <div class="table-container has-background-white-bis">
+        <div class="table-container">
             <table class="table is-fullwidth">
                 <tbody>
-                <tr class="has-background-white-bis">
+                <tr>
                     <td><span id="second-counter" class="has-text-weight-light"></span></td>
                     <td><progress class="progress is-secondary is-small mt-2" max="100">15%</progress></td>
                     <td class="is-family-monospace is-blinking" id="task-progress-indicator-text"></td>
@@ -152,7 +152,6 @@
             $('#view-prompt-button').click(function() {
                 $('#prompt-box').toggleClass('is-hidden');
                 $('#view-prompt-button').toggleClass('is-active');
-                $('#result-box').toggleClass('is-hidden');
             });
 
              // Open websocket to get task updates
@@ -228,7 +227,7 @@
                             const converter = new showdown.Converter();
                             const htmlMessage = converter.makeHtml(event.message);
                             $('.table tbody').append(`
-                                <tr class="has-background-white-bis">
+                                <tr>
                                     <td class="has-text-weight-light">${counter}</td>
                                     <td><span class="icon"><i class="fa fa-${event.icon}"></i></span></td>
                                     <td>${htmlMessage}</td>

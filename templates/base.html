@@ -100,7 +100,7 @@
 <body class="has-background-light">
 
 
-<div class="page-container container is-max-desktop">
+<div class="page-container container is-fullwidth">
     <nav class="level p-3">
 
         <!-- Left side -->
@@ -134,6 +134,13 @@
                     <span>Pull Requests</span>
                 </a>
             </p>
+            <p class="level-item has-text-centered">
+                <a class="is-page-loader button is-rounded is-small {% if active_tab == "build" %}is-link is-static{% endif %}"
+                   href="{% url 'build_home' %}">
+                    <span class="icon"><i class="fas fa-hammer"></i></span>
+                    <span>Build</span>
+                </a>
+            </p>
 
             <p class="level-item has-text-centered">
                 {% url 'contribute' as contribute_url %}
@@ -142,6 +149,7 @@
                     <span class="icon"><i class="fas fa-plus"></i></span>
                 </a>
             </p>
+
         </div>
 
         <!-- Right side -->

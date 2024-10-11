@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Arcane Studio - Build{% endblock %}
+
+{% block content %}
+
+
+<!--Hero-->
+<section class="hero is-success is-bold  has-round-corners">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Build
+            </h1>
+            <h2 class="subtitle">
+                Manage build scripts and config files with ease
+            </h2>
+        </div>
+    </div>
+</section>
+<section class="section content is-size-4">
+    <p>
+        Maintaining build scripts and configuration files can be a pain. Use the Build tool to manage your
+        build scripts and configuration files with ease:
+    </p>
+    <p>
+        <ul>
+            <li>
+                <strong>Discover</strong> - The tool will automatically discover build scripts and configuration files in your repository
+            </li>
+            <li>
+                <strong>Explain</strong> - The tool will explain the purpose of each build script and configuration file
+            </li>
+            <li>
+                <strong>Optimize</strong> - The tool will suggest optimizations to your build scripts and configuration files that you can apply with just one click
+            </li>
+        </ul>
+    </p>
+    <a href="{% url 'github_login' %}" class="button is-large is-rounded">
+        <span>Login and start optimizing</span>
+        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+    </a>
+</section>
+<script>
+    $(document).ready(function() {
+    });
+</script>
+{% endblock %}

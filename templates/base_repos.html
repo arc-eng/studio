@@ -2,51 +2,57 @@
 
 {% block content %}
 
-    <div class="tabs is-toggle is-centered">
-        <ul>
-            {#  Repo Tabs  #}
-            <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
-                <a class="is-page-loader" href="{% url 'repositories:repo_overview' %}">
-                    <span class="icon"><i class="fas fa-link"></i></span>
-                </a>
-            </li>
-            {% for owner, repos in bookmarked_repos.items %}
-                {% for bookmark in repos %}
-                    <li class="{% if  bookmark.full_name == selected_repo %}is-active{% endif %}">
-                        {% if active_tab == "tasks" %}
-                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                        {% elif active_tab == "pull-request-manager" %}
-                            {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                        {% elif active_tab == "reports" %}
-                            {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                        {% else %}
-                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                        {% endif %}
 
-                        <a href="{{ repo_link }}">
-{#                            <span class="icon"><i class="fab fa-github"></i></span>#}
-                            <span>
+
+    <div class="has-background-white tiny-rounded">
+
+        <div class="tabs is-toggle mt-5 mx-5 is-fullwidth is-small">
+            <ul>
+                {#  Repo Tabs  #}
+                <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
+                    <a class="is-page-loader" href="{% url 'repositories:repo_overview' %}">
+                        <span class="icon"><i class="fas fa-link"></i></span>
+                    </a>
+                </li>
+                {% for owner, repos in bookmarked_repos.items %}
+                    {% for bookmark in repos %}
+                        <li class="{% if  bookmark.full_name == selected_repo %}is-active{% endif %}">
+                            {% if active_tab == "tasks" %}
+                                {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                            {% elif active_tab == "pull-request-manager" %}
+                                {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                            {% elif active_tab == "reports" %}
+                                {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                            {% elif active_tab == "build" %}
+                                {% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                            {% else %}
+                                {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                            {% endif %}
+
+                            <a href="{{ repo_link }}">
+                                {#                            <span class="icon"><i class="fab fa-github"></i></span>#}
+                                <span>
                                 <figure class="image is-24x24 mr-2">
                                     <img
                                             src="{{ bookmark.img_url }}"
                                             class="is-rounded" />
                                 </figure>
                             </span>
-                            <span>{{ bookmark.repo_name }}</span>
-                        </a>
-                    </li>
+                                <span>{{ bookmark.repo_name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+
                 {% endfor %}
 
-            {% endfor %}
+            </ul>
+        </div>
+        <div class="p-5">
+            {% block repo_content %}
 
-        </ul>
-    </div>
+            {% endblock %}
+        </div>
 
-    <div class="has-background-white-bis tiny-rounded">
-
-        {% block repo_content %}
-
-        {% endblock %}
     </div>
     <script>
     $(document).ready(function() {

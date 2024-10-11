@@ -41,7 +41,7 @@ def view_pull_requests(request, owner=None, repo=None):
         g = Github(get_github_token(request))
         github_repo = g.get_repo(f"{owner}/{repo}")
         prs = github_repo.get_pulls(state='open')
-    return render_with_repositories(request, "index.html", {
+    return render_with_repositories(request, "build_home.html", {
         "prs": prs,
         "active_tab": "pull-request-manager",
     }, owner, repo)

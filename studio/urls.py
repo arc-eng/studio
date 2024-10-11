@@ -39,6 +39,7 @@ all_patterns = [
     path("user/", include("users.urls")),
     path("chat/", include("chat.urls")),
     path("repositories/", include("repositories.urls")),
+    path("build/", include("build.urls")),
     path("contribute/", views.contribute, name="contribute"),
     path("login/", oauth2_login, name="github_login"),
     path("logout/", views.user_logout, name="user_logout"),

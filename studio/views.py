@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 
 
 def terms_of_service(request):
@@ -54,8 +55,7 @@ def contribute(request, owner=None, repo=None):
 def user_logout(request):
     # Log out the user
     logout(request)
-    # Redirect to home page (or any other page you prefer)
-    return redirect("/")
+    return redirect(reverse("studio_home"))
 
 
 
