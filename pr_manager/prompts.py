@@ -25,8 +25,11 @@ Use the following guidelines:
 ---
 
 # Your task
-Edit PR #{pr_number} title and description to reflect the changes made in this PR.
-Respond only with a copy of the PR description, nothing else.
+Do the following:
+1. Read PR #{pr_number}
+2. Generate title and description to reflect the changes made in this PR
+3. Update the PR with the title and description
+4. Respond with a copy of the PR description
 """
 
 

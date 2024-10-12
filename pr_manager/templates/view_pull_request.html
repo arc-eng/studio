@@ -4,7 +4,6 @@
 
 {% block extra_header %}
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
 
     <!-- Javascripts -->
@@ -16,7 +15,7 @@
     {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
 
     <div class="columns">
-        <div class="column is-4">
+        <div class="column is-5">
             <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
                 <ul>
                     <li class="is-active tab" id="description-tab">
@@ -40,7 +39,7 @@
                         <input type="hidden" name="owner" value="{{ repo_owner }}">
                         <input type="hidden" name="repo" value="{{ repo_name }}">
                         <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
-                        <div class="buttons is-fullwidth mr-5 mb-5">
+                        <div class="buttons is-fullwidth is-justify-content-space-evenly mr-5 mb-5">
                             <button class="button" type="submit" id="start-over-button">
                                 <span class="icon is-small"><i class="fas fa-redo"></i></span>
                                 <span>Start Over</span>
@@ -53,7 +52,10 @@
 
                         {% csrf_token %}
                     </form>
-                    {{ description.description|safe }}
+                    <pre id="desc-data" style="display: none;">
+                    {{ pr_description }}
+                    </pre>
+                    <div id="desc-output" class="content"></div>
                 {% elif task %}
                     {% include 'task_live_updates.html' %}
                 {% else %}
@@ -66,11 +68,11 @@
 
             <div id="review-tab-container" class="tab-container is-hidden">
                 <p class="is-size-5">
-                    Here you can review
+                    Soon, you will be able to review the changes in the PR here.
                 </p>
             </div>
         </div>
-        <div class="column is-8">
+        <div class="column is-7">
             <div class="select is-dark mb-3 is-fullwidth">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
@@ -119,6 +121,9 @@
                 $('.tab-container').toggleClass('is-hidden');
                 $('.tab').toggleClass('is-active');
             });
+
+            // Get the description data from the hidden pre tag with jquery
+            $('#desc-output').html(window.md.render($('#desc-data').text().trim()));
         });
     </script>
 

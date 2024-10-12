@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import arcane
 import markdown
@@ -69,14 +70,14 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
         if task.status == 'completed':
             description.description = task.result
             description.save()
-    if description and description.description:
-        description.description = markdown.markdown(description.description, extensions=['nl2br', 'fenced_code', 'extra'])
+
     return render_with_repositories(request, "view_pull_request.html", {
         "prs": prs,
         "selected_pr": selected_pr,
         "diff_data": diff_data,
         "task": task,
         "description": description,
+        "pr_description": description.description if description else "",
         "active_tab": "pull-request-manager",
     }, owner, repo)
 
@@ -105,9 +106,7 @@ def generate_description(request, api_key):
     )
 
     try:
-        task = engine.create_task(f"{owner}/{repo}", prompt,
-                                  output_format="markdown",
-                                  output_structure="Only the PR description, nothing else")
+        task = engine.create_task(f"{owner}/{repo}", prompt)
         # Create a new PullRequestDescription instance
         PullRequestDescription.objects.create(
             user=request.user,
