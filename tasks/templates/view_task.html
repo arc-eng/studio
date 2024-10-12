@@ -22,9 +22,6 @@
         <ul>
             <li>
                 <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
-                    {#                        <span class="icon is-small">#}
-                    {#                          <i class="fas fa-gears" aria-hidden="true"></i>#}
-                    {#                        </span>#}
                     <span>Tasks</span>
                 </a>
             </li>
@@ -48,8 +45,6 @@
         </ul>
     </nav>
     <div class="content">
-
-
 
         <div class="is-hidden" id="prompt-box">
             <div class="columns">
@@ -130,134 +125,5 @@
 
 
     </div>
-
-    {% if task.status == "scheduled" or task.status == "running" %}
-        <!-- Render task events using BulmaCSS Table -->
-        <div class="table-container">
-            <table class="table is-fullwidth">
-                <tbody>
-                <tr>
-                    <td><span id="second-counter" class="has-text-weight-light"></span></td>
-                    <td><progress class="progress is-secondary is-small mt-2" max="100">15%</progress></td>
-                    <td class="is-family-monospace is-blinking" id="task-progress-indicator-text"></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-    {% endif %}
-    <script>
-        $(document).ready(function() {
-
-            $('#view-prompt-button').click(function() {
-                $('#prompt-box').toggleClass('is-hidden');
-                $('#view-prompt-button').toggleClass('is-active');
-            });
-
-             // Open websocket to get task updates
-            const task = {
-                id: "{{ task.id }}",
-                status: "{{ task.status }}"
-            }
-            const taskEvents = [
-                {% for event in task_events %}
-                    {
-                        id: "{{ event.id }}",
-                        timestamp: "{{ event.timestamp }}",
-                        target: "{{ event.target }}",
-                        action: "{{ event.action }}",
-                        icon: "{{ event.icon }}",
-                        seconds_since_start: {{ event.seconds_since_start }}
-                    },
-                {% endfor %}
-            ];
-            let counter = 0;
-            {% if task.status == "running" or task.status == "scheduled" %}
-                // Count up timer and set value in #second-counter
-                const lastEvent = taskEvents[taskEvents.length - 1];
-
-                if (lastEvent) {
-                    counter = lastEvent.seconds_since_start;
-                }
-                function countUp() {
-                    counter++;
-                    $("#second-counter").text(counter);
-                }
-                setInterval(countUp, 1000);
-            {% endif %}
-
-            const ACTION_FA_ICON_MAP = {
-                "invoke_skill": "forward",
-                "finish_skill": "backward",
-                "push_branch": "code-branch",
-                "checkout_branch": "code-branch",
-                "write_file": "edit",
-                "list_directory": "folder",
-                "search_code": "search",
-                "search": "search",
-                "search_issues": "search",
-                "read_github_issue": "file-alt",
-                "read_pull_request": "file-alt",
-                "read_files": "file-alt",
-            }
-
-            {% if task.status == "running" or task.status == "scheduled" or task.status == "created" %}
-
-                function connectWebSocket() {
-                    const ws = new WebSocket("wss://arcane.engineer/ws/tasks/{{ task.id }}/events/");
-
-                    ws.onmessage = function (event) {
-                        const data = JSON.parse(event.data);
-                        const msgType = data['type'];
-
-                        if (msgType === "status_update") {
-                            window.location.reload();
-                        }
-
-                        if (msgType === "title_update") {
-                            $('#task-progress-indicator-text').text(data['data']);
-                            $('#breadcrumb-title').text(data['data']);
-
-                        }
-
-                        if (msgType === "event") {
-                            const event = data['data'];
-                            taskEvents.push(event);
-                            event.icon = ACTION_FA_ICON_MAP[event.action] || "check";
-                            const converter = new showdown.Converter();
-                            const htmlMessage = converter.makeHtml(event.message);
-                            $('.table tbody').append(`
-                                <tr>
-                                    <td class="has-text-weight-light">${counter}</td>
-                                    <td><span class="icon"><i class="fa fa-${event.icon}"></i></span></td>
-                                    <td>${htmlMessage}</td>
-                                </tr>
-                            `);
-
-                            // Swap the last and second to last row in the table
-                            const lastRow = $('.table tbody tr:last');
-                            const secondLastRow = $('.table tbody tr:nth-last-child(2)');
-                            lastRow.insertBefore(secondLastRow);
-                        }
-
-                        console.log(data);
-                    };
-
-                    ws.onclose = function () {
-                        console.log('WebSocket closed. Reconnecting in 1 second...');
-                        setTimeout(connectWebSocket, 1000); // Try to reconnect after 1 seconds
-                    };
-
-                    ws.onerror = function (error) {
-                        console.error('WebSocket error:', error);
-                        ws.close(); // Close the WebSocket to trigger the reconnect
-                    };
-                }
-
-                // Initiate the WebSocket connection
-                connectWebSocket();
-            {% endif %}
-
-        });
-    </script>
+    {% include 'task_live_updates.html' with task=task %}
 {% endblock %}

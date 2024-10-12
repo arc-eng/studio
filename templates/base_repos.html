@@ -20,7 +20,7 @@
                             {% if active_tab == "tasks" %}
                                 {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                             {% elif active_tab == "pull-request-manager" %}
-                                {% url 'view_pull_requests' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                                {% url 'view_pull_request' owner=bookmark.owner repo=bookmark.repo_name pr_number=0 as repo_link %}
                             {% elif active_tab == "reports" %}
                                 {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                             {% elif active_tab == "build" %}

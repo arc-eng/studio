@@ -1,0 +1,125 @@
+{% extends "base_repos.html" %}
+
+{% block title %}Arcane Studio - Pull Requests{% endblock %}
+
+{% block extra_header %}
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
+
+    <!-- Javascripts -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
+{% endblock %}
+
+
+{% block repo_content %}
+    {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
+
+    <div class="columns">
+        <div class="column is-4">
+            <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
+                <ul>
+                    <li class="is-active tab" id="description-tab">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-file-waveform"></i></span>
+                            <span>Description</span>
+                        </a>
+                    </li>
+                    <li id="review-tab" class="tab">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-magnifying-glass"></i></span>
+                            <span>Review</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div id="description-tab-container" class="tab-container">
+
+                {% if description and description.description %}
+                    <form action="{% url 'start_over' %}" method="post" class="is-fullwidth">
+                        <input type="hidden" name="owner" value="{{ repo_owner }}">
+                        <input type="hidden" name="repo" value="{{ repo_name }}">
+                        <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+                        <div class="buttons is-fullwidth mr-5 mb-5">
+                            <button class="button" type="submit" id="start-over-button">
+                                <span class="icon is-small"><i class="fas fa-redo"></i></span>
+                                <span>Start Over</span>
+                            </button>
+                            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button">
+                                <span class="icon is-small"><i class="fab fa-github"></i></span>
+                                <span>View on GitHub</span>
+                            </a>
+                        </div>
+
+                        {% csrf_token %}
+                    </form>
+                    {{ description.description|safe }}
+                {% elif task %}
+                    {% include 'task_live_updates.html' %}
+                {% else %}
+                    <p class="is-size-5 mb-5">
+                        Customize the options below to create the perfect PR description in seconds.
+                    </p>
+                    {% include 'description_generator_form.html' %}
+                {% endif %}
+            </div>
+
+            <div id="review-tab-container" class="tab-container is-hidden">
+                <p class="is-size-5">
+                    Here you can review
+                </p>
+            </div>
+        </div>
+        <div class="column is-8">
+            <div class="select is-dark mb-3 is-fullwidth">
+                <select name="pr_number" id="pr-select">
+                    {% for pr in prs %}
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}">#{{ pr.number }} {{ pr.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
+            <div id="diff-output"></div>
+        </div>
+    </div>
+    
+
+    {% if not prs %}
+    <div class="p-4">
+        <p class="content has-text-weight-light">
+            No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
+        </p>
+    </div>
+    {% endif %}
+    <script>
+        // Get the diff data from the hidden pre tag
+        const diffData = document.getElementById('diff-data').textContent;
+
+        const targetElement = document.getElementById('diff-output');
+        const configuration = { drawFileList: false, matching: 'lines' };
+
+        const diff2htmlUi = new Diff2HtmlUI(targetElement, diffData, configuration);
+        diff2htmlUi.draw();
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.generate-button').click(function() {
+                $(this).addClass('is-loading');
+            });
+            $('#start-over-button').click(function() {
+                $(this).addClass('is-loading');
+            });
+            $('#pr-select').on('change', function(){
+                var url = $(this).val();
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+            $('.tab').click(function() {
+                $('.tab-container').toggleClass('is-hidden');
+                $('.tab').toggleClass('is-active');
+            });
+        });
+    </script>
+
+{% endblock %}
