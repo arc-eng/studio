@@ -1,0 +1,74 @@
+<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth">
+    <input type="hidden" name="owner" value="{{ repo_owner }}">
+    <input type="hidden" name="repo" value="{{ repo_name }}">
+    <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+    {% csrf_token %}
+
+    <div class="field" id="emoji-selector">
+        <p class="control has-icons-left">
+                            <span class="select is-fullwidth is-info">
+                              <select name="emojis">
+                                <option value="readability" selected>Use emojis to enhance readability</option>
+                                <option value="readability_and_fun">Emojis for readability and fun</option>
+                                <option value="no_emojis">No Emojis</option>
+                              </select>
+                            </span>
+            <span class="icon is-small is-left">
+                              <i class="fas fa-icons"></i>
+                            </span>
+        </p>
+    </div>
+
+    <div class="field" id="content-size-field">
+        <p class="control has-icons-left">
+                            <span class="select is-info is-fullwidth">
+                              <select name="content_size">
+                                <option value="brief" selected>Keep it brief and concise</option>
+                                <option value="medium">Brief, but elaborate where necessary</option>
+                                <option value="detailed">Go into details</option>
+                              </select>
+                            </span>
+            <span class="icon is-small is-left">
+                              <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                            </span>
+        </p>
+    </div>
+    <div class="field" id="structure-field">
+        <p class="control has-icons-left">
+                            <span class="select is-fullwidth is-info">
+                              <select name="structure">
+                                <option value="topics" selected>Write bullet points grouped by topics</option>
+                                <option value="files">Write bullet points grouped by file</option>
+                                <option value="prose">Write prose and paragraphs</option>
+                              </select>
+                            </span>
+            <span class="icon is-small is-left">
+                              <i class="fa-regular fa-file-lines"></i>
+                            </span>
+        </p>
+    </div>
+    <div class="field" id="additional-notes-field">
+        <div class="control">
+                            <textarea class="textarea is-info"
+                                      name="additional_instructions"
+                                      placeholder="(Optional) additional instructions"></textarea>
+        </div>
+
+    </div>
+    <div class="field" id="title-emoji-checkbox">
+        <label class="checkbox">
+            <input type="checkbox" name="add_emoji_to_title" checked/>
+            Add Emoji to PR title
+        </label>
+    </div>
+
+
+    <div class="field">
+        <div class="control">
+            <button class="button is-info is-fullwidth is-medium generate-button">
+                <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+                <span>Generate Description & Title</span>
+            </button>
+        </div>
+    </div>
+</form>
