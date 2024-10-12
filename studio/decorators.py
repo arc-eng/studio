@@ -11,8 +11,23 @@ from studio.github import get_github_token
 
 logger = logging.getLogger(__name__)
 
-
 def needs_api_key(view_func):
+    """
+    Decorator to ensure a valid API key is available for a user before executing a view function.
+
+    This decorator performs the following actions:
+
+    1. Checks for an existing API key in the user's profile.
+    2. If missing, attempts to generate a new API key using the user's GitHub token.
+    3. Redirects the user to the 'user_profile' page if an API key cannot be generated.
+    4. Passes the API key to the view function as an additional argument if available.
+
+    Args:
+        view_func (function): The view function to be wrapped.
+
+    Returns:
+        function: The wrapped view function with API key handling.
+    """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         # Fetch the API key from the user's profile or another source
