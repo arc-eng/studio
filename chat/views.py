@@ -1,7 +1,6 @@
 import logging
 import threading
 
-import markdown
 from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required

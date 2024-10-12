@@ -1,9 +1,7 @@
 import json
 import logging
-import re
 
 import arcane
-import markdown
 import requests
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
@@ -16,7 +14,6 @@ from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
 from studio.github import get_github_token
-
 from .models import PullRequestDescription
 from .prompts import emoji_prompt, structure_prompt, style_prompt, PR_DESCRIPTION
 
