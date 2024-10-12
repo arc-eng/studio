@@ -96,13 +96,13 @@
 
                 </div>
                 <pre id="result-data" style="display: none;">
-                    {{ task.result | safe }}
-                    </pre>
+                {{ task.result }}
+                </pre>
                 <div id="result-output" class="content"></div>
 
 
 
-                <!-- Follo-up Form -->
+                <!-- Follow-up Form -->
                 <div class="content">
                     <form action="{% url 'create_followup_task' owner=repo_owner repo=repo_name task_id=task.id %}" method="post">
                         {% csrf_token %}
@@ -133,7 +133,7 @@
         </div>
         <div class="box content has-background-danger-light">
             <pre id="result-data" style="display: none;">
-            {{ task.result | safe }}
+            {{ task.result | safe}}
             </pre>
             <div id="result-output" class="content"></div>
         </div>

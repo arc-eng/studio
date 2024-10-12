@@ -53,7 +53,7 @@
                         {% csrf_token %}
                     </form>
                     <pre id="desc-data" style="display: none;">
-                    {{ pr_description|safe }}
+                    {{ pr_description }}
                     </pre>
                     <div id="desc-output" class="content"></div>
                 {% elif task %}

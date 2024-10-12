@@ -30,12 +30,6 @@ def home(request):
     return redirect("view_pull_request", owner=None, repo=None, pr_number=0)
 
 
-def preprocess_markdown(text):
-    # Add empty lines before and after lists
-    text = re.sub(r"([^\n])(\n- )", r"\1\n\2", text)  # Before list
-    text = re.sub(r"(\n- .*)([^\n])", r"\1\n\2", text)  # After list
-    return text
-
 @login_required
 @needs_api_key
 def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None):
@@ -112,9 +106,7 @@ def generate_description(request, api_key):
     )
 
     try:
-        task = engine.create_task(f"{owner}/{repo}", prompt,
-                                  output_format="markdown",
-                                  output_structure="Only the PR description, nothing else")
+        task = engine.create_task(f"{owner}/{repo}", prompt)
         # Create a new PullRequestDescription instance
         PullRequestDescription.objects.create(
             user=request.user,

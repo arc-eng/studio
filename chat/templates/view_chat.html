@@ -63,7 +63,10 @@
             </p>
             {% for message in messages %}
                 <!-- User Message -->
-                <div class="box is-shadowless has-background-white-ter ml-5">
+                <div class="columns">
+                <div class="column is-one-third"></div>
+                  <div class="column is-two-thirds">
+                    <div class="box is-shadowless has-background-white-ter">
                     <figure class="image is-24x24 is-inline-block has-circle is-pulled-right">
                         <img
                                 src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
@@ -71,11 +74,14 @@
                                 class="is-rounded" />
                     </figure>
                     <pre class="msg-data" data-msg-id="{{ message.id }}" style="display: none;">
-                    {{ message.message | safe }}
+                    {{ message.message }}
                     </pre>
                     <div class="msg-output content" data-msg-id="{{ message.id }}"></div>
 
                 </div>
+                  </div>
+                </div>
+
                 <!-- Response -->
                 <div class="content p-3">
                     {% if not message.result %}
@@ -97,7 +103,7 @@
                             </div>
                             <div class="column">
                                 <pre class="response-data" data-msg-id="{{ message.id }}" style="display: none;">
-                                {{ message.result | safe }}
+                                {{ message.result }}
                                 </pre>
                                 <div class="response-output content" data-msg-id="{{ message.id }}"></div>
                             </div>
