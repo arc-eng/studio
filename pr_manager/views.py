@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 
 import arcane
 import markdown
@@ -28,6 +29,12 @@ def home(request):
         })
     return redirect("view_pull_request", owner=None, repo=None, pr_number=0)
 
+
+def preprocess_markdown(text):
+    # Add empty lines before and after lists
+    text = re.sub(r"([^\n])(\n- )", r"\1\n\2", text)  # Before list
+    text = re.sub(r"(\n- .*)([^\n])", r"\1\n\2", text)  # After list
+    return text
 
 @login_required
 @needs_api_key
@@ -69,14 +76,14 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
         if task.status == 'completed':
             description.description = task.result
             description.save()
-    if description and description.description:
-        description.description = markdown.markdown(description.description, extensions=['nl2br', 'fenced_code', 'extra'])
+
     return render_with_repositories(request, "view_pull_request.html", {
         "prs": prs,
         "selected_pr": selected_pr,
         "diff_data": diff_data,
         "task": task,
         "description": description,
+        "pr_description": description.description if description else "",
         "active_tab": "pull-request-manager",
     }, owner, repo)
 

@@ -70,7 +70,11 @@
                                 alt="{{ user.username }}"
                                 class="is-rounded" />
                     </figure>
+                    <pre class="msg-data" data-msg-id="{{ message.id }}" style="display: none;">
                     {{ message.message | safe }}
+                    </pre>
+                    <div class="msg-output content" data-msg-id="{{ message.id }}"></div>
+
                 </div>
                 <!-- Response -->
                 <div class="content p-3">
@@ -92,7 +96,10 @@
                                 </button>
                             </div>
                             <div class="column">
+                                <pre class="response-data" data-msg-id="{{ message.id }}" style="display: none;">
                                 {{ message.result | safe }}
+                                </pre>
+                                <div class="response-output content" data-msg-id="{{ message.id }}"></div>
                             </div>
                         </div>
 
@@ -146,8 +153,7 @@
 
             if (msgType === "event") {
                 const event = data['data'];
-                const converter = new showdown.Converter();
-                const htmlMessage = converter.makeHtml(event.message);
+                const htmlMessage = window.md.render(event.message);
                 $('#in-progress-message').html(`<span>${htmlMessage}<span>`);
             }
 
@@ -187,6 +193,20 @@
     $(document).ready(function() {
         var container = $('#chat-wrapper'); // Change this to your container's class or ID
         container.scrollTop(container.prop("scrollHeight"));
+
+        // For all messages, render the markdown content
+        $('.msg-data').each(function() {
+            const msgId = $(this).data('msg-id');
+            const stripped_text = $(this).text().trim();
+            const htmlMessage = window.md.render(stripped_text);
+            $(`.msg-output[data-msg-id="${msgId}"]`).html(htmlMessage);
+        });
+        $('.response-data').each(function() {
+            const msgId = $(this).data('msg-id');
+            const stripped_text = $(this).text().trim();
+            const htmlMessage = window.md.render(stripped_text);
+            $(`.response-output[data-msg-id="${msgId}"]`).html(htmlMessage);
+        });
     });
     </script>
 {% endblock %}

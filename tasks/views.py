@@ -1,4 +1,3 @@
-import markdown
 from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
@@ -23,8 +22,6 @@ def home(request):
 @needs_api_key
 def view_task(request, owner, repo, task_id, api_key):
     task = ArcaneEngine(api_key).get_task(task_id)
-    task.result = markdown.markdown(task.result)
-    task.user_request = markdown.markdown(task.user_request)
     return render_with_repositories(request, "view_task.html", {
         "task": task,
         "selected_repo": task.github_project,

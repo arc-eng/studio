@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "studio"
-version = "0.6.0"
+version = "0.6.1"
 description = "Demo application to showcase the Arcane Development Kit"
 authors = ["Marco lamina <marco@arcane.engineer>"]
 license = "MIT"
@@ -12,7 +12,6 @@ python = "~3.10.0"
 django = "^5.1.1"
 arcane-engine = "^1.11.2"
 pygithub = "^2.4.0"
-markdown = "^3.7"
 django-allauth = "^65.0.1"
 psycopg2-binary = "^2.9.9"
 django-redis = "^5.4.0"

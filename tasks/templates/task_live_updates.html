@@ -90,8 +90,7 @@
                         const event = data['data'];
                         taskEvents.push(event);
                         event.icon = ACTION_FA_ICON_MAP[event.action] || "check";
-                        const converter = new showdown.Converter();
-                        const htmlMessage = converter.makeHtml(event.message);
+                        const htmlMessage = window.md.render(event.message.trim());
                         $('.table tbody').append(`
                                 <tr>
                                     <td class="has-text-weight-light">${counter}</td>

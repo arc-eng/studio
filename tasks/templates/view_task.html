@@ -17,6 +17,16 @@
     }
 {% endblock %}
 
+{% block extra_header %}
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+
+    <!-- Javascripts -->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
+{% endblock %}
+
+
 {% block repo_content %}
     <nav class="breadcrumb ml-2" aria-label="breadcrumbs">
         <ul>
@@ -52,7 +62,10 @@
                     <span class="icon is-large"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="column is-11 content is-family-monospace">
+                    <pre id="prompt-data" style="display: none;">
                     {{ task.user_request | safe }}
+                    </pre>
+                    <div id="prompt-output" class="content"></div>
                     <hr/>
                 </div>
 
@@ -75,14 +88,18 @@
                         <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
                     </a>
                     {% if task.pr_number %}
-                        <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
-                            <span class="icon is-small has-text-success-40"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>#{{ task.pr_number }}</span>
+                        <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader">
+                            <span class="icon is-small has-text-success-40"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
                         </a>
 
                     {% endif %}
 
                 </div>
-                {{ task.result | safe }}
+                <pre id="result-data" style="display: none;">
+                    {{ task.result | safe }}
+                    </pre>
+                <div id="result-output" class="content"></div>
+
 
 
                 <!-- Follo-up Form -->
@@ -115,8 +132,10 @@
             The agent <b class="has-text-danger">{{ task.status }}</b> the task and responded:
         </div>
         <div class="box content has-background-danger-light">
-            {{ task.result }}
-
+            <pre id="result-data" style="display: none;">
+            {{ task.result | safe }}
+            </pre>
+            <div id="result-output" class="content"></div>
         </div>
 
         {% endif %}
@@ -126,4 +145,11 @@
 
     </div>
     {% include 'task_live_updates.html' with task=task %}
+
+    <script>
+    $(document).ready(function() {
+        $('#prompt-output').html(window.md.render($('#prompt-data').text().trim()));
+        $('#result-output').html(window.md.render($('#result-data').text().trim()));
+    });
+    </script>
 {% endblock %}

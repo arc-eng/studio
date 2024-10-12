@@ -51,9 +51,6 @@ def view_chat(request, chat_id, api_key):
                 chat.pr_number = task.pr_number
                 chat.branch = task.branch
                 chat.save()
-        if message.result:
-            message.result = markdown.markdown(message.result, extensions=['nl2br', 'fenced_code', 'extra'])
-        message.message = markdown.markdown(message.message, extensions=['nl2br', 'fenced_code', 'extra'])
     return render(request, "view_chat.html", {
         "chats": user_chats.order_by('-id').all(),
         "selected_chat": chat,
