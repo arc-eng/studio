@@ -38,11 +38,13 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
             return redirect('view_pull_request', owner=owner, repo=repo, pr_number=pr_number)
         else:
             return redirect('repositories:repo_overview')
+    github_token = None
     if not owner or not repo:
         prs = []
     else:
         try:
-            g = Github(get_github_token(request))
+            github_token = get_github_token(request)
+            g = Github(github_token)
             github_repo = g.get_repo(f"{owner}/{repo}")
         except GithubException as e:
             return render(request, "error.html", {"error": str(e)})
@@ -55,12 +57,12 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
                     selected_pr = pr
                     break
     # Load the diff data for the selected PR
-    diff_url = selected_pr.diff_url  # This gives us the URL to fetch the diff
+    url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{pr_number}"
     headers = {
-        'Accept': 'application/vnd.github.v3.diff',
-        'Authorization': f'token {get_github_token(request)}'
+        "Accept": "application/vnd.github.v3.diff"
     }
-    diff_data = requests.get(diff_url, headers=headers).text
+    response = requests.get(url, headers=headers)
+    diff_data = response.text
 
     # Check if there is a description for this PR
     description = PullRequestDescription.objects.filter(repo__owner=owner, repo__repo_name=repo, user=request.user, pr_number=selected_pr.number).first()
