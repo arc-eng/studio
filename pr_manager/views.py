@@ -56,7 +56,10 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
                     break
     # Load the diff data for the selected PR
     diff_url = selected_pr.diff_url  # This gives us the URL to fetch the diff
-    headers = {'Accept': 'application/vnd.github.v3.diff'}
+    headers = {
+        'Accept': 'application/vnd.github.v3.diff',
+        'Authorization': f'token {get_github_token(request)}'
+    }
     diff_data = requests.get(diff_url, headers=headers).text
 
     # Check if there is a description for this PR

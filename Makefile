@@ -20,3 +20,6 @@ create-k8s-secrets:
 
 deploy:
 	helm upgrade --install arcane-studio ./helm-chart --set image.tag=$(VERSION) --values values.yaml
+
+logs:
+	stern -l app=arcane-studio | grep -v "/health"
