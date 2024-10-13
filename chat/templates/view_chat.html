@@ -120,8 +120,7 @@
                         {% if selected_chat.branch %}
                             <div class="control">
                                 <a class="button is-rounded"
-                                   href="https://github.com/{{ selected_chat.repo.full_name }}/pull/{{ selected_chat.pr_number }}/files"
-                                    target="_blank">
+                                   href="{% url 'view_pull_request' owner=selected_chat.repo.owner repo=selected_chat.repo.repo_name pr_number=selected_chat.pr_number %}">
                                     <span class="icon"><i class="fa fa-code-branch"></i></span>
                                     <span>#{{ selected_chat.pr_number }}</span>
                                 </a>
@@ -198,7 +197,7 @@
     $('input[name="message"]').focus();
     $(document).ready(function() {
         var container = $('#chat-wrapper'); // Change this to your container's class or ID
-        container.scrollTop(container.prop("scrollHeight"));
+
 
         // For all messages, render the markdown content
         $('.msg-data').each(function() {
@@ -213,6 +212,7 @@
             const htmlMessage = window.md.render(stripped_text);
             $(`.response-output[data-msg-id="${msgId}"]`).html(htmlMessage);
         });
+        container.scrollTop(container.prop("scrollHeight"));
     });
     </script>
 {% endblock %}

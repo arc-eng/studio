@@ -76,7 +76,8 @@
             <div class="select is-dark mb-3 is-fullwidth">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}">#{{ pr.number }} {{ pr.title }}</option>
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}"
+                        {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
                     {% endfor %}
                 </select>
             </div>
