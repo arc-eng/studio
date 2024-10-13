@@ -6,24 +6,28 @@
     <section class="hero is-light has-round-corners">
         <div class="hero-body">
             <div class="container">
-                <h1 class="title is-1">
-                    <span class="icon is-large"><i class="fas fa-hand-pointer"></i></span>
+                <h1 class="title is-2 is-3-mobile">
                     <span>
                         Your new favorite <span class="has-text-primary-25"><span class="icon is-large"><i class="fas fa-toolbox"></i></span> tool belt</span>
                     </span>
 
 
                 </h1>
-                <h2 class="subtitle is-2">
+                <h2 class="subtitle is-4 is-5-mobile">
                     Automate your day-to-day operations
                 </h2>
             </div>
         </div>
     </section>
 
-    <section class="section content is-size-4">
+
+    <section class="section content is-size-4 is-size-5-mobile">
+        <p>
+            The studio contains a number of AI-driven tools that help you automate your daily work:
+
+        </p>
         <div class="table-container">
-            <table class="table has-background-light ">
+            <table class="table has-background-light is-hoverable ">
                 <tbody>
                 {% for tool in tools %}
                 <tr>
@@ -33,7 +37,7 @@
                         </span>
                     </td>
                     <td class="is-narrow has-text-weight-bold">
-                        {{ tool.name }}
+                        <a href="{{ tool.link }}" class="has-text-dark">{{ tool.name }}</a>
                     </td>
                     <td>
                         {{ tool.description}}
@@ -46,9 +50,5 @@
 
     </section>
 
-    <section class="section content is-size-4">
-        Currently, the studio contains a small collection of generic tools. Soon, you will
-        see more tools that are tailored to your specific needs.
-    </section>
 
 {% endblock %}
