@@ -12,25 +12,56 @@
 
 {% include 'app_header.html' with title="Tasks" subtitle="Hand over work to the Arcane Engine" %}
 
-<!-- New Task Form -->
-<div class="content">
-    <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
-        {% csrf_token %}
-        <div class="field">
-            <div class="control">
-                <textarea class="textarea" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
-            </div>
+<div class="columns">
+    <div class="column">
+        <div class="content" id="new-task-form">
+            <form action="{% url 'create_task' owner=repo_owner repo=repo_name %}" method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="control">
+                        <textarea class="textarea is-success" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button has-text-success-25" type="submit" id="generate-button">
+                            <span class="icon"><i class="fa fa-play"></i></span>
+                            <span>Run Task</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="field is-grouped">
-            <div class="control">
-                <button class="button is-success is-small" type="submit" id="generate-button">
-                    <span class="icon"><i class="fa fa-play"></i></span>
-                    <span>Run Task</span>
-                </button>
+    </div>
+    <div class="column">
+        <div class="content">
+            <p class="has-text-weight-light is-size-5">
+                A simple interface for turning natural language instructions into actionable tasks. Here are some examples:
+            </p>
+            <div class="control has-icons-left">
+                <div class="select is-fullwidth is-success">
+                    <select id="task-prompts">
+                        <option value="">Select an example prompt</option>
+                        <option value="Find the CI/CD pipeline definition, read it and suggest improvements">Suggest improvements to CI/CD pipeline</option>
+                        <option value="Update the README file: Add emojis to the beginning of each section, correct spelling errors, make the layout and text more cohesive and add badges right below the main header.">Make the README file pretty</option>
+                        <option value="Find bash scripts in the main directory, read them, add error handling and comments and write them back to file.">Add error handling to bash scripts</option>
+                        <option value="Read the README.md to learn more about the project. Then, find index.html and add SEO tags to it.">Add SEO tags to index.html</option>
+                        <option value="List the `.` directory and read build scripts / configs. Then set up a linter for the project. Then tell me how to set this up as a pre-commit hook.">Add automated linting to the project</option>
+                        <option value="Find open Github issues labeled as 'bug', then read the latest one. Find and read the relevant code files, then respond with an analysis - how to reproduce it, probable cause and a fix suggestion.">Analyze a bug ticket</option>
+                        <option value="Read the README.md and other files in the root directory that tell you how the project is built and run. Then, write an onboarding guide for new developers on how to set it up and run the project locally.">Write onboarding guide</option>
+                    </select>
+                </div>
+                <span class="icon is-left">
+                    <i class="fas fa-lightbulb"></i>
+                  </span>
             </div>
+
         </div>
-    </form>
+    </div>
 </div>
+
+<!-- New Task Form -->
+
 
 {%  if tasks %}
 <div class="table-container">
@@ -70,17 +101,20 @@
 </div>
 
 {% else %}
-<div class="p-4">
     <p class="content has-text-weight-light">
         No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
     </p>
-</div>
 {% endif %}
 
 <script>
     $(document).ready(function() {
         $('#generate-button').click(function() {
             $(this).addClass('is-loading');
+        });
+        // When the user selects a prompt, populate the textarea with the selected prompt
+        $('#task-prompts').change(function() {
+            const selectedPrompt = $(this).val();
+            $('#new-task-form textarea').val(selectedPrompt);
         });
     });
 </script>

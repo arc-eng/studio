@@ -28,35 +28,59 @@
 
 
 {% block repo_content %}
-    <nav class="breadcrumb ml-2" aria-label="breadcrumbs">
-        <ul>
-            <li>
-                <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
-                    <span>Tasks</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span id="breadcrumb-title">{{ task.title }}</span>
-                    <span class="icon is-small">
+
+    <div class="columns box p-0 m-3 mb-5 is-shadowless">
+        <div class="column is-flex  is-align-items-center">
+            <nav class="breadcrumb ml-2" aria-label="breadcrumbs">
+                <ul>
+                    <li>
+                        <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
+                            <span>Tasks</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span id="breadcrumb-title">{{ task.title }}</span>
+                            <span class="icon is-small">
                             {% if task.status == "running" or task.status == "scheduled" %}
                                 <i class="fas fa-rotate fa-spin"></i>
-                            {% elif task.status == "completed" %}
-                                <i class="fas fa-check" aria-hidden="true"></i>
                             {% elif task.status == "failed" %}
                                 <i class="fas fa-exclamation-triangle"></i>
                             {% endif %}
 
                         </span>
 
-                </a>
-            </li>
+                        </a>
+                    </li>
 
-        </ul>
-    </nav>
+                </ul>
+            </nav>
+        </div>
+        <div class="column is-narrow">
+            <div class="buttons">
+                {% if task.pr_number %}
+                    <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader has-text-success-40">
+                        <span class="icon is-small"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
+                    </a>
+
+                {% endif %}
+                <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-small">
+                    <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
+                </a>
+                <a class="button is-small" id="view-prompt-button">
+                    <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
+                </a>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="content">
 
-        <div class="is-hidden" id="prompt-box">
+        <div class="is-hidden mb-3" id="prompt-box">
             <div class="columns">
                 <div class="column is-1 has-text-centered is-size-4">
                     <span class="icon is-large"><i class="fas fa-user"></i></span>
@@ -65,8 +89,7 @@
                     <pre id="prompt-data" style="display: none;">
                     {{ task.user_request | safe }}
                     </pre>
-                    <div id="prompt-output" class="content"></div>
-                    <hr/>
+                    <div id="prompt-output" class="content box is-size-7 p-3 has-background-info-95"></div>
                 </div>
 
             </div>
@@ -76,25 +99,11 @@
 
         {%  if task.status == "completed" %}
         <div class="columns">
-            <div class="column is-1 content has-text-centered is-size-4 has-text-success">
-                <span class="icon"><i class="fas fa-check-circle"></i></span>
+            <div class="column is-1 content has-text-centered is-size-4">
+{#                <span class="icon"><i class="fas fa-robot"></i></span>#}
             </div>
-            <div class="column is-11 content is-family-monospace">
-                <div class="buttons">
-                    <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-small">
-                        <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
-                    </a>
-                    <a class="button is-small" id="view-prompt-button">
-                        <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
-                    </a>
-                    {% if task.pr_number %}
-                        <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader">
-                            <span class="icon is-small has-text-success-40"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
-                        </a>
+            <div class="column is-11 content is-size-6">
 
-                    {% endif %}
-
-                </div>
                 <pre id="result-data" style="display: none;">
                 {{ task.result }}
                 </pre>
