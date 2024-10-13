@@ -25,8 +25,8 @@
             </div>
         </div>
     </section>
-    <section class="section p-0 mt-5">
-        <div class="fixed-grid has-4-cols">
+    <section class="section p-0-desktop p-1-mobile mt-5">
+        <div class="fixed-grid has-4-cols-desktop has-1-cols-mobile has-2-cols-tablet">
 
             <div class="grid content is-gap-2">
                 <div class="cell  is-flex is-flex-direction-column">
@@ -141,6 +141,21 @@
                 </div>
             </div>
         </div>
+    </section>
+    <section class="section">
+        <p class="is-size-4 is-size-5-mobile">
+            The studio contains a collection of <a href="{% url 'how_it_works' %}">AI-driven tools</a>, each tailored to a specific type of workflow in software development.
+        </p>
+        <div class="laptop">
+            <video autoplay loop muted playsinline>
+                <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <a href="{% url 'how_it_works' %}" class="button is-large-desktop is-medium is-rounded is-fullwidth">
+            <span>See how it works</span>
+            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+        </a>
     </section>
 
     <script>
