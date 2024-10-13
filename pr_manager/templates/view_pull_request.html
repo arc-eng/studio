@@ -14,6 +14,12 @@
 {% block repo_content %}
     {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
 
+    {% if not prs %}
+        <p class="content has-text-weight-light is-size-5">
+            No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
+        </p>
+    {% else %}
+    
     <div class="columns">
         <div class="column is-5">
             <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
@@ -86,14 +92,8 @@
         </div>
     </div>
     
-
-    {% if not prs %}
-    <div class="p-4">
-        <p class="content has-text-weight-light">
-            No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
-        </p>
-    </div>
     {% endif %}
+    
     <script>
         // Get the diff data from the hidden pre tag
         const diffData = document.getElementById('diff-data').textContent;

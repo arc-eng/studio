@@ -38,17 +38,23 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
             return redirect('view_pull_request', owner=owner, repo=repo, pr_number=pr_number)
         else:
             return redirect('repositories:repo_overview')
-    github_token = None
+    github_token = get_github_token(request)
     if not owner or not repo:
         prs = []
     else:
         try:
-            github_token = get_github_token(request)
             g = Github(github_token)
             github_repo = g.get_repo(f"{owner}/{repo}")
         except GithubException as e:
             return render(request, "error.html", {"error": str(e)})
         prs = github_repo.get_pulls(state='open')
+        if prs.totalCount == 0:
+            return render_with_repositories(request, "view_pull_request.html", {
+                "prs": None,
+                "selected_pr": 0,
+                "diff_data": "",
+                "active_tab": "pull-request-manager",
+            }, owner, repo)
         if not pr_number:
             selected_pr = prs[0]
         else:
@@ -57,11 +63,15 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
                     selected_pr = pr
                     break
     # Load the diff data for the selected PR
-    url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{pr_number}"
+    url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{selected_pr.number}"
     headers = {
-        "Accept": "application/vnd.github.v3.diff"
+        "Accept": "application/vnd.github.diff"
     }
     response = requests.get(url, headers=headers)
+    if not response.ok:
+        return render(request, "error.html", {
+            "error": f"Failed to load diff data: {response.text}"
+        })
     diff_data = response.text
 
     # Check if there is a description for this PR
