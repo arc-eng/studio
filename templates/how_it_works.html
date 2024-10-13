@@ -23,7 +23,7 @@
 
     <section class="section content is-size-4">
         <div class="table-container">
-            <table class="table has-background-light ">
+            <table class="table has-background-light is-hoverable ">
                 <tbody>
                 {% for tool in tools %}
                 <tr>
@@ -33,7 +33,7 @@
                         </span>
                     </td>
                     <td class="is-narrow has-text-weight-bold">
-                        {{ tool.name }}
+                        <a href="{{ tool.link }}" class="has-text-dark">{{ tool.name }}</a>
                     </td>
                     <td>
                         {{ tool.description}}

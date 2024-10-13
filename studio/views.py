@@ -21,14 +21,22 @@ def how_it_works(request):
         'name': 'Chat',
         'icon': 'fa-comment',
         'description': 'Imagine ChatGPT, but with access your code, wikis and other sources.',
+        'link': reverse('chat_home')
     }, {
         'name': 'Tasks',
         'icon': 'fa-gears has-text-info-35',
-        'description': 'A quick and easy way to hand off work to the engine.'
+        'description': 'A quick and easy way to hand off work to the engine.',
+        'link': reverse('tasks_home')
     }, {
         'name': 'Pull Requests',
         'icon': 'fa-code-branch has-text-success-35',
-        'description': 'Generate comprehensive and beautiful PR descriptions in seconds.'
+        'description': 'Generate comprehensive and beautiful PR descriptions in seconds.',
+        'link': reverse('pr_manager_home')
+    }, {
+        'name': 'Build',
+        'icon': 'fa-hammer has-text-danger-35',
+        'description': 'Manage build scripts and config files with ease.',
+        'link': reverse('build_home')
     }]
     return render(request, "how_it_works.html", {'tools': tools})
 

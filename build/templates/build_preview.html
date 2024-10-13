@@ -5,7 +5,7 @@
 
 
 <!--Hero-->
-<section class="hero is-success is-bold  has-round-corners">
+<section class="hero is-dark is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
@@ -23,18 +23,28 @@
         build scripts and configuration files with ease:
     </p>
     <p>
-        <ul>
-            <li>
-                <strong>Discover</strong> - The tool will automatically discover build scripts and configuration files in your repository
-            </li>
-            <li>
-                <strong>Explain</strong> - The tool will explain the purpose of each build script and configuration file
-            </li>
-            <li>
-                <strong>Optimize</strong> - The tool will suggest optimizations to your build scripts and configuration files that you can apply with just one click
-            </li>
-        </ul>
+    <ul>
+        <li>
+            <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
+            <strong>File Discovery</strong> - The tool will automatically discover build scripts and configuration files in your repository
+        </li>
+        <li>
+            <span class="icon"><i class="fas fa-check"></i></span>
+            <strong>Recommendations</strong> - For each detected file, the tool will recommend optimizations and best practices
+        </li>
+        <li>
+            <span class="icon"><i class="fas fa-bolt"></i></span>
+            <strong>One-Click Actions</strong> - Automatically apply recommended optimizations with a single click
+        </li>
+    </ul>
     </p>
+    <div class="laptop">
+        <video autoplay loop muted playsinline>
+            <source src="https://storage.cloud.google.com/arc-eng-videos/build_demo.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
     <a href="{% url 'github_login' %}" class="button is-large is-rounded">
         <span>Login and start optimizing</span>
         <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
