@@ -8,35 +8,45 @@
 <section class="hero is-dark is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">
+            <h1 class="title is-1">
                 Chat
             </h1>
-            <h2 class="subtitle">
-                Imagine ChatGPT, but with access to your code
+            <h2 class="subtitle is-3">
+                Imagine ChatGPT, but with superpowers
             </h2>
         </div>
     </div>
 </section>
-<section class="section content is-size-5 is-size-6-mobile">
-    <p>
-        Say good-bye to juggling multiple tools and browser windows. Chat is a single interface that
-        allows you to interact with your codebase, your team, and your tools. Save time and avoid
-        context switching by using Chat to manage your daily work.
+<section class="section content">
+    <div class="columns">
+        <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+            <div class="content">
+                <p class="title is-2">The assistant you've always wanted</p>
+                <p class="subtitle is-4">with access to your code, issues, wikis and more</p>
+                <p>
+                    Say good-bye to juggling multiple tools and browser windows. Chat is a single interface that
+                    allows you to interact with your codebase, your team, and your tools. Save time and avoid
+                    context switching by using Chat to manage your daily work.
 
-    </p>
-    <div class="laptop">
-        <video autoplay loop muted playsinline>
-            <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+                </p>
+                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25">
+                    <span>Login and start a conversation</span>
+                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+        <div class="column is-7-desktop is-6-tablet">
+            <div class="laptop">
+                <video autoplay loop muted playsinline>
+                    <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+        </div>
+
     </div>
 
-    <a href="{% url 'github_login' %}" class="button is-large-desktop is-medium is-rounded is-fullwidth">
-        <span>Login and start a conversation</span>
-        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-    </a>
-</section>
-<section class="section content">
 
 
 </section>

@@ -7,20 +7,35 @@
         <div class="content">
             <p class="title is-4">{{ user.username }}</p>
             <p class="subtitle is-6">{{ user.email }}</p>
-        </div>
+
         {% if needs_engine_login %}
-            <div class="content">
-            Looks like you're new to the platform.
-
-                To get you started, we need to connect your Github account the <a href="https://arcane.engineer/engine" target="_blank">Engine</a>.
-
-            </div>
-            <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-page-loader">Connect</a>
+            <p class="is-size-5">
+            Looks like this is your first time using the <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine Platform</a>.
+            </p>
+            <p class="is-size-5">We need to connect your studio account to the central platform to enable the AI-driven tools.</p>
+            <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-page-loader">
+                <span>Connect</span>
+                <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+            </a>
+        {% else %}
+            <form method="post" action="{% url 'delete_user_data' %}">
+                {% csrf_token %}
+                <button class="button is-danger is-outlined" type="submit" id="delete-button">
+                    <span class="icon is-large"><i class="fas fa-trash"></i></span>
+                    <span>Delete all my data</span>
+                </button>
+            </form>
         {% endif %}
+        </div>
 
     </div>
     <script>
         $(document).ready(function() {
+            $('#delete-button').click(function() {
+                if (confirm('Are you sure you want to delete all your data?')) {
+                    $(this).closest('form').submit();
+                }
+            });
 
         });
     </script>

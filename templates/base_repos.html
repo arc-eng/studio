@@ -6,7 +6,7 @@
 
     <div class="has-background-white tiny-rounded">
 
-        <div class="tabs is-fullwidth is-small mb-0">
+        <div class="tabs is-fullwidth is-small mb-0 has-text-weight-bold">
             <ul>
                 {#  Repo Tabs  #}
                 <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
@@ -29,7 +29,7 @@
                                 {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
                             {% endif %}
 
-                            <a href="{{ repo_link }}">
+                            <a href="{{ repo_link }}" class="">
                                 {#                            <span class="icon"><i class="fab fa-github"></i></span>#}
                                 <span>
                                 <figure class="image is-24x24 mr-2">

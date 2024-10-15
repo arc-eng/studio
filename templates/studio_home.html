@@ -11,21 +11,121 @@
 }
 {% endblock %}
 
+{% block navbar %}
+    <nav class="navbar has-background-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="https://arcane.engineer/studio/">
+                <span class="icon is-large"><i class="fas fa-cube"></i></span>
+
+            </a>
+
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+
+                <a class="navbar-item" href="https://arcane.engineer/engine/">
+                    Platform
+                </a>
+                <a class="navbar-item" href="https://arcane.engineer/pricing">
+                    Pricing
+                </a>
+                <a class="navbar-item" href="{% url 'how_it_works' %}">
+                    How it works
+                </a>
+
+            </div>
+
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'user_profile' %}">
+                            <figure class="image is-32x32 has-circle">
+                                <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.username }}" class="is-rounded" />
+                            </figure>
+                        </a>
+                        {% else %}
+                            <a class="button is-light" href="{% url 'github_login' %}">
+                                Log in
+                            </a>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block extra_header %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
+{% endblock %}
+
 {% block content %}
+
     <section class="hero is-dark is-bold has-round-corners">
+        <a class="github-fork-ribbon" href="https://github.com/arc-eng/studio" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
         <div class="hero-body">
             <div class="container">
-                <h1 class="title">
+                <h1 class="title is-1">
                     <span class="icon is-large"><i class="fas fa-cube"></i></span>
                     <span>Arcane Studio</span>
                 </h1>
-                <h2 class="subtitle">
-                    Generative AI tools to support common workflows in software development
+                <h2 class="subtitle is-3">
+                    Boosting developer productivity with smart automation
                 </h2>
             </div>
         </div>
     </section>
+    <section class="section">
+    <div class="columns">
+
+        <div class="column is-7-desktop is-6-tablet">
+            <div class="laptop">
+                <video autoplay loop muted playsinline>
+                    <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+            <div class=" content pl-5">
+                <p class="title is-2">Stay in the Flow</p>
+                <p class="subtitle is-4">and avoid context switching</p>
+                <p class="is-size-5">
+                    Arcane Studio is a collection of web-based tools designed to streamline your
+                    daily work.
+                </p>
+                <p class="is-size-5">
+                    Powered by the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>,
+                    the studio uses generative AI to interact with your Github repositories and other data sources
+                    like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
+
+                </p>
+                <a href="{% url 'how_it_works' %}" class="button is-rounded is-medium has-text-info-25">
+                    <span>See how it works</span>
+                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+
+    </section>
     <section class="section p-0-desktop p-1-mobile mt-5">
+        <p class="title is-2 has-text-centered">Supercharge your Workflows</p>
+        <p class="subtitle is-4 has-text-centered">
+            Our tools are designed to augment the tasks you do every day
+        </p>
+
         <div class="fixed-grid has-4-cols-desktop has-1-cols-mobile has-2-cols-tablet">
 
             <div class="grid content is-gap-2">
@@ -141,22 +241,10 @@
                 </div>
             </div>
         </div>
+
+
     </section>
-    <section class="section">
-        <p class="is-size-4 is-size-5-mobile">
-            The studio contains a collection of <a href="{% url 'how_it_works' %}">AI-driven tools</a>, each tailored to a specific type of workflow in software development.
-        </p>
-        <div class="laptop">
-            <video autoplay loop muted playsinline>
-                <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-        <a href="{% url 'how_it_works' %}" class="button is-large-desktop is-medium is-rounded is-fullwidth">
-            <span>See how it works</span>
-            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-        </a>
-    </section>
+
 
     <script>
         $(document).ready(function() {

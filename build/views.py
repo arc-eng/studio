@@ -1,12 +1,9 @@
 import json
 import logging
-import threading
 from typing import List
 
 import arcane
-from arcane import Task
 from arcane.engine import ArcaneEngine
-from arcane.util import wait_for_result
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -51,35 +48,6 @@ def home(request):
     return redirect("build_overview", owner=None, repo=None)
 
 
-def wait_for_task(task, system: BuildSystem):
-    """Wait for the task to finish and update the system information"""
-    result = wait_for_result(task)
-    if not task.status == "completed":
-        logger.error(f"Build system task failed: {task.result}")
-        system.error = task.result
-        system.save()
-        return
-    try:
-        description = BuildSystemDescription.model_validate(from_json(result))
-        logger.info(f"Successfully generated build system description for {task.github_project}")
-        system.description = description.description
-        for file_description in description.files:
-            file = BuildSystemFile.objects.create(
-                path=file_description.path, icon=file_description.icon, build_system=system,
-                purpose=file_description.purpose, title=file_description.title
-            )
-            for rec_description in file_description.recommendations:
-                BuildSystemFileRecommendation.objects.create(
-                    build_system_file=file, action=rec_description.action, icon=rec_description.icon,
-                    benefit=rec_description.benefit
-                )
-        system.last_update = timezone.now()
-        system.save()
-    except ValueError as e:
-        logger.error("Failed to parse task result", exc_info=e)
-        system.error = f"Failed to parse task result: {str(e)}"
-
-
 @login_required
 @needs_api_key
 def build_overview(request, owner=None, repo=None, api_key=None):
@@ -92,7 +60,7 @@ def build_overview(request, owner=None, repo=None, api_key=None):
         else:
             return redirect('repositories:repo_overview')
     bookmark = BookmarkedRepo.objects.filter(owner=owner, repo_name=repo).first()
-
+    task = None
     # Create a build system instance for the repo if not exists
     system:BuildSystem = BuildSystem.objects.filter(user=request.user, repo=bookmark).first()
     if not system:
@@ -104,16 +72,51 @@ def build_overview(request, owner=None, repo=None, api_key=None):
                                                  output_structure=json.dumps(BuildSystemDescription.model_json_schema()))
         system.task_id = task.id
         system.save()
-        threading.Thread(target=wait_for_task, args=(task,system)).start()
     elif not system.last_update:
         # Task was created, but we haven't saved a result yet
         task = ArcaneEngine(api_key).get_task(system.task_id)
-        threading.Thread(target=wait_for_task, args=(task,system)).start()
+        if task.status == "completed":
+            try:
+                description = BuildSystemDescription.model_validate(from_json(task.result))
+                logger.info(f"Successfully generated build system description for {task.github_project}")
+                system.description = description.description
+                for file_description in description.files:
+                    file = BuildSystemFile.objects.create(
+                        path=file_description.path, icon=file_description.icon, build_system=system,
+                        purpose=file_description.purpose, title=file_description.title
+                    )
+                    for rec_description in file_description.recommendations:
+                        BuildSystemFileRecommendation.objects.create(
+                            build_system_file=file, action=rec_description.action, icon=rec_description.icon,
+                            benefit=rec_description.benefit
+                        )
+                system.last_update = timezone.now()
+                system.save()
+            except ValueError as e:
+                logger.error("Failed to parse task result", exc_info=e)
+                system.error = f"Failed to parse task result: {str(e)}"
+        elif task.status == "failed":
+            system.error = task.result
+            system.save()
 
     return render_with_repositories(request, "build_home.html", {
+        "task": task,
         "active_tab": "build",
         "system": system
     }, owner, repo)
+
+
+@login_required
+@require_POST
+def reset_build_system(request):
+    system_id = request.POST.get('system_id')
+    system = BuildSystem.objects.get(pk=system_id)
+    if system.user != request.user:
+        return render(request, "error.html", {"error": "Unauthorized"})
+    owner = system.repo.owner
+    repo = system.repo.repo_name
+    system.delete()
+    return redirect('build_overview', owner=owner, repo=repo)
 
 
 @login_required

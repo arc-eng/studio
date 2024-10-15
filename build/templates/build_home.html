@@ -11,6 +11,7 @@
                 <span class="icon has-text-info is-large"><i class="fa fa-rotate fa-spin"></i></span>
                 <span>Detecting build scripts and config files ...</span>
             </p>
+            {% include 'task_live_updates.html' with task=task %}
         </section>
 
     {% elif system.error %}
@@ -21,7 +22,14 @@
     {% else %}
 
         <div class="content">
-            {% include 'app_header.html' with title="Build Scripts & Config Files" subtitle="AI-generated recommendations for optimizations and improvements" classes="mb-5" %}
+            <form method="post" action="{% url 'reset_build_system' %}" class="is-inline-block is-pulled-right">
+                {% csrf_token %}
+                <input type="hidden" name="system_id" value="{{ system.id }}">
+                <button type="submit" class="button is-large reset-button">
+                    <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
+                </button>
+            </form>
+            {% include 'app_header.html' with title="Build Scripts & Config Files" subtitle="One-click optimizations and improvements" classes="mb-5" %}
             <p>
                 {{ system.description }}
             </p>
@@ -99,6 +107,9 @@
     <script>
         $(document).ready(function() {
             $('.apply-button').click(function() {
+                $(this).addClass('is-loading');
+            });
+            $('.reset-button').click(function() {
                 $(this).addClass('is-loading');
             });
         });

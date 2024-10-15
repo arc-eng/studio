@@ -19,7 +19,7 @@
                 {% csrf_token %}
                 <div class="field">
                     <div class="control">
-                        <textarea class="textarea is-success" name="task_description" placeholder="Provide relevant details / context, use Markdown for formatting"></textarea>
+                        <textarea class="textarea is-success" name="task_description" placeholder="Describe work to be done and provide relevant details / context"></textarea>
                     </div>
                 </div>
                 <div class="field is-grouped">
@@ -35,11 +35,9 @@
     </div>
     <div class="column">
         <div class="content">
-            <p class="has-text-weight-light is-size-5">
-                A simple interface for turning natural language instructions into actionable tasks. Here are some examples:
-            </p>
+
             <div class="control has-icons-left">
-                <div class="select is-fullwidth is-success">
+                <div class="select is-fullwidth">
                     <select id="task-prompts">
                         <option value="">Select an example prompt</option>
                         <option value="Find the CI/CD pipeline definition, read it and suggest improvements">Suggest improvements to CI/CD pipeline</option>
@@ -55,7 +53,9 @@
                     <i class="fas fa-lightbulb"></i>
                   </span>
             </div>
-
+            <p class="has-text-weight-light is-size-5 is-flex mt-3">
+                Describe a task in your own words or select an example prompt from the dropdown.
+            </p>
         </div>
     </div>
 </div>
@@ -77,16 +77,15 @@
                         {% elif task.status == 'scheduled' or task.status == "running" %}
                             <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
                         {% endif %}
-                        <span class="has-font-weight-light is-family-monospace is-size-7">
-                            {{ task.created | timesince }}
-                        </span>
+
                     </td>
-                    <td>
+
+                    <td class="is-flex">
                         <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
                             {{ task.title }}
                         </a>
                     </td>
-                    <td>
+                    <td class="is-narrow">
                         {% if task.pr_number %}
                             <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
                                 <span class="icon is-small"><i class="fab fa-github"></i></span> <span>#{{ task.pr_number }}</span>
@@ -94,6 +93,12 @@
 
                         {% endif %}
                     </td>
+                    <td class="is-narrow">
+                        <span class="has-font-weight-light is-family-monospace is-size-7">
+                            {{ task.created | timesince }}
+                        </span>
+                    </td>
+
                 </tr>
             {% endfor %}
         </tbody>

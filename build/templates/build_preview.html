@@ -8,47 +8,61 @@
 <section class="hero is-dark is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">
+            <h1 class="title is-1">
                 Build
             </h1>
-            <h2 class="subtitle">
+            <h2 class="subtitle is-3">
                 Manage build scripts and config files with ease
             </h2>
         </div>
     </div>
 </section>
-<section class="section content is-size-5 is-size-6-mobile">
-    <p>
-        Maintaining build scripts and configuration files can be a pain. Use the Build tool to manage your
-        build scripts and configuration files with ease:
-    </p>
-    <p>
-    <ul>
-        <li>
-            <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
-            <strong>File Discovery</strong> - The tool will automatically discover build scripts and configuration files in your repository
-        </li>
-        <li>
-            <span class="icon"><i class="fas fa-check"></i></span>
-            <strong>Recommendations</strong> - For each detected file, the tool will recommend optimizations and best practices
-        </li>
-        <li>
-            <span class="icon"><i class="fas fa-bolt"></i></span>
-            <strong>One-Click Actions</strong> - Automatically apply recommended optimizations with a single click
-        </li>
-    </ul>
-    </p>
-    <div class="laptop">
-        <video autoplay loop muted playsinline>
-            <source src="https://storage.cloud.google.com/arc-eng-videos/build_demo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<section class="section content">
+    <div class="columns">
+        <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+            <div class="content">
+                <p class="title is-2">One-Click Optimizations</p>
+                <p class="subtitle is-4">for scripts, config files & more</p>
+                <p>
+                    Maintaining build scripts and configuration files can be a pain. Use the Build tool to manage your
+                    build scripts and configuration files with ease:
+                </p>
+                <p>
+                <ul>
+                    <li>
+                        <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
+                        <strong>File Discovery</strong> - The tool will automatically discover build scripts and configuration files in your repository
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fas fa-check"></i></span>
+                        <strong>Recommendations</strong> - For each detected file, the tool will recommend optimizations and best practices
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fas fa-bolt"></i></span>
+                        <strong>One-Click Actions</strong> - Automatically apply recommended optimizations with a single click
+                    </li>
+                </ul>
+                </p>
+                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25">
+                    <span>Login and start optimizing</span>
+                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+        <div class="column is-7-desktop is-6-tablet">
+
+            <div class="laptop">
+                <video autoplay loop muted playsinline>
+                    <source src="https://storage.cloud.google.com/arc-eng-videos/build_demo_2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+        </div>
+
     </div>
 
-    <a href="{% url 'github_login' %}" class="button is-large-desktop is-medium is-rounded is-fullwidth">
-        <span>Login and start optimizing</span>
-        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-    </a>
+
 </section>
 <script>
     $(document).ready(function() {

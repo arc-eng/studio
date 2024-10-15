@@ -8,46 +8,60 @@
 <section class="hero is-dark is-bold  has-round-corners">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title">
+            <h1 class="title is-1">
                 Pull Request Manager
             </h1>
-            <h2 class="subtitle">
-                Create comprehensive PR descriptions in seconds
+            <h2 class="subtitle is-3">
+                A unified interface for managing your pull requests
             </h2>
         </div>
     </div>
 </section>
-<section class="section content is-size-5 is-size-6-mobile">
-    <p>
-        Writing good PR descriptions is important, but can take up a lot of time.
-        Use the PR Manager to codify your guidelines and generate PR descriptions
-        that meet your quality standards.
-    </p>
-    <p>
-        Here are some real-life examples from the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>:
-    <ul>
-        <li>
-            <a href="https://github.com/arc-eng/studio/pull/12" target="_blank">💬 Implement chat application</a>
-        </li>
-        <li>
-            <a href="https://github.com/arc-eng/studio/pull/9" target="_blank">🔒 Implement login via allauth</a>
-        </li>
-        <li>
-            <a href="https://github.com/arc-eng/studio/pull/10" target="_blank">🚀 Add Helm Chart for Deployment</a>
-        </li>
-    </ul>
-    </p>
-    <div class="laptop">
-        <video autoplay loop muted playsinline>
-            <source src="https://storage.cloud.google.com/arc-eng-videos/pr_demo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+<section class="section content">
+    <div class="columns">
+        <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+            <div class="content">
+                <p class="title is-2">Consistent, high-quality content</p>
+                <p class="subtitle is-4">Generate PR descriptions and reviews in seconds</p>
+                <p>
+                    Writing good PR descriptions and reviewing code changes is important, but can take up a lot of time.
+                    Use the PR Manager to codify your guidelines and generate PR descriptions
+                    that meet your quality standards.
+                </p>
+                <p>
+                    Here are some real-life examples from the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>:
+                <ul>
+                    <li>
+                        <a href="https://github.com/arc-eng/studio/pull/12" target="_blank">💬 Implement chat application</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/arc-eng/studio/pull/9" target="_blank">🔒 Implement login via allauth</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/arc-eng/studio/pull/10" target="_blank">🚀 Add Helm Chart for Deployment</a>
+                    </li>
+                </ul>
+                </p>
+                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25">
+                    <span>Login and manage your PRs</span>
+                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+        <div class="column is-7-desktop is-6-tablet">
+
+            <div class="laptop">
+                <video autoplay loop muted playsinline>
+                    <source src="https://storage.cloud.google.com/arc-eng-videos/pr_demo.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+        </div>
+
     </div>
 
-    <a href="{% url 'github_login' %}" class="button is-large-desktop is-medium is-rounded is-fullwidth">
-        <span>Login and view open PRs</span>
-        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-    </a>
+
 </section>
 <script>
     $(document).ready(function() {
