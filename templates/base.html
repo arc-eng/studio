@@ -152,6 +152,8 @@
 
 
 <div class="page-container container is-fullwidth">
+
+    {% block navbar %}
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="{% url 'studio_home' %}">
@@ -216,7 +218,7 @@
                             </figure>
                         </a>
                     {% else %}
-                        <a class="button is-dark is-small is-rounded" href="{% url 'github_login' %}">
+                        <a class="button is-dark is-small is-rounded" href="{% url 'github_login' %}?next={% url 'tasks_home' %}">
                             <span class="icon"><i class="fab fa-github"></i></span>
                             <span>Login</span>
                         </a>
@@ -226,7 +228,7 @@
             </div>
         </div>
     </nav>
-
+    {% endblock %}
 
 
     <div class="content-wrap container">
@@ -257,6 +259,9 @@
                 </p>
                 <p>
                     <a href="https://docs.arcane.engineer" class="has-text-grey" target="_blank">Documentation</a>
+                </p>
+                <p>
+                    <a href="mailto:support@arcane.engineer" class="has-text-grey">Support</a>
                 </p>
             </div>
             <div class="column">

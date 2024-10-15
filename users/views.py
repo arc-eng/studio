@@ -2,9 +2,14 @@ import logging
 
 from arcane import ApiException
 from arcane.engine import ArcaneEngine
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
+from build.models import BuildSystem
+from chat.models import ChatConversation
+from repositories.models import BookmarkedRepo
 from studio.github import get_github_token
 
 logger = logging.getLogger(__name__)
@@ -32,3 +37,16 @@ def user_profile(request):
         "needs_engine_login": needs_engine_login,
         "active_tab": "profile",
     })
+
+
+@login_required
+def delete_user_data(request):
+    if request.method == "POST":
+        ChatConversation.objects.filter(user=request.user).delete()
+        BuildSystem.objects.filter(user=request.user).delete()
+        BookmarkedRepo.objects.filter(user=request.user).delete()
+        user = request.user
+        user.delete()
+        return redirect(reverse("studio_home"))
+
+    return redirect(reverse("studio_home"))

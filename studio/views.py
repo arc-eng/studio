@@ -35,7 +35,7 @@ def how_it_works(request):
     }, {
         'name': 'Build',
         'icon': 'fa-hammer has-text-danger-35',
-        'description': 'Manage build scripts and config files with ease.',
+        'description': 'One-click optimizations for build scripts and config files.',
         'link': reverse('build_home')
     }]
     return render(request, "how_it_works.html", {'tools': tools})

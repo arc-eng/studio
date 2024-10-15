@@ -12,7 +12,7 @@
 
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Pull Requests" subtitle="Automate PR descriptions and reviews" %}
+    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions, apply and review changes in seconds" %}
 
     {% if not prs %}
         <p class="content has-text-weight-light is-size-5">
@@ -24,21 +24,27 @@
         <div class="column is-5">
             <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
                 <ul>
-                    <li class="is-active tab" id="description-tab">
+                    <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
                             <span class="icon is-small"><i class="fas fa-file-waveform"></i></span>
-                            <span>Description</span>
+                            <span>Describe</span>
                         </a>
                     </li>
-                    <li id="review-tab" class="tab">
+                    <li id="review-tab" class="tab" data-tab-id="review">
                         <a>
                             <span class="icon is-small"><i class="fas fa-magnifying-glass"></i></span>
                             <span>Review</span>
                         </a>
                     </li>
+                    <li id="change-tab" class="tab" data-tab-id="change">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-code"></i></span>
+                            <span>Change</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
-            <div id="description-tab-container" class="tab-container">
+            <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
                 {% if description and description.description %}
                     <form action="{% url 'start_over' %}" method="post" class="is-fullwidth">
@@ -72,14 +78,20 @@
                 {% endif %}
             </div>
 
-            <div id="review-tab-container" class="tab-container is-hidden">
+            <div id="review-tab-container" class="tab-container is-hidden" data-tab-id="review">
                 <p class="is-size-5">
                     Soon, you will be able to review the changes in the PR here.
                 </p>
             </div>
+            <div id="change-tab-container" class="tab-container is-hidden" data-tab-id="change">
+                <p class="is-size-5">
+                    Soon, you will be able to apply the changes to the PR using prompts.
+                </p>
+            </div>
         </div>
         <div class="column is-7">
-            <div class="select is-dark mb-3 is-fullwidth">
+
+            <div class="select mb-3 is-inline-block">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
                         <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}"
@@ -87,6 +99,10 @@
                     {% endfor %}
                 </select>
             </div>
+            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-inline-block">
+                <span class="icon is-small"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+            </a>
+
             <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
             <div id="diff-output"></div>
         </div>
@@ -119,8 +135,11 @@
                 }
             });
             $('.tab').click(function() {
-                $('.tab-container').toggleClass('is-hidden');
-                $('.tab').toggleClass('is-active');
+                var tabId = $(this).data('tab-id');
+                $('.tab-container').addClass('is-hidden');
+                $('.tab').removeClass('is-active');
+                $('#' + tabId + '-tab-container').removeClass('is-hidden');
+                $(this).addClass('is-active');
             });
 
             // Get the description data from the hidden pre tag with jquery

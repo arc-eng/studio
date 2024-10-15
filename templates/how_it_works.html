@@ -3,55 +3,122 @@
 {% block title %}Arcane Studio - How it Works{% endblock %}
 
 {% block content %}
-    <section class="hero is-light has-round-corners">
+    <section class="hero is-dark has-round-corners">
         <div class="hero-body">
             <div class="container">
-                <h1 class="title is-2 is-3-mobile">
+                <h1 class="title is-1 is-2-mobile">
                     <span>
-                        Arcane Studio: Your new favorite <span class="has-text-primary-25"><span class="icon is-large"><i class="fas fa-toolbox"></i></span> tool belt</span>
+                        Your new favorite <span class="has-text-primary-25"><span class="icon is-large"><i class="fas fa-toolbox"></i></span> tool belt</span>
                     </span>
-
-
                 </h1>
-                <h2 class="subtitle is-4 is-5-mobile">
-                    Automate your daily work
+                <h2 class="subtitle is-3 is-4-mobile">
+                    Smart developer tools that meet you where you're at
                 </h2>
             </div>
         </div>
     </section>
 
 
-    <section class="section content is-size-4 is-size-5-mobile">
-        <p>
-            The studio contains AI-driven tools that help you automate your daily work:
+    <section class="section content">
+        <div class="columns">
+            <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+                <div class=" content">
+                    <p class="title is-2">Simple and Intuitive</p>
+                    <p class="subtitle is-4">prompt-based interfaces</p>
+                    <p class="is-size-5">
+                        Built using the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>, our tools use generative AI to understand
+                        natural language prompts. Given a prompt, the engine will use its <a href="https://docs.arcane.engineer/capabilities.html" target="_blank">capabilities</a> to interact with your Github repositories and other data sources like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
 
-        </p>
-        <div class="table-container">
-            <table class="table has-background-light is-hoverable is-size-6-mobile">
-                <tbody>
-                {% for tool in tools %}
-                <tr>
-                    <td>
-                        <span class="icon">
-                            <i class="fas {{ tool.icon }}"></i>
-                        </span>
-                    </td>
-                    <td class="is-narrow has-text-weight-bold">
-                        <a href="{{ tool.link }}" class="has-text-dark">{{ tool.name }}</a>
-                    </td>
-                    <td>
-                        {{ tool.description}}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </p>
+                    <p class="p-5 has-text-centered">
+                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-large is-fullwidth is-rounded has-text-info-25">
+                            <span>Login to get started</span>
+                            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </p>
+{##}
+{#                    <p class="">#}
+{#                        Here are some examples of the engine in action:#}
+{#                    </p>#}
+{#                    <p>#}
+{#                        <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/create-a-docker-compose-yaml-for-local-development-of-pr-pilot-ai/" class="button is-small">#}
+{#                            <i class="fa fa-file-code"></i>#}
+{#                        </a> Generate docker-compose file from Helm Chart#}
+{#                    </p>#}
+{#                    <p>#}
+{#                        <a href="https://arcane.engineer/labs/PR-Pilot-AI/pr-pilot/modularize-django-views-by-creating-separate-files-for-each-function/" class="button is-small">#}
+{#                            <i class="fa fa-code-branch"></i>#}
+{#                        </a> Break down a large module into smaller ones#}
+{#                    </p>#}
+{#                    <p>#}
+{#                        <a href="https://arcane.engineer/labs/hex337/quantum-attendance/create-an-enhanced-readme-for-quantum-attendance-project-1726448329-6865072/" class="button is-small">#}
+{#                            <i class="fa fa-book"></i>#}
+{#                        </a> Scrape project to generate beautiful README file#}
+{#                    </p>#}
+
+
+                </div>
+            </div>
+            <div class="column is-7-desktop is-6-tablet">
+                <div class="laptop">
+                    <video autoplay loop muted playsinline>
+                        <source src="https://storage.cloud.google.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
         </div>
-        <p>
-            Click on the tool name to learn more about it.
 
-        </p>
 
+
+
+    </section>
+
+    <section class="section content">
+        <div class="columns">
+
+
+            <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+                <div class=" content">
+                    <p class="title is-2">The Tools</p>
+                    <p class="subtitle is-4">Use ours or build your own</p>
+                    <p class="is-size-5">
+                        At the top of the page, you'll find a list of tools that are available to you. Each tool
+                        provides a different user experience. Choose the tool that best fits your needs and click on it to get started.
+                    </p>
+                    <a href="{% url 'contribute' %}" class="button is-rounded">
+                        <span>Learn how to build your own tools</span>
+                        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+            </div>
+            <div class="column is-7-desktop is-6-tablet">
+                <div class="table-container">
+
+                    <table class="table is-hoverable">
+                        <tbody>
+                        {% for tool in tools %}
+                            <tr class="has-background-light" style="border:none">
+                                <td class="is-narrow" style="border:none">
+                                    <a href="{{ tool.link }}" class="button is-medium is-fullwidth">
+                                        <span class="icon">
+                                            <i class="fas {{ tool.icon }}"></i>
+                                        </span>
+                                        <span>{{ tool.name }}</span>
+                                    </a>
+                                </td>
+                                <td class="has-text-weight-light is-size-5" style="border:none">
+                                    {{ tool.description}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
     </section>
 
 

@@ -39,6 +39,7 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
         else:
             return redirect('repositories:repo_overview')
     github_token = get_github_token(request)
+    selected_pr = None
     if not owner or not repo:
         prs = []
     else:
@@ -46,8 +47,12 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
             g = Github(github_token)
             github_repo = g.get_repo(f"{owner}/{repo}")
         except GithubException as e:
+            if e.status == 401:
+                # Log user out
+                return redirect("user_logout")
             return render(request, "error.html", {"error": str(e)})
         prs = github_repo.get_pulls(state='open')
+
         if prs.totalCount == 0:
             return render_with_repositories(request, "view_pull_request.html", {
                 "prs": None,
@@ -55,13 +60,12 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
                 "diff_data": "",
                 "active_tab": "pull-request-manager",
             }, owner, repo)
-        if not pr_number:
-            selected_pr = prs[0]
-        else:
-            for pr in prs:
-                if pr.number == pr_number:
-                    selected_pr = pr
-                    break
+        selected_pr = prs[0]
+        for pr in prs:
+            if pr.number == pr_number:
+                selected_pr = pr
+                break
+
     # Load the diff data for the selected PR
     url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{selected_pr.number}"
     headers = {
