@@ -4,7 +4,7 @@ POSTGRES_PASSWORD := $(shell grep POSTGRES_PASSWORD .env | cut -d '=' -f2)
 IMAGE := arceng/studio
 
 # Phony Targets
-.PHONY: docker docker-push
+.PHONY: docker docker-push lint
 
 docker:
 	docker build --platform linux/amd64 -t $(IMAGE):$(VERSION) .
@@ -23,3 +23,6 @@ deploy:
 
 logs:
 	stern -l app=arcane-studio | grep -v "/health"
+
+lint:
+	poetry run flake8 .
