@@ -86,10 +86,8 @@
                     <span class="icon is-large"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="column is-11 content is-family-monospace">
-                    <pre id="prompt-data" style="display: none;">
-                    {{ task.user_request | safe }}
-                    </pre>
-                    <div id="prompt-output" class="content box is-size-7 p-3 has-background-info-95"></div>
+                    {% include 'markdown_container.html' with markdown=task.user_request id="prompt" classes="content box is-size-7 p-3 has-background-info-95" %}
+
                 </div>
 
             </div>
@@ -100,14 +98,10 @@
         {%  if task.status == "completed" %}
         <div class="columns">
             <div class="column is-1 content has-text-centered is-size-4">
-{#                <span class="icon"><i class="fas fa-robot"></i></span>#}
             </div>
             <div class="column is-11 content is-size-6">
 
-                <pre id="result-data" style="display: none;">
-                {{ task.result }}
-                </pre>
-                <div id="result-output" class="content"></div>
+                {% include 'markdown_container.html' with markdown=task.result id="result" %}
 
 
 
@@ -141,10 +135,7 @@
             The agent <b class="has-text-danger">{{ task.status }}</b> the task and responded:
         </div>
         <div class="box content has-background-danger-light">
-            <pre id="result-data" style="display: none;">
-            {{ task.result | safe}}
-            </pre>
-            <div id="result-output" class="content"></div>
+            {% include 'markdown_container.html' with markdown=task.result id="result" %}
         </div>
 
         {% endif %}
@@ -155,10 +146,4 @@
     </div>
     {% include 'task_live_updates.html' with task=task %}
 
-    <script>
-    $(document).ready(function() {
-        $('#prompt-output').html(window.md.render($('#prompt-data').text().trim()));
-        $('#result-output').html(window.md.render($('#result-data').text().trim()));
-    });
-    </script>
 {% endblock %}

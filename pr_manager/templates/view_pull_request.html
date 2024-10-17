@@ -12,7 +12,7 @@
 
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions, apply and review changes in seconds" %}
+
 
     {% if not prs %}
         <p class="content has-text-weight-light is-size-5">
@@ -46,33 +46,15 @@
             </div>
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
-                {% if description and description.description %}
-                    
-                    <pre id="desc-data" style="display: none;">
-                    {{ pr_description }}
-                    </pre>
-                    <div id="desc-output" class="content"></div>
-                    <form action="{% url 'start_over' %}" method="post" class="is-fullwidth">
-                        <input type="hidden" name="owner" value="{{ repo_owner }}">
-                        <input type="hidden" name="repo" value="{{ repo_name }}">
-                        <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
-                        <div class="buttons is-fullwidth is-justify-content-space-evenly mr-5 mb-5">
-                            <button class="button" type="submit" id="start-over-button">
-                                <span class="icon is-small"><i class="fas fa-redo"></i></span>
-                                <span>Start Over</span>
-                            </button>
-                            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button">
-                                <span class="icon is-small"><i class="fab fa-github"></i></span>
-                                <span>View on GitHub</span>
-                            </a>
-                        </div>
+                {% if task and task.status != "completed" %}
 
-                        {% csrf_token %}
-                    </form>
-                {% elif task %}
                     {% include 'task_live_updates.html' %}
                 {% else %}
-                    <p class="is-size-5 mb-5">
+                    {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content" %}
+
+                    <hr />
+
+                    <p class="is-size-5 mb-5 has-text-grey is-hidden">
                         Customize the options below to create the perfect PR description in seconds.
                     </p>
                     {% include 'description_generator_form.html' %}
@@ -134,6 +116,7 @@
                 if (url) {
                     window.location.href = url;
                 }
+                $(this).attr('disabled', 'disabled');
             });
             $('.tab').click(function() {
                 var tabId = $(this).data('tab-id');
@@ -143,8 +126,6 @@
                 $(this).addClass('is-active');
             });
 
-            // Get the description data from the hidden pre tag with jquery
-            $('#desc-output').html(window.md.render($('#desc-data').text().trim()));
         });
     </script>
 
