@@ -47,6 +47,11 @@
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
                 {% if description and description.description %}
+                    
+                    <pre id="desc-data" style="display: none;">
+                    {{ pr_description }}
+                    </pre>
+                    <div id="desc-output" class="content"></div>
                     <form action="{% url 'start_over' %}" method="post" class="is-fullwidth">
                         <input type="hidden" name="owner" value="{{ repo_owner }}">
                         <input type="hidden" name="repo" value="{{ repo_name }}">
@@ -64,10 +69,6 @@
 
                         {% csrf_token %}
                     </form>
-                    <pre id="desc-data" style="display: none;">
-                    {{ pr_description }}
-                    </pre>
-                    <div id="desc-output" class="content"></div>
                 {% elif task %}
                     {% include 'task_live_updates.html' %}
                 {% else %}
