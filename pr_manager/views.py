@@ -79,21 +79,19 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, api_key=None)
     diff_data = response.text
 
     # Check if there is a description for this PR
-    description = PullRequestDescription.objects.filter(repo__owner=owner, repo__repo_name=repo, user=request.user, pr_number=selected_pr.number).first()
+    description = PullRequestDescription.objects.filter(repo__owner=owner,
+                                                        repo__repo_name=repo,
+                                                        user=request.user,
+                                                        pr_number=selected_pr.number).first()
     task = None
-    if description and not description.description:
+    if description:
         task = ArcaneEngine(api_key).get_task(description.task_id)
-        if task.status == 'completed':
-            description.description = task.result
-            description.save()
 
     return render_with_repositories(request, "view_pull_request.html", {
         "prs": prs,
         "selected_pr": selected_pr,
         "diff_data": diff_data,
         "task": task,
-        "description": description,
-        "pr_description": description.description if description else "",
         "active_tab": "pull-request-manager",
     }, owner, repo)
 
@@ -109,7 +107,7 @@ def generate_description(request, api_key):
     content_size = request.POST.get('content_size')
     structure = request.POST.get('structure')
     additional_instructions = request.POST.get('additional_instructions', '')
-    add_emoji_to_title = request.POST.get('add_emoji_to_title', 'off') == 'on'
+    add_emoji_to_title = True
 
     engine = ArcaneEngine(api_key)
     prompt = PR_DESCRIPTION.format(
@@ -123,10 +121,13 @@ def generate_description(request, api_key):
 
     try:
         task = engine.create_task(f"{owner}/{repo}", prompt)
+        bookmark = BookmarkedRepo.objects.get(owner=owner, repo_name=repo)
         # Create a new PullRequestDescription instance
+
+        PullRequestDescription.objects.filter(user=request.user, repo=bookmark).delete()
         PullRequestDescription.objects.create(
             user=request.user,
-            repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo),
+            repo=bookmark,
             pr_number=pr_number,
             task_id=task.id
         )
@@ -142,12 +143,3 @@ def generate_description(request, api_key):
 
     return redirect(reverse('view_pull_request', args=(owner, repo, pr_number,)))
 
-
-@login_required
-@require_POST
-def start_over(request):
-    owner = request.POST.get('owner')
-    repo = request.POST.get('repo')
-    pr_number = request.POST.get('pr_number')
-    PullRequestDescription.objects.filter(repo__owner=owner, repo__repo_name=repo, user=request.user, pr_number=pr_number).delete()
-    return redirect('view_pull_request', owner=owner, repo=repo, pr_number=pr_number)
