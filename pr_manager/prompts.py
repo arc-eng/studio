@@ -1,3 +1,73 @@
+from enum import Enum
+from typing import List
+
+from pydantic import BaseModel, Field
+
+
+class Criticality(Enum):
+    MINOR = "Minor"
+    MAJOR = "Major"
+    CRITICAL = "Critical"
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+
+
+class Category(Enum):
+    SECURITY = "Security"
+    PERFORMANCE = "Performance"
+    USABILITY = "Usability"
+    FUNCTIONALITY = "Functionality"
+    MAINTAINABILITY = "Maintainability"
+    READABILITY = "Readability"
+    STYLE = "Style"
+    OTHER = "Other"
+
+    def __str__(self):
+        return self.value
+
+    def __repr__(self):
+        return self.value
+
+class CodeReviewFinding(BaseModel):
+    file: str = Field(title="File Path", description="Path of the file that is being reviewed")
+    issue: str = Field(title="Issue", description="Issue found in the file changes")
+    line_start: int = Field(title="First line number", description="First line number of the issue")
+    line_end: int = Field(title="Last line number", description="Last line number of the issue")
+    criticality: Criticality = Field(title="Criticality", description="Criticality of the issue", )
+    category: Category = Field(title="Category", description="Category of the file changes")
+    recommendation: str = Field(title="Recommendation", description="Recommendation to fix the issue")
+
+class CodeReview(BaseModel):
+    summary: str = Field(title="Summary", description="A brief summary of the code review")
+    findings: List[CodeReviewFinding] = Field(title="Findings", description="Findings from the code review")
+
+CODE_REVIEW = """
+There is a pull request I want you to review: #{pr_number}.
+I need you to review the changes made in the files and provide a list of findings.
+
+### What constitutes a "finding"
+- An issue found in the file changes that should be addressed
+- A recommendation to fix the issue
+- The criticality of the issue (Minor, Major, Critical)
+- The category of the file changes (Security, Performance, Usability, Functionality, Maintainability, Readability, Style, Other)
+
+### How to write a review summary
+Provide a brief summary of the findings. If there are no findings, point out some positive aspects of the changes.
+
+Do the following:
+1. Read the PR #{pr_number} to understand the file changes
+2. Review the file changes and identify issues that need to be addressed
+3. Create a list of findings for each issue found
+4. Write a summary of the findings
+
+It is OK to have an empty list of findings if there are no issues found. If that is the case, 
+point out in the summary that there are no findings and it looks good to go.
+"""
+
 PR_DESCRIPTION = """
 I've made some changes and opened a new PR: #{pr_number}.
 

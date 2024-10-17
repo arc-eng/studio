@@ -1,0 +1,120 @@
+
+{% if review %}
+    {% if review.summary %}
+        <div class="content">
+            <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right">
+                <input type="hidden" name="owner" value="{{ repo_owner }}">
+                <input type="hidden" name="repo" value="{{ repo_name }}">
+                <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+                {% csrf_token %}
+                <button type="submit" class="button is-small reset-button">
+                    <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
+                </button>
+            </form>
+            {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-5" %}
+
+
+            {% for finding in review.findings.all %}
+                <nav class="panel is-small m-5 {% if finding.criticality == "Major" %}is-warning{% elif finding.criticality == "Critical" %}is-danger{% else %}is-light{% endif %}">
+                    <div class="panel-heading">
+                        <div class="columns">
+                            <div class="column is-narrow">
+                                <div class="field has-addons">
+                                    <p class="control m-0">
+                                        <button class="button is-small">
+                                            <span class="icon is-small"><i class="fas fa-copy"></i></span>
+                                        </button>
+                                    </p>
+                                    <p class="control m-0">
+                                        <button class="button is-small">
+                                            <span class="icon is-small"><i class="fas fa-comment"></i></span>
+                                        </button>
+                                    </p>
+                                    <p class="control m-0">
+                                        <button class="button is-small">
+                                            <span class="icon is-small"><i class="fas fa-play"></i></span>
+                                        </button>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="column">{{ finding.file }}</div>
+                            <div class="column is-hidden">
+                                <code>
+                                    {% if finding.line_start == finding.line_end %}
+                                        l {{ finding.line_start }}
+                                    {% else %}
+                                        ll {{ finding.line_start }} - {{ finding.line_end }}
+                                    {% endif %}
+                                </code>
+                                <span class="tag is-pulled-right has-text-weight-normal
+                            {% if finding.category == 'SECURITY' %} is-danger
+                                {% elif finding.category == 'PERFORMANCE' %} is-warning
+                                {% elif finding.category == 'USABILITY' %} is-info
+                                {% elif finding.category == 'FUNCTIONALITY' %} is-success
+                                {% elif finding.category == 'MAINTAINABILITY' %} is-primary
+                                {% elif finding.category == 'READABILITY' %} is-link
+                                {% elif finding.category == 'STYLE' %} is-light
+                                {% else %} is-dark
+                                {% endif %}
+                            ">{{ finding.category }}</span>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <a class="panel-block">
+                        <span class="panel-icon
+                            {% if finding.criticality == "Major" %}has-text-warning{% elif finding.criticality == "Critical" %}has-text-danger{% else %}has-text-light{% endif %}">
+                          <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                        </span>
+                        {{ finding.issue }}
+                    </a>
+                    <div class="panel-block is-active">
+                        <span class="panel-icon has-text-success">
+                          <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                        </span>
+                        <p>{{ finding.recommendation }}</p>
+
+                    </div>
+
+                </nav>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="title is-5 has-text-centered">
+            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+            <span>Analyzing code changes</span>
+        </p>
+        {% include 'task_live_updates.html' with task=review_task %}
+    {% endif %}
+{% else %}
+    <div class="content">
+        <p class="is-size-5 has-text-weight-light p-5">
+            Let the engine analyze this pull request and generate a code review for you, including recommendations on how to improve it.
+        </p>
+        <form action="{% url 'generate_review' %}" method="post" class="is-fullwidth m-5">
+            <input type="hidden" name="owner" value="{{ repo_owner }}">
+            <input type="hidden" name="repo" value="{{ repo_name }}">
+            <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+            {% csrf_token %}
+
+            <div class="field">
+                <div class="control">
+                    <button class="button has-text-info-25 is-fullwidth generate-button" type="submit">
+
+                        <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+                        <span>Generate a code review</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+<script>
+    $('.reset-button').click(function() {
+        $(this).addClass('is-loading');
+    });
+</script>

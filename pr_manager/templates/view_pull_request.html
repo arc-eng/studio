@@ -63,7 +63,7 @@
 
             <div id="review-tab-container" class="tab-container is-hidden" data-tab-id="review">
                 <p class="is-size-5">
-                    Soon, you will be able to review the changes in the PR here.
+                    {% include 'review_generator_tab.html' %}
                 </p>
             </div>
             <div id="change-tab-container" class="tab-container is-hidden" data-tab-id="change">
@@ -77,7 +77,7 @@
             <div class="select mb-3 is-inline-block">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}"
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
                         {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
                     {% endfor %}
                 </select>
@@ -125,6 +125,12 @@
                 $('#' + tabId + '-tab-container').removeClass('is-hidden');
                 $(this).addClass('is-active');
             });
+
+            const describeTab = document.querySelector('.tab[data-tab-id="{{ pr_tab }}"]');
+            if (describeTab) {
+                describeTab.click();
+            }
+
 
         });
     </script>
