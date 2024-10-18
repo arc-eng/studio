@@ -37,7 +37,7 @@
                         <a href="{% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
                             <span class="icon"><i class="fas fa-gears"></i></span>
                         </a>
-                        <a href="{% url 'view_pull_request' owner=bookmark.owner repo=bookmark.repo_name pr_number=0 %}" class="button is-small is-page-loader">
+                        <a href="{% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
                             <span class="icon"><i class="fas fa-code-branch"></i></span>
                         </a>
                         <a href="{% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
