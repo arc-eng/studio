@@ -78,6 +78,17 @@ It is OK to have an empty list of findings if there are no issues found. If that
 point out in the summary that there are no findings and it looks good to go. 
 """
 
+APPLY_RECOMMENDATION = """
+In a code review, we have identified an issue in the file `{file}` that needs to be addressed:
+
+{issue}
+
+The recommendation to fix the issue is:
+{recommendation}
+
+Apply the code changes to fix the issue.
+"""
+
 PR_DESCRIPTION = """
 I've made some changes and opened a new PR: #{pr_number}.
 

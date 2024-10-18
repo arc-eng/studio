@@ -19,8 +19,8 @@
 
                     <header class="card-header p-2 has-round-corners">
 
-                        <p class="card-header-title m-0 p-0">
-                        <span class="tag has-text-weight-normal mr-3
+                        <p class="card-header-title m-0 p-0 has-text-weight-normal">
+                        <span class="tag mr-3
                             {% if finding.criticality == 'Minor' %} is-link
                             {% elif finding.criticality == 'Major' %} is-warning
                             {% elif finding.criticality == 'Critical' %} is-danger
@@ -38,7 +38,7 @@
 
 
 
-                    <div class="card-content is-hidden has-round-corners has-background-white-bis" style="height: 0;">
+                    <div class="card-content has-round-corners has-background-white-bis" style="display: none;">
 
                         <div class="title is-6">
                             <a class="tag is-dark is-pulled-right line-link"
@@ -70,22 +70,28 @@
                                     </button>
                                 </p>
                                 <p class="control">
-                                    <button class="button is-small">
+                                    <button class="button is-small has-text-link-25">
                                         <span class="icon is-small"><i class="fas fa-copy"></i></span>
                                         <span>Copy</span>
                                     </button>
                                 </p>
                                 <p class="control">
-                                    <button class="button is-small">
+                                    <button class="button is-small has-text-info-25">
                                         <span class="icon is-small"><i class="fas fa-comment"></i></span>
                                         <span>Comment</span>
                                     </button>
                                 </p>
                                 <p class="control">
-                                    <button class="button is-small">
-                                        <span class="icon is-small"><i class="fas fa-play"></i></span>
-                                        <span>Apply</span>
+                                <form action="{% url 'apply_recommendation' %}" method="post">
+                                    <input type="hidden" name="finding_id" value="{{ finding.id }}">
+                                    {% csrf_token %}
+
+                                    <button class="button is-small has-text-success-25 {% if finding.task_id %}is-static{% endif %}">
+                                        <span class="icon is-small"><i class="fas {% if finding.task_id %}fa-check{% else %}fa-play{% endif %}"></i></span>
+                                        <span>{% if finding.task_id %}Applied{% else %}Apply{% endif %}</span>
                                     </button>
+                                </form>
+
                                 </p>
                             </div>
 
@@ -134,8 +140,7 @@
 
     $('.card-header').click(function() {
         // Animate height
-        $(this).next('.card-content').css('height', 'auto');
-        $(this).next('.card-content').toggleClass('is-hidden');
+        $(this).next('.card-content').slideToggle(200);
         // Change icon
         $(this).find('.icon i').toggleClass('fa-angle-right fa-angle-down');
     });

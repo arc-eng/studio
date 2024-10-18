@@ -15,8 +15,9 @@ from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
 from studio.github import get_github_token
-from .models import PullRequestDescription, PullRequestReview
-from .prompts import emoji_prompt, structure_prompt, style_prompt, PR_DESCRIPTION, CODE_REVIEW, CodeReview, Category
+from .models import PullRequestDescription, PullRequestReview, ReviewFinding
+from .prompts import emoji_prompt, structure_prompt, style_prompt, PR_DESCRIPTION, CODE_REVIEW, CodeReview, Category, \
+    APPLY_RECOMMENDATION
 
 logger = logging.getLogger(__name__)
 
@@ -215,3 +216,22 @@ def generate_review(request, api_key):
     review.save()
     return redirect(reverse('view_pull_request', args=(owner, repo, pr_number, "review")))
 
+
+@login_required
+@needs_api_key
+def apply_recommendation(request, api_key):
+    finding_id = request.POST.get('finding_id')
+    finding = ReviewFinding.objects.get(id=finding_id)
+    repo = finding.review.repo
+    if not finding.review.user == request.user:
+        return render(request, "error.html", {"error": "You are not authorized to apply this recommendation"})
+    prompt = APPLY_RECOMMENDATION.format(
+        file=finding.file,
+        issue=finding.issue,
+        recommendation=finding.recommendation
+    )
+    engine = ArcaneEngine(api_key)
+    task = engine.create_task(repo.full_name, prompt)
+    finding.task_id = task.id
+    finding.save()
+    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
