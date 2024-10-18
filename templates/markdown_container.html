@@ -1,10 +1,10 @@
-<pre id="{{ id }}-data" style="display: none;">
+<pre id="{{ id_prefix }}{{ id }}-data" style="display: none;">
 {{ markdown | safe }}
 </pre>
-<div id="{{ id }}-output" class="{{ classes }}"></div>
+<div id="{{ id_prefix }}{{ id }}-output" class="{{ classes }}"></div>
 
 <script>
     $(document).ready(function() {
-        $('#{{ id }}-output').html(window.md.render($('#{{ id }}-data').text().trim()));
+        $('#{{ id_prefix }}{{ id }}-output').html(window.md.render($('#{{ id_prefix }}{{ id }}-data').text().trim()));
     });
 </script>
