@@ -71,7 +71,11 @@
 
                     {% include 'task_live_updates.html' %}
                 {% else %}
-                    {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content" %}
+                    <p class="title is-4 p-3">
+                        {{ selected_pr.title }}
+
+                    </p>
+                    {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content p-3" %}
 
                     <hr />
 

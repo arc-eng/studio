@@ -10,4 +10,5 @@ urlpatterns = [
     path("generate-description/", views.generate_description, name="generate_description"),
     path("generate-review/", views.generate_review, name="generate_review"),
     path("apply-recommendation/", views.apply_recommendation, name="apply_recommendation"),
+    path("comment-on-pr-review/", views.comment_on_pr_review, name="comment_on_pr_review"),
 ]

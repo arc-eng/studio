@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
-from github import Github, GithubException
+from github import Github
+from github.GithubException import GithubException
 from pydantic_core import from_json
 
 from repositories.models import BookmarkedRepo
@@ -235,3 +236,25 @@ def apply_recommendation(request, api_key):
     finding.task_id = task.id
     finding.save()
     return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
+
+
+@login_required
+@require_POST
+def comment_on_pr_review(request):
+    """Create a comment on a PR review in a particular line for a particular file"""
+    line = int(request.POST.get('line'))
+    file = request.POST.get('file')
+    comment = request.POST.get('comment')
+    try:
+        g = Github(get_github_token(request))
+        repo = g.get_repo(request.POST.get('repo'))
+        pr = repo.get_pull(int(request.POST.get('pr_number')))
+        commit = pr.get_commits().reversed[0]
+        comment = pr.create_review_comment(body=comment, commit=commit, path=file, start_line=line)
+    except GithubException as e:
+        message = e.message
+        if not message:
+            message = str(e.data)
+        return render(request, "error.html", {"error": f"Failed to create comment: {message}"})
+    # Redirect to the comment URL
+    return redirect(comment.html_url)

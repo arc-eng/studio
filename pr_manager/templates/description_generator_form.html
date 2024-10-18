@@ -1,4 +1,4 @@
-<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth">
+<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth p-3">
     <input type="hidden" name="owner" value="{{ repo_owner }}">
     <input type="hidden" name="repo" value="{{ repo_name }}">
     <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">

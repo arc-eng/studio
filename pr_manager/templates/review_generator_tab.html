@@ -2,17 +2,21 @@
 {% if review %}
     {% if review.summary %}
         <div class="content" id="code-review">
-            <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right">
+            <p class="title is-4 p-3">
+                {{ selected_pr.title }}
+
+            </p>
+            <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right m-3">
                 <input type="hidden" name="owner" value="{{ repo_owner }}">
                 <input type="hidden" name="repo" value="{{ repo_name }}">
                 <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
                 {% csrf_token %}
-                <button type="submit" class="button is-small reset-button">
+                <button type="submit" class="button is-small reset-button has-text-info-25 has-text-weight-bold">
                     <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
                 </button>
             </form>
-            {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-5" %}
 
+            {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
 
             {% for finding in review.findings.all %}
                 <div class="card p-0">
@@ -78,17 +82,30 @@
                                     </button>
                                 </p>
                                 <p class="control">
-                                    <button class="button is-small has-text-info-25">
-                                        <span class="icon is-small"><i class="fas fa-comment"></i></span>
-                                        <span>Comment</span>
-                                    </button>
+
+                                    <form action="{% url 'comment_on_pr_review' %}" method="post">
+                                        <input type="hidden" name="line" value="{{ finding.line_start }}">
+                                        <input type="hidden" name="file" value="{{ finding.file }}">
+                                        <input type="hidden" name="comment" value="{{ finding.recommendation }}">
+                                        <input type="hidden" name="repo" value="{{ finding.review.repo.full_name }}">
+                                        <input type="hidden" name="pr_number" value="{{ finding.review.pr_number }}">
+
+
+                                        {% csrf_token %}
+
+                                        <button class="button is-small has-text-info-25 finding-action" type="submit">
+                                            <span class="icon is-small"><i class="fas fa-comment"></i></span>
+                                            <span>Comment</span>
+                                        </button>
+                                    </form>
+
                                 </p>
                                 <p class="control">
                                 <form action="{% url 'apply_recommendation' %}" method="post">
                                     <input type="hidden" name="finding_id" value="{{ finding.id }}">
                                     {% csrf_token %}
 
-                                    <button class="button is-small has-text-success-25 {% if finding.task_id %}is-static{% endif %}">
+                                    <button class="button is-small has-text-success-25 finding-action {% if finding.task_id %}is-static{% endif %}">
                                         <span class="icon is-small"><i class="fas {% if finding.task_id %}fa-check{% else %}fa-play{% endif %}"></i></span>
                                         <span>{% if finding.task_id %}Applied{% else %}Apply{% endif %}</span>
                                     </button>
@@ -157,6 +174,10 @@
     $('.reset-button').click(function() {
         $(this).addClass('is-loading');
     });
+    $('.finding-action').click(function() {
+        $(this).addClass('is-loading');
+    });
+
 
     $('.card-header').click(function() {
 
