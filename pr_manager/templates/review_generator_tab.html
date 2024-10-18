@@ -15,71 +15,85 @@
 
 
             {% for finding in review.findings.all %}
-                <nav class="panel is-small m-5 {% if finding.criticality == "Major" %}is-warning{% elif finding.criticality == "Critical" %}is-danger{% else %}is-light{% endif %}">
-                    <div class="panel-heading">
-                        <div class="columns">
-                            <div class="column is-narrow">
-                                <div class="field has-addons">
-                                    <p class="control m-0">
-                                        <button class="button is-small">
-                                            <span class="icon is-small"><i class="fas fa-copy"></i></span>
-                                        </button>
-                                    </p>
-                                    <p class="control m-0">
-                                        <button class="button is-small">
-                                            <span class="icon is-small"><i class="fas fa-comment"></i></span>
-                                        </button>
-                                    </p>
-                                    <p class="control m-0">
-                                        <button class="button is-small">
-                                            <span class="icon is-small"><i class="fas fa-play"></i></span>
-                                        </button>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="column">{{ finding.file }}</div>
-                            <div class="column is-hidden">
-                                <code>
-                                    {% if finding.line_start == finding.line_end %}
-                                        l {{ finding.line_start }}
-                                    {% else %}
-                                        ll {{ finding.line_start }} - {{ finding.line_end }}
-                                    {% endif %}
-                                </code>
-                                <span class="tag is-pulled-right has-text-weight-normal
-                            {% if finding.category == 'SECURITY' %} is-danger
-                                {% elif finding.category == 'PERFORMANCE' %} is-warning
-                                {% elif finding.category == 'USABILITY' %} is-info
-                                {% elif finding.category == 'FUNCTIONALITY' %} is-success
-                                {% elif finding.category == 'MAINTAINABILITY' %} is-primary
-                                {% elif finding.category == 'READABILITY' %} is-link
-                                {% elif finding.category == 'STYLE' %} is-light
-                                {% else %} is-dark
-                                {% endif %}
-                            ">{{ finding.category }}</span>
-                            </div>
+                <div class="card p-0">
+
+                    <header class="card-header p-2 has-round-corners">
+
+                        <p class="card-header-title m-0 p-0">
+                        <span class="tag has-text-weight-normal mr-3
+                            {% if finding.criticality == 'Minor' %} is-link
+                            {% elif finding.criticality == 'Major' %} is-warning
+                            {% elif finding.criticality == 'Critical' %} is-danger
+                            {% else %} is-light
+                            {% endif %}
+                        ">{{ finding.criticality }}</span>
+                        {{ finding.file|truncatechars:35 }}
+                        </p>
+                        <button class="card-header-icon p-0" aria-label="more options">
+                          <span class="icon">
+                            <i class="fas fa-angle-right" aria-hidden="true"></i>
+                          </span>
+                        </button>
+                    </header>
+
+
+
+                    <div class="card-content is-hidden has-round-corners has-background-white-bis" style="height: 0;">
+
+                        <div class="title is-6">
+                            <a class="tag is-dark is-pulled-right line-link"
+                               data-pr-number="{{ review.pr_number }}"
+                               data-file="{{ finding.file }}"
+                               data-line-start="{{ finding.line_start }}"
+                               data-line-end="{{ finding.line_end }}"
+                               data-repo-owner="{{ repo_owner }}"
+                               data-repo-name="{{ repo_name }}">
+                                {% if finding.line_start == finding.line_end %}{{ finding.line_start }}{% else %}{{ finding.line_start }} - {{ finding.line_end }}{% endif %}
+                            </a>
+                            {{ finding.category }} issue
+                        </div>
+                        <div class="content">
+                            {% include 'markdown_container.html' with markdown=finding.issue id=finding.id %}
                         </div>
 
+                        <div class="content mt-5">
+                            <div class="title is-6">
+                                Recommendation
+                            </div>
+                            <span>
+                        {% include 'markdown_container.html' with markdown=finding.recommendation id_prefix="rec" id=finding.id classes="is-inline-block" %}
+                        </span>
+                            <div class="field has-addons mt-5">
+                                <p class="control">
+                                    <button class="button is-static is-small">
+                                        <span class="icon is-small"><i class="fas fa-lightbulb"></i></span>
+                                    </button>
+                                </p>
+                                <p class="control">
+                                    <button class="button is-small">
+                                        <span class="icon is-small"><i class="fas fa-copy"></i></span>
+                                        <span>Copy</span>
+                                    </button>
+                                </p>
+                                <p class="control">
+                                    <button class="button is-small">
+                                        <span class="icon is-small"><i class="fas fa-comment"></i></span>
+                                        <span>Comment</span>
+                                    </button>
+                                </p>
+                                <p class="control">
+                                    <button class="button is-small">
+                                        <span class="icon is-small"><i class="fas fa-play"></i></span>
+                                        <span>Apply</span>
+                                    </button>
+                                </p>
+                            </div>
 
-
+                        </div>
                     </div>
 
-                    <a class="panel-block">
-                        <span class="panel-icon
-                            {% if finding.criticality == "Major" %}has-text-warning{% elif finding.criticality == "Critical" %}has-text-danger{% else %}has-text-light{% endif %}">
-                          <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-                        </span>
-                        {{ finding.issue }}
-                    </a>
-                    <div class="panel-block is-active">
-                        <span class="panel-icon has-text-success">
-                          <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                        </span>
-                        <p>{{ finding.recommendation }}</p>
+                </div>
 
-                    </div>
-
-                </nav>
             {% endfor %}
         </div>
     {% else %}
@@ -116,5 +130,34 @@
 <script>
     $('.reset-button').click(function() {
         $(this).addClass('is-loading');
+    });
+
+    $('.card-header').click(function() {
+        // Animate height
+        $(this).next('.card-content').css('height', 'auto');
+        $(this).next('.card-content').toggleClass('is-hidden');
+        // Change icon
+        $(this).find('.icon i').toggleClass('fa-angle-right fa-angle-down');
+    });
+
+    // Clicking on line number should lead user directly to the line in the code in the PR on github
+    $('.line-link').click(function() {
+        var pr_number = $(this).data('pr-number');
+        var file = $(this).data('file');
+        var line_start = $(this).data('line-start');
+        var line_end = $(this).data('line-end');
+        var repo_owner = $(this).data('repo-owner');
+        var repo_name = $(this).data('repo-name');
+
+        const baseUrl = `https://github.com/${repo_owner}/${repo_name}/pull/${pr_number}/files`;
+
+        // Generate the file diff hash by encoding the file path and trimming extra characters
+        const fileHash = encodeURIComponent(file).replace(/%2F/g, '/').replace(/\./g, '%2E');
+
+        // Construct the full URL with the diff hash and line number
+        const fullUrl = `${baseUrl}#diff-${fileHash}R${line_start}`;
+
+        // Open the URL in a new tab
+        window.open(fullUrl, '_blank');
     });
 </script>

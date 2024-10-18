@@ -47,6 +47,10 @@
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
                 {% if task and task.status != "completed" %}
+                    <p class="title is-5 has-text-centered">
+                        <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                        <span>Generating title and description</span>
+                    </p>
 
                     {% include 'task_live_updates.html' %}
                 {% else %}

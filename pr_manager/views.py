@@ -159,13 +159,11 @@ def generate_description(request, api_key):
     content_size = request.POST.get('content_size')
     structure = request.POST.get('structure')
     additional_instructions = request.POST.get('additional_instructions', '')
-    add_emoji_to_title = True
 
     engine = ArcaneEngine(api_key)
     prompt = PR_DESCRIPTION.format(
         pr_number=pr_number,
         structure=structure_prompt(structure),
-        emoji_in_title="Include an emoji in the title." if add_emoji_to_title else "Do not include an emoji in the title.",
         additional_instructions=additional_instructions,
         emojis=emoji_prompt(emojis),
         style=style_prompt(content_size)

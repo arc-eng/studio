@@ -55,8 +55,18 @@ I need you to review the changes made in the files and provide a list of finding
 - The criticality of the issue (Minor, Major, Critical)
 - The category of the file changes (Security, Performance, Usability, Functionality, Maintainability, Readability, Style, Other)
 
-### How to write a review summary
-Provide a brief summary of the findings. If there are no findings, point out some positive aspects of the changes.
+### What to look out for
+- Code that could lead to security issues like SQL injection, XSS, etc.
+- Code that could lead to performance issues
+- Code smells like duplicated code, long methods, etc.
+- Lack of comments or docstrings
+- Code style violations
+- Incorrect or missing error handling
+- Incorrect or missing tests for complex logic
+- Poorly written code that could be refactored for better readability and maintainability
+
+### Formatting
+Use Markdown formatting in the findings issues and recommendations to enhance readability.
 
 Do the following:
 1. Read the PR #{pr_number} to understand the file changes
@@ -65,7 +75,7 @@ Do the following:
 4. Write a summary of the findings
 
 It is OK to have an empty list of findings if there are no issues found. If that is the case, 
-point out in the summary that there are no findings and it looks good to go.
+point out in the summary that there are no findings and it looks good to go. 
 """
 
 PR_DESCRIPTION = """
@@ -76,7 +86,6 @@ I need a PR title and a description that summarizes these changes.
 Use the following guidelines:
 
 - Start the title with a verb in the imperative mood (e.g., "Add", "Fix", "Update").
-- {emoji_in_title}
 - At the very top, provide short paragraph summarizing the changes and their impact.
 - Use the present tense and the active voice.
 - Be specific - Include names, paths, identifiers, names, versions, etc
@@ -114,9 +123,9 @@ def structure_prompt(form_select):
 
 def emoji_prompt(form_select):
     if form_select == "readability":
-        return "Add emojis, to enhance the readability. Use UTF-8 encoding for emojis"
+        return "Add emojis to the beginning of headers and the title to enhance the readability. Use UTF-8 encoding for emojis"
     elif form_select == "readability_and_fun":
-        return "Add lots of emojis to enhance readability and for visual eye candy and fun! Use UTF-8 encoding for emojis"
+        return "Add emojis to the beginning of headers and the title. Also use lots of emojis in the description to enhance readability and for visual eye candy and fun! Use UTF-8 encoding for emojis"
     elif form_select == "no_emojis":
         return "Do not use emojis"
     else:
