@@ -59,7 +59,7 @@
         <div class="column is-narrow">
             <div class="buttons">
                 {% if task.pr_number %}
-                    <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader has-text-success-40">
+                    <a href="{% url 'view_pull_request_default_tab' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader has-text-success-40">
                         <span class="icon is-small"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
                     </a>
 

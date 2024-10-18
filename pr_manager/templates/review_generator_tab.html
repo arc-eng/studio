@@ -76,7 +76,7 @@
                                     </button>
                                 </p>
                                 <p class="control">
-                                    <button class="button is-small has-text-link-25">
+                                    <button class="button is-small has-text-link-25 copy-button" data-copy-text="{{ finding.recommendation }}">
                                         <span class="icon is-small"><i class="fas fa-copy"></i></span>
                                         <span>Copy</span>
                                     </button>
@@ -101,7 +101,7 @@
 
                                 </p>
                                 <p class="control">
-                                <form action="{% url 'apply_recommendation' %}" method="post">
+                                <form action="{% url 'apply_review_finding_recommendation' %}" method="post">
                                     <input type="hidden" name="finding_id" value="{{ finding.id }}">
                                     {% csrf_token %}
 
@@ -181,8 +181,6 @@
 
     $('.card-header').click(function() {
 
-
-
         // Animate height
         $(this).next('.card-content').slideToggle(200);
         // Change icon
@@ -243,5 +241,20 @@
         {#window.open(fullUrl, '_blank');#}
         scrollToLineInFile(file, line_start);
 
+    });
+    
+    $('.copy-button').click(function() {
+        const text = $(this).data('copy-text');
+        navigator.clipboard.writeText(text).then(function() {
+            console.log('Copied to clipboard');
+        }, function(err) {
+            console.error('Failed to copy to clipboard', err);
+        });
+        // Turn copy icon into checkmark, then revert back after 2 seconds
+        const $button = $(this);
+        $button.find('i').removeClass('fa-copy').addClass('fa-check');
+        setTimeout(function() {
+            $button.find('i').removeClass('fa-check').addClass('fa-copy');
+        }, 2000);
     });
 </script>

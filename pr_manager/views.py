@@ -232,10 +232,10 @@ def apply_recommendation(request, api_key):
         recommendation=finding.recommendation
     )
     engine = ArcaneEngine(api_key)
-    task = engine.create_task(repo.full_name, prompt)
+    task = engine.create_task(repo.full_name, prompt, pr_number=finding.review.pr_number)
     finding.task_id = task.id
     finding.save()
-    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
+    return redirect(reverse('view_task', args=(repo.owner, repo.repo_name, task.id)))
 
 
 @login_required

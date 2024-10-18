@@ -9,6 +9,6 @@ urlpatterns = [
     path("<str:owner>/<str:repo>/", views.view_pull_request, name="view_pull_request_default"),
     path("generate-description/", views.generate_description, name="generate_description"),
     path("generate-review/", views.generate_review, name="generate_review"),
-    path("apply-recommendation/", views.apply_recommendation, name="apply_recommendation"),
+    path("apply-recommendation/", views.apply_recommendation, name="apply_review_finding_recommendation"),
     path("comment-on-pr-review/", views.comment_on_pr_review, name="comment_on_pr_review"),
 ]
