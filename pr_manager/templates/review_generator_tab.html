@@ -1,7 +1,7 @@
 
 {% if review %}
     {% if review.summary %}
-        <div class="content">
+        <div class="content" id="code-review">
             <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right">
                 <input type="hidden" name="owner" value="{{ repo_owner }}">
                 <input type="hidden" name="repo" value="{{ repo_name }}">
@@ -17,7 +17,9 @@
             {% for finding in review.findings.all %}
                 <div class="card p-0">
 
-                    <header class="card-header p-2 has-round-corners">
+                    <header class="card-header p-2 has-round-corners"
+                            data-file="{{ finding.file }}"
+                            data-line-start="{{ finding.line_start }}">
 
                         <p class="card-header-title m-0 p-0 has-text-weight-normal">
                         <span class="tag mr-3
@@ -38,7 +40,7 @@
 
 
 
-                    <div class="card-content has-round-corners has-background-white-bis" style="display: none;">
+                    <div class="card-content" style="display: none;">
 
                         <div class="title is-6">
                             <a class="tag is-dark is-pulled-right line-link"
@@ -134,15 +136,69 @@
 {% endif %}
 
 <script>
+    // Scroll to a specific line in a specific file using jQuery
+    function scrollToLineInFile(fileName, lineNumber) {
+        var $fileElement = $('.d2h-file-name:contains("' + fileName + '")').closest('.d2h-file-wrapper');
+        if ($fileElement.length) {
+            var $lineElement = $fileElement.find('.line-num2:contains("' + lineNumber + '")').closest('tr');
+            if ($lineElement.length) {
+                $('html, body').animate({
+                    scrollTop: $lineElement.offset().top
+                }, 'slow');
+            } else {
+                console.log('Line not found in file: ' + lineNumber);
+            }
+        } else {
+            console.log('File not found: ' + fileName);
+        }
+    }
+
+
     $('.reset-button').click(function() {
         $(this).addClass('is-loading');
     });
 
     $('.card-header').click(function() {
+
+
+
         // Animate height
         $(this).next('.card-content').slideToggle(200);
         // Change icon
         $(this).find('.icon i').toggleClass('fa-angle-right fa-angle-down');
+        // Find parent card
+        var $card = $(this).closest('.card');
+        var originalOffset = $card.offset().top;
+        var originalWidth = $card.outerWidth(); // Store the original width
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > originalOffset) {
+                $card.width(originalWidth); // Set the width to the original width
+                $card.addClass('fixed-div'); // Apply fixed when scrolled
+            } else {
+                $card.css('width', ''); // Reset width when it is not fixed
+                $card.removeClass('fixed-div'); // Revert to normal when back to the top
+            }
+        });
+        const file = $(this).data('file');
+        const line_start = $(this).data('line-start');
+
+        // Check if it has is-active class
+        if ($(this).hasClass('is-active')) {
+            // Remove is-active class
+            $(this).removeClass('is-active');
+            // Scroll to top
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        } else {
+            // Remove is-active class from all card headers
+            $('.card-header').removeClass('is-active');
+            // Add is-active class to this card header
+            $(this).addClass('is-active');
+            scrollToLineInFile(file, line_start);
+        }
+
     });
 
     // Clicking on line number should lead user directly to the line in the code in the PR on github
@@ -163,6 +219,8 @@
         const fullUrl = `${baseUrl}#diff-${fileHash}R${line_start}`;
 
         // Open the URL in a new tab
-        window.open(fullUrl, '_blank');
+        {#window.open(fullUrl, '_blank');#}
+        scrollToLineInFile(file, line_start);
+
     });
 </script>

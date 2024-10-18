@@ -10,6 +10,23 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
 {% endblock %}
 
+{% block css %}
+.sticky-div {
+    position: relative; /* Default state */
+    top: auto;
+    z-index: 1000;
+}
+
+.fixed-div {
+    position: fixed; /* Changes to fixed when scrolling */
+    top: 0;
+    z-index: 1000;
+    background-color: white; /* Make sure background is solid */
+    width: 100%; /* Make sure it covers the same width */
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+{% endblock %}
 
 {% block repo_content %}
 
