@@ -129,11 +129,11 @@
         {% include 'task_live_updates.html' with task=review_task %}
     {% endif %}
 {% else %}
-    <div class="content">
-        <p class="is-size-5 has-text-weight-light p-5">
+    <div class="content p-3">
+        <p class="is-size-5 has-text-weight-light">
             Let the engine analyze this pull request and generate a code review for you, including recommendations on how to improve it.
         </p>
-        <form action="{% url 'generate_review' %}" method="post" class="is-fullwidth m-5">
+        <form action="{% url 'generate_review' %}" method="post" class="is-fullwidth">
             <input type="hidden" name="owner" value="{{ repo_owner }}">
             <input type="hidden" name="repo" value="{{ repo_name }}">
             <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">

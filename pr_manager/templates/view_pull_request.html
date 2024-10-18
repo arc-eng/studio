@@ -39,7 +39,7 @@
     
     <div class="columns">
         <div class="column is-5">
-            <div class="tabs is-toggle is-toggle-rounded is-fullwidth">
+            <div class="tabs is-toggle is-toggle-rounded is-fullwidth is-small">
                 <ul>
                     <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
@@ -71,7 +71,7 @@
 
                     {% include 'task_live_updates.html' %}
                 {% else %}
-                    <p class="title is-4 p-3">
+                    <p class="title is-5 p-3">
                         {{ selected_pr.title }}
 
                     </p>
@@ -92,14 +92,14 @@
                 </p>
             </div>
             <div id="change-tab-container" class="tab-container is-hidden" data-tab-id="change">
-                <p class="is-size-5">
-                    Soon, you will be able to apply the changes to the PR using prompts.
+                <p class="is-size-5 has-text-weight-light p-3">
+                    Soon, you will be able to apply changes to the PR using prompts.
                 </p>
             </div>
         </div>
         <div class="column is-7">
 
-            <div class="select mb-3 is-inline-block">
+            <div class="select mb-3 is-inline-block is-small is-link">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
                         <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
@@ -107,7 +107,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-inline-block">
+            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-inline-block is-small">
                 <span class="icon is-small"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
             </a>
 
