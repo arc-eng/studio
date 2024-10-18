@@ -10,6 +10,23 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/diff2html/bundles/js/diff2html-ui.min.js"></script>
 {% endblock %}
 
+{% block css %}
+.sticky-div {
+    position: relative; /* Default state */
+    top: auto;
+    z-index: 1000;
+}
+
+.fixed-div {
+    position: fixed; /* Changes to fixed when scrolling */
+    top: 0;
+    z-index: 1000;
+    background-color: white; /* Make sure background is solid */
+    width: 100%; /* Make sure it covers the same width */
+    margin-top: 10px; /* Add some margin to the top */
+}
+
+{% endblock %}
 
 {% block repo_content %}
 
@@ -47,10 +64,18 @@
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
                 {% if task and task.status != "completed" %}
+                    <p class="title is-5 has-text-centered">
+                        <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                        <span>Generating title and description</span>
+                    </p>
 
                     {% include 'task_live_updates.html' %}
                 {% else %}
-                    {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content" %}
+                    <p class="title is-4 p-3">
+                        {{ selected_pr.title }}
+
+                    </p>
+                    {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content p-3" %}
 
                     <hr />
 
@@ -63,7 +88,7 @@
 
             <div id="review-tab-container" class="tab-container is-hidden" data-tab-id="review">
                 <p class="is-size-5">
-                    Soon, you will be able to review the changes in the PR here.
+                    {% include 'review_generator_tab.html' %}
                 </p>
             </div>
             <div id="change-tab-container" class="tab-container is-hidden" data-tab-id="change">
@@ -77,7 +102,7 @@
             <div class="select mb-3 is-inline-block">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name %}"
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
                         {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
                     {% endfor %}
                 </select>
@@ -125,6 +150,12 @@
                 $('#' + tabId + '-tab-container').removeClass('is-hidden');
                 $(this).addClass('is-active');
             });
+
+            const describeTab = document.querySelector('.tab[data-tab-id="{{ pr_tab }}"]');
+            if (describeTab) {
+                describeTab.click();
+            }
+
 
         });
     </script>

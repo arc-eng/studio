@@ -1,0 +1,260 @@
+
+{% if review %}
+    {% if review.summary %}
+        <div class="content" id="code-review">
+            <p class="title is-4 p-3">
+                {{ selected_pr.title }}
+
+            </p>
+            <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right m-3">
+                <input type="hidden" name="owner" value="{{ repo_owner }}">
+                <input type="hidden" name="repo" value="{{ repo_name }}">
+                <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+                {% csrf_token %}
+                <button type="submit" class="button is-small reset-button has-text-info-25 has-text-weight-bold">
+                    <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
+                </button>
+            </form>
+
+            {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
+
+            {% for finding in review.findings.all %}
+                <div class="card p-0">
+
+                    <header class="card-header p-2 has-round-corners"
+                            data-file="{{ finding.file }}"
+                            data-line-start="{{ finding.line_start }}">
+
+                        <p class="card-header-title m-0 p-0 has-text-weight-normal">
+                        <span class="tag mr-3
+                            {% if finding.criticality == 'Minor' %} is-link
+                            {% elif finding.criticality == 'Major' %} is-warning
+                            {% elif finding.criticality == 'Critical' %} is-danger
+                            {% else %} is-light
+                            {% endif %}
+                        ">{{ finding.criticality }}</span>
+                        {{ finding.file|truncatechars:35 }}
+                        </p>
+                        <button class="card-header-icon p-0" aria-label="more options">
+                          <span class="icon">
+                            <i class="fas fa-angle-right" aria-hidden="true"></i>
+                          </span>
+                        </button>
+                    </header>
+
+
+
+                    <div class="card-content" style="display: none;">
+
+                        <div class="title is-6">
+                            <a class="tag is-dark is-pulled-right line-link"
+                               data-pr-number="{{ review.pr_number }}"
+                               data-file="{{ finding.file }}"
+                               data-line-start="{{ finding.line_start }}"
+                               data-line-end="{{ finding.line_end }}"
+                               data-repo-owner="{{ repo_owner }}"
+                               data-repo-name="{{ repo_name }}">
+                                {% if finding.line_start == finding.line_end %}{{ finding.line_start }}{% else %}{{ finding.line_start }} - {{ finding.line_end }}{% endif %}
+                            </a>
+                            {{ finding.category }} issue
+                        </div>
+                        <div class="content">
+                            {% include 'markdown_container.html' with markdown=finding.issue id=finding.id %}
+                        </div>
+
+                        <div class="content mt-5">
+                            <div class="title is-6">
+                                Recommendation
+                            </div>
+                            <span>
+                        {% include 'markdown_container.html' with markdown=finding.recommendation id_prefix="rec" id=finding.id classes="is-inline-block" %}
+                        </span>
+                            <div class="field has-addons mt-5">
+                                <p class="control">
+                                    <button class="button is-static is-small">
+                                        <span class="icon is-small"><i class="fas fa-lightbulb"></i></span>
+                                    </button>
+                                </p>
+                                <p class="control">
+                                    <button class="button is-small has-text-link-25 copy-button" data-copy-text="{{ finding.recommendation }}">
+                                        <span class="icon is-small"><i class="fas fa-copy"></i></span>
+                                        <span>Copy</span>
+                                    </button>
+                                </p>
+                                <p class="control">
+
+                                    <form action="{% url 'comment_on_pr_review' %}" method="post">
+                                        <input type="hidden" name="line" value="{{ finding.line_start }}">
+                                        <input type="hidden" name="file" value="{{ finding.file }}">
+                                        <input type="hidden" name="comment" value="{{ finding.recommendation }}">
+                                        <input type="hidden" name="repo" value="{{ finding.review.repo.full_name }}">
+                                        <input type="hidden" name="pr_number" value="{{ finding.review.pr_number }}">
+
+
+                                        {% csrf_token %}
+
+                                        <button class="button is-small has-text-info-25 finding-action" type="submit">
+                                            <span class="icon is-small"><i class="fas fa-comment"></i></span>
+                                            <span>Comment</span>
+                                        </button>
+                                    </form>
+
+                                </p>
+                                <p class="control">
+                                <form action="{% url 'apply_review_finding_recommendation' %}" method="post">
+                                    <input type="hidden" name="finding_id" value="{{ finding.id }}">
+                                    {% csrf_token %}
+
+                                    <button class="button is-small has-text-success-25 finding-action {% if finding.task_id %}is-static{% endif %}">
+                                        <span class="icon is-small"><i class="fas {% if finding.task_id %}fa-check{% else %}fa-play{% endif %}"></i></span>
+                                        <span>{% if finding.task_id %}Applied{% else %}Apply{% endif %}</span>
+                                    </button>
+                                </form>
+
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="title is-5 has-text-centered">
+            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+            <span>Analyzing code changes</span>
+        </p>
+        {% include 'task_live_updates.html' with task=review_task %}
+    {% endif %}
+{% else %}
+    <div class="content">
+        <p class="is-size-5 has-text-weight-light p-5">
+            Let the engine analyze this pull request and generate a code review for you, including recommendations on how to improve it.
+        </p>
+        <form action="{% url 'generate_review' %}" method="post" class="is-fullwidth m-5">
+            <input type="hidden" name="owner" value="{{ repo_owner }}">
+            <input type="hidden" name="repo" value="{{ repo_name }}">
+            <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+            {% csrf_token %}
+
+            <div class="field">
+                <div class="control">
+                    <button class="button has-text-info-25 is-fullwidth generate-button" type="submit">
+
+                        <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+                        <span>Generate a code review</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+<script>
+    // Scroll to a specific line in a specific file using jQuery
+    function scrollToLineInFile(fileName, lineNumber) {
+        var $fileElement = $('.d2h-file-name:contains("' + fileName + '")').closest('.d2h-file-wrapper');
+        if ($fileElement.length) {
+            var $lineElement = $fileElement.find('.line-num2:contains("' + lineNumber + '")').closest('tr');
+            if ($lineElement.length) {
+                $('html, body').animate({
+                    scrollTop: $lineElement.offset().top
+                }, 'slow');
+            } else {
+                console.log('Line not found in file: ' + lineNumber);
+            }
+        } else {
+            console.log('File not found: ' + fileName);
+        }
+    }
+
+
+    $('.reset-button').click(function() {
+        $(this).addClass('is-loading');
+    });
+    $('.finding-action').click(function() {
+        $(this).addClass('is-loading');
+    });
+
+
+    $('.card-header').click(function() {
+
+        // Animate height
+        $(this).next('.card-content').slideToggle(200);
+        // Change icon
+        $(this).find('.icon i').toggleClass('fa-angle-right fa-angle-down');
+        // Find parent card
+        var $card = $(this).closest('.card');
+        var originalOffset = $card.offset().top;
+        var originalWidth = $card.outerWidth(); // Store the original width
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > originalOffset) {
+                $card.width(originalWidth); // Set the width to the original width
+                $card.addClass('fixed-div'); // Apply fixed when scrolled
+            } else {
+                $card.css('width', ''); // Reset width when it is not fixed
+                $card.removeClass('fixed-div'); // Revert to normal when back to the top
+            }
+        });
+        const file = $(this).data('file');
+        const line_start = $(this).data('line-start');
+
+        // Check if it has is-active class
+        if ($(this).hasClass('is-active')) {
+            // Remove is-active class
+            $(this).removeClass('is-active');
+            // Scroll to top
+            $('html, body').animate({
+                scrollTop: 0
+            }, 'fast');
+        } else {
+            // Remove is-active class from all card headers
+            $('.card-header').removeClass('is-active');
+            // Add is-active class to this card header
+            $(this).addClass('is-active');
+            scrollToLineInFile(file, line_start);
+        }
+
+    });
+
+    // Clicking on line number should lead user directly to the line in the code in the PR on github
+    $('.line-link').click(function() {
+        var pr_number = $(this).data('pr-number');
+        var file = $(this).data('file');
+        var line_start = $(this).data('line-start');
+        var line_end = $(this).data('line-end');
+        var repo_owner = $(this).data('repo-owner');
+        var repo_name = $(this).data('repo-name');
+
+        const baseUrl = `https://github.com/${repo_owner}/${repo_name}/pull/${pr_number}/files`;
+
+        // Generate the file diff hash by encoding the file path and trimming extra characters
+        const fileHash = encodeURIComponent(file).replace(/%2F/g, '/').replace(/\./g, '%2E');
+
+        // Construct the full URL with the diff hash and line number
+        const fullUrl = `${baseUrl}#diff-${fileHash}R${line_start}`;
+
+        // Open the URL in a new tab
+        {#window.open(fullUrl, '_blank');#}
+        scrollToLineInFile(file, line_start);
+
+    });
+    
+    $('.copy-button').click(function() {
+        const text = $(this).data('copy-text');
+        navigator.clipboard.writeText(text).then(function() {
+            console.log('Copied to clipboard');
+        }, function(err) {
+            console.error('Failed to copy to clipboard', err);
+        });
+        // Turn copy icon into checkmark, then revert back after 2 seconds
+        const $button = $(this);
+        $button.find('i').removeClass('fa-copy').addClass('fa-check');
+        setTimeout(function() {
+            $button.find('i').removeClass('fa-check').addClass('fa-copy');
+        }, 2000);
+    });
+</script>
