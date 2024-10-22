@@ -259,9 +259,6 @@ if SHARED_SESSIONS_ENABLED:
 
 
 SENTRY_DSN = os.getenv("SENTRY_DSN", None)
-SENTRY_CLIENT_ID = os.getenv("SENTRY_CLIENT_ID", None)
-SENTRY_CLIENT_SECRET = os.getenv("SENTRY_CLIENT_SECRET", None)
-
 
 if SENTRY_DSN:
     sentry_sdk.init(

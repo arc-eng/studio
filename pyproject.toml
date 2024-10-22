@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "studio"
-version = "0.7.2"
-description = "Demo application to showcase the Arcane Development Kit"
+version = "0.7.3"
+description = "Flagship application to showcase the Arcane Engineer platform"
 authors = ["Marco lamina <marco@arcane.engineer>"]
 license = "MIT"
 readme = "README.md"
