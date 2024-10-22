@@ -220,14 +220,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ARCANE_API_KEY = os.environ.get("ARCANE_API_KEY")
 GITHUB_PAT = os.environ.get("GITHUB_PAT")
-
-
-# TODO Make this available as parameter on ArcaneEngine
-if ARCANE_API_KEY:
-    os.environ.setdefault('PR_PILOT_API_KEY', ARCANE_API_KEY)
-
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
 
@@ -237,6 +230,7 @@ if not GITHUB_CLIENT_ID or not GITHUB_CLIENT_SECRET:
 SOCIALACCOUNT_AUTO_SIGNUP = True
 ACCOUNT_ALLOW_REGISTRATION = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_SESSION_COOKIE = "arcane_engineer_session"
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
@@ -266,7 +260,6 @@ LOGIN_REDIRECT_URL = f"{ROOT_PATH}/repositories/".replace('//', '/')
 if SHARED_SESSIONS_ENABLED:
     SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", ".arcane.engineer")
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-    SESSION_CACHE_ALIAS = "session"
     SESSION_COOKIE_NAME = "arcane_engineer_session"
 
 
