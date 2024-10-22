@@ -61,7 +61,7 @@ LOGGING = {
 
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-REDIS_PORT = os.getenv("REDIS_PORT", 6379)
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 
 SHARED_SESSIONS_ENABLED = os.getenv("SHARED_SESSIONS_ENABLED", "false").lower() == "true"
 
