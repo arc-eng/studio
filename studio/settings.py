@@ -31,7 +31,7 @@ DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 
 AUTH_USER_MODEL = "users.StudioUser"
 
-ALLOWED_HOSTS = ['arcane.engineer', 'helping-willing-seasnail.ngrok-free.app']
+ALLOWED_HOSTS = ['*']
 SESSION_COOKIE_SECURE = True  # If you are using HTTPS
 SESSION_COOKIE_SAMESITE = 'Lax'
 CORS_ORIGIN_WHITELIST = [
