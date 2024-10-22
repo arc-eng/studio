@@ -65,7 +65,7 @@ spec:
           - name: SESSION_COOKIE_DOMAIN
             value: {{ .Values.session.cookie_domain }}
           - name: SHARED_SESSIONS_ENABLED
-            value: {{ .Values.shared_sessions_enabled }}
+            value: {{ .Values.shared_sessions_enabled | quote }}
           - name: ROOT_PATH
             value: {{ .Values.root_path }}
           - name: POSTGRES_HOST
