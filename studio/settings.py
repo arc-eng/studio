@@ -42,7 +42,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://helping-willing-seasnail.ngrok-free.app",
     "https://arcane.engineer",
 ]
-CSRF_COOKIE_NAME = "arcane_engineer_csrf"
+CSRF_COOKIE_NAME = "arcane_engineer_csrf_studio"
 CSRF_COOKIE_SECURE = True  # if using HTTPS
 CSRF_COOKIE_SAMESITE = 'None'
 
@@ -53,6 +53,7 @@ if SHARED_SESSIONS_ENABLED:
     SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
     SESSION_COOKIE_NAME = "arcane_engineer_session"
     SESSION_COOKIE_SAMESITE = 'None'
+    ACCOUNT_SESSION_REMEMBER = True  # To keep sessions persistent across requests
 
 SESSION_COOKIE_SECURE = True  # If using HTTPS
 
@@ -245,6 +246,7 @@ ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_ALLOW_REGISTRATION = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SESSION_COOKIE = "arcane_engineer_session"
+ACCOUNT_SESSION_REMEMBER = True  # To keep sessions persistent across requests
 SOCIALACCOUNT_STORE_TOKENS = True
 SOCIALACCOUNT_PROVIDERS = {
     "github": {
