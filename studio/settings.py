@@ -32,9 +32,9 @@ DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 AUTH_USER_MODEL = "users.StudioUser"
 
 ALLOWED_HOSTS = ['*']
-SESSION_COOKIE_SECURE = True  # If you are using HTTPS
-SESSION_COOKIE_SAMESITE = 'Lax'
+
 CORS_ORIGIN_WHITELIST = [
+    "https://helping-willing-seasnail.ngrok-free.app",
     "https://arcane.engineer",
 ]
 CSRF_COOKIE_DOMAIN = ".arcane.engineer"
@@ -42,6 +42,20 @@ CSRF_TRUSTED_ORIGINS = [
     "https://helping-willing-seasnail.ngrok-free.app",
     "https://arcane.engineer",
 ]
+CSRF_COOKIE_NAME = "arcane_engineer_csrf"
+CSRF_COOKIE_SECURE = True  # if using HTTPS
+CSRF_COOKIE_SAMESITE = 'None'
+
+SHARED_SESSIONS_ENABLED = os.getenv("SHARED_SESSIONS_ENABLED", "false").lower() == "true"
+
+if SHARED_SESSIONS_ENABLED:
+    SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", ".arcane.engineer")
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+    SESSION_COOKIE_NAME = "arcane_engineer_session"
+    SESSION_COOKIE_SAMESITE = 'None'
+
+SESSION_COOKIE_SECURE = True  # If using HTTPS
+
 
 LOGGING = {
     "version": 1,
@@ -71,7 +85,6 @@ LOGGING = {
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", "6379")
 
-SHARED_SESSIONS_ENABLED = os.getenv("SHARED_SESSIONS_ENABLED", "false").lower() == "true"
 
 CACHES = {
     'default': {
@@ -228,6 +241,7 @@ if not GITHUB_CLIENT_ID or not GITHUB_CLIENT_SECRET:
     raise ValueError("GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET environment variables are required")
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
+ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_ALLOW_REGISTRATION = False
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SESSION_COOKIE = "arcane_engineer_session"
@@ -256,11 +270,6 @@ ROOT_PATH = os.getenv('ROOT_PATH', '/')
 LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', '/')
 # Redirect to home after login
 LOGIN_REDIRECT_URL = f"{ROOT_PATH}/repositories/".replace('//', '/')
-
-if SHARED_SESSIONS_ENABLED:
-    SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", ".arcane.engineer")
-    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
-    SESSION_COOKIE_NAME = "arcane_engineer_session"
 
 
 SENTRY_DSN = os.getenv("SENTRY_DSN", None)
