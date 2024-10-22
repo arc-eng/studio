@@ -258,8 +258,8 @@ LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', 
 LOGIN_REDIRECT_URL = f"{ROOT_PATH}/repositories/".replace('//', '/')
 
 if SHARED_SESSIONS_ENABLED:
-    SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", None)
-    SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+    SESSION_COOKIE_DOMAIN = os.getenv("SESSION_COOKIE_DOMAIN", ".arcane.engineer")
+    SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
     SESSION_CACHE_ALIAS = "session"
     SESSION_COOKIE_NAME = "arcane_engineer_session"
 
