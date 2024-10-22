@@ -83,6 +83,11 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: password
+          - name: DJANGO_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secret
+                key: django_secret
         envFrom:
           - secretRef:
               name: {{ .Release.Name }}-secret
