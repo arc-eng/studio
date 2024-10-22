@@ -33,11 +33,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Release.Name }}-postgresql
                   key: password
-            - name: DJANGO_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Release.Name }}-secret
-                  key: django_secret
       containers:
       - name: {{ .Release.Name }}
         image: "arceng/studio:{{ .Values.image.tag }}"
@@ -88,11 +83,6 @@ spec:
               secretKeyRef:
                 name: {{ .Release.Name }}-postgresql
                 key: password
-          - name: DJANGO_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: {{ .Release.Name }}-secret
-                key: django_secret
         envFrom:
           - secretRef:
               name: {{ .Release.Name }}-secret
