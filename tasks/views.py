@@ -1,3 +1,5 @@
+import json
+
 from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
@@ -23,10 +25,17 @@ def home(request):
 @needs_api_key
 def view_task(request, owner, repo, task_id, api_key):
     task = ArcaneEngine(api_key).get_task(task_id)
+    task_result = task.result
+    try:
+        json.loads(task_result)
+        task_result = f"```json\n{task_result}\n```"
+    except json.JSONDecodeError:
+        pass
     return render_with_repositories(request, "view_task.html", {
         "task": task,
         "selected_repo": task.github_project,
         "active_tab": "tasks",
+        "task_result": task_result,
     }, owner, repo)
 
 

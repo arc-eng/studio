@@ -41,7 +41,7 @@
         <div class="column is-narrow">
             <div class="buttons">
                 {% if task.pr_number %}
-                    <a href="{% url 'view_pull_request_default_tab' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-page-loader has-text-success-40">
+                    <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="review" %}" class="button is-page-loader has-text-success-40">
                         <span class="icon is-small"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
                     </a>
 
@@ -84,7 +84,7 @@
             </div>
             <div class="column is-11 is-size-6">
 
-                {% include 'markdown_container.html' with markdown=task.result id="result" classes="content" %}
+                {% include 'markdown_container.html' with markdown=task_result id="result" classes="content" %}
 
                 <!-- Message Form -->
                 <div class="content mt-3">
@@ -101,7 +101,11 @@
                                 </div>
                             {% endif %}
                             <div class="control is-expanded">
-                                <input class="input is-rounded" type="text" name="task_description" placeholder="Continue as conversation" />
+                                {% if task.pr_number %}
+                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue conversation on PR #{{ task.pr_number }}" >
+                                {% else %}
+                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue conversation" />
+                                {% endif %}
                             </div>
                             <div class="control">
                                 <button class="button is-link is-rounded" type="submit" id="send-button">
@@ -123,7 +127,7 @@
             The engine <b class="has-text-danger">{{ task.status }}</b> the task and responded:
         </div>
         <div class="box content has-background-danger-light">
-            {% include 'markdown_container.html' with markdown=task.result id="result" %}
+            {% include 'markdown_container.html' with markdown=task_result id="result" %}
         </div>
 
         {% endif %}
