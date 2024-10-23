@@ -43,75 +43,77 @@ def home(request):
 
 @login_required
 @needs_api_key
-def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="describe", api_key=None):
-    if not owner or owner == 'None':
-        first_bookmark = BookmarkedRepo.objects.first()
-        if first_bookmark:
-            owner = first_bookmark.owner
-            repo = first_bookmark.repo_name
-            return redirect('view_pull_request_default_tab', owner=owner, repo=repo, pr_number=pr_number)
-        else:
-            return redirect('repositories:repo_overview')
-    github_token = get_github_token(request)
-    selected_pr = None
-    if not owner or not repo:
-        prs = []
-    else:
-        try:
-            g = Github(github_token)
-            github_repo = g.get_repo(f"{owner}/{repo}")
-        except GithubException as e:
-            if e.status == 401:
-                # Log user out
-                return redirect("user_logout")
-            return render(request, "error.html", {"error": str(e)})
-        prs = github_repo.get_pulls(state='open')
+def get_github_repo(github_token, owner, repo):
+    """Retrieve the GitHub repository object."""
+    try:
+        g = Github(github_token)
+        return g.get_repo(f"{owner}/{repo}")
+    except GithubException as e:
+        if e.status == 401:
+            return None, "Unauthorized access."
+        return None, str(e)
 
-        if prs.totalCount == 0:
-            return render_with_repositories(request, "view_pull_request.html", {
-                "prs": None,
-                "selected_pr": 0,
-                "diff_data": "",
-                "active_tab": "pull-request-manager",
-            }, owner, repo)
-        selected_pr = prs[0]
-        for pr in prs:
-            if pr.number == pr_number:
-                selected_pr = pr
-                break
 
-    # Load the diff data for the selected PR
-    url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{selected_pr.number}"
+@login_required
+@needs_api_key
+def get_pull_requests(github_repo):
+    """Fetch open pull requests for the specified repository."""
+    return github_repo.get_pulls(state='open')
+
+
+@login_required
+@needs_api_key
+def get_selected_pull_request(prs, pr_number):
+    """Determine the selected pull request based on the provided PR number."""
+    selected_pr = prs[0] if prs.totalCount > 0 else None
+    for pr in prs:
+        if pr.number == pr_number:
+            selected_pr = pr
+            break
+    return selected_pr
+
+
+@login_required
+@needs_api_key
+def load_diff_data(github_token, owner, repo, pr_number):
+    """Load the diff data for the selected pull request."""
+    url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{pr_number}"
     headers = {
         "Accept": "application/vnd.github.diff"
     }
     response = requests.get(url, headers=headers)
     if not response.ok:
-        return render(request, "error.html", {
-            "error": f"Failed to load diff data: {response.text}"
-        })
-    diff_data = response.text
+        return None, f"Failed to load diff data: {response.text}"
+    return response.text, None
 
-    # Check if there is a description for this PR
+
+@login_required
+@needs_api_key
+def get_task_description(owner, repo, user, pr_number, api_key):
+    """Retrieve the task description for the pull request if it exists."""
     description = PullRequestDescription.objects.filter(repo__owner=owner,
                                                         repo__repo_name=repo,
-                                                        user=request.user,
-                                                        pr_number=selected_pr.number).first()
+                                                        user=user,
+                                                        pr_number=pr_number).first()
     task = None
     if description:
         task = ArcaneEngine(api_key).get_task(description.task_id)
+    return task
 
 
-    # Check if there is a review for this PR
+@login_required
+@needs_api_key
+def get_review_task(owner, repo, user, pr_number, api_key, selected_pr):
+    """Retrieve and process the review task for the pull request if it exists."""
     review = PullRequestReview.objects.filter(repo__owner=owner,
                                               repo__repo_name=repo,
-                                              pr_number=selected_pr.number,
-                                              user=request.user).first()
+                                              pr_number=pr_number,
+                                              user=user).first()
     review_task = None
     if review and not review.summary:
         if not review.task_id:
             review.delete()
-            return redirect(reverse('view_pull_request', args=(owner, repo, pr_number,)))
+            return None, redirect(reverse('view_pull_request', args=(owner, repo, pr_number,)))
         review_task = ArcaneEngine(api_key).get_task(review.task_id)
         if review_task.status == "completed":
             try:
@@ -120,8 +122,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
                 review.delete()
                 data = description.dict(exclude_unset=True)
                 review = PullRequestReview.objects.create(
-                    user=request.user,
-                    repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user),
+                    user=user,
+                    repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=user),
                     task_id=review_task.id,
                     pr_number=selected_pr.number,
                     summary=data.pop("summary"),
@@ -135,7 +137,39 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         elif review_task.status == "failed":
             review.summary = review_task.result
             review.save()
+    return review_task, review
 
+
+@login_required
+@needs_api_key
+def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="describe", api_key=None):
+    """Main function to view a pull request, orchestrating helper functions."""
+    if not owner or owner == 'None':
+        first_bookmark = BookmarkedRepo.objects.first()
+        if first_bookmark:
+            owner = first_bookmark.owner
+            repo = first_bookmark.repo_name
+            return redirect('view_pull_request_default_tab', owner=owner, repo=repo, pr_number=pr_number)
+        else:
+            return redirect('repositories:repo_overview')
+    github_token = get_github_token(request)
+    github_repo, error = get_github_repo(github_token, owner, repo)
+    if error:
+        return render(request, "error.html", {"error": error})
+    prs = get_pull_requests(github_repo)
+    if prs.totalCount == 0:
+        return render_with_repositories(request, "view_pull_request.html", {
+            "prs": None,
+            "selected_pr": 0,
+            "diff_data": "",
+            "active_tab": "pull-request-manager",
+        }, owner, repo)
+    selected_pr = get_selected_pull_request(prs, pr_number)
+    diff_data, error = load_diff_data(github_token, owner, repo, selected_pr.number)
+    if error:
+        return render(request, "error.html", {"error": error})
+    task = get_task_description(owner, repo, request.user, selected_pr.number, api_key)
+    review_task, review = get_review_task(owner, repo, request.user, selected_pr.number, api_key, selected_pr)
 
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,
