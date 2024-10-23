@@ -41,28 +41,22 @@ def home(request):
     return redirect("view_pull_request_default", owner=None, repo=None)
 
 
-@login_required
-@needs_api_key
 def get_github_repo(github_token, owner, repo):
     """Retrieve the GitHub repository object."""
     try:
         g = Github(github_token)
-        return g.get_repo(f"{owner}/{repo}")
+        return g.get_repo(f"{owner}/{repo}"), None
     except GithubException as e:
         if e.status == 401:
             return None, "Unauthorized access."
         return None, str(e)
 
 
-@login_required
-@needs_api_key
 def get_pull_requests(github_repo):
     """Fetch open pull requests for the specified repository."""
     return github_repo.get_pulls(state='open')
 
 
-@login_required
-@needs_api_key
 def get_selected_pull_request(prs, pr_number):
     """Determine the selected pull request based on the provided PR number."""
     selected_pr = prs[0] if prs.totalCount > 0 else None
@@ -73,8 +67,6 @@ def get_selected_pull_request(prs, pr_number):
     return selected_pr
 
 
-@login_required
-@needs_api_key
 def load_diff_data(github_token, owner, repo, pr_number):
     """Load the diff data for the selected pull request."""
     url = f"https://{github_token}:x-oauth-basic@api.github.com/repos/{owner}/{repo}/pulls/{pr_number}"
@@ -87,8 +79,6 @@ def load_diff_data(github_token, owner, repo, pr_number):
     return response.text, None
 
 
-@login_required
-@needs_api_key
 def get_task_description(owner, repo, user, pr_number, api_key):
     """Retrieve the task description for the pull request if it exists."""
     description = PullRequestDescription.objects.filter(repo__owner=owner,
@@ -101,8 +91,6 @@ def get_task_description(owner, repo, user, pr_number, api_key):
     return task
 
 
-@login_required
-@needs_api_key
 def get_review_task(owner, repo, user, pr_number, api_key, selected_pr):
     """Retrieve and process the review task for the pull request if it exists."""
     review = PullRequestReview.objects.filter(repo__owner=owner,
