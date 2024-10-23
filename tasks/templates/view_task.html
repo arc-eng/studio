@@ -29,45 +29,27 @@
 
 {% block repo_content %}
 
-    <div class="columns box p-0 m-3 mb-5 is-shadowless">
+    <div class="columns mb-5">
+        <div class="column is-1 has-text-centered">
+            <a class="button" href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
+                <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            </a>
+        </div>
         <div class="column is-flex  is-align-items-center">
-            <nav class="breadcrumb ml-2" aria-label="breadcrumbs">
-                <ul>
-                    <li>
-                        <a href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
-                            <span>Tasks</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span id="breadcrumb-title">{{ task.title }}</span>
-                            <span class="icon is-small">
-                            {% if task.status == "running" or task.status == "scheduled" %}
-                                <i class="fas fa-rotate fa-spin"></i>
-                            {% elif task.status == "failed" %}
-                                <i class="fas fa-exclamation-triangle"></i>
-                            {% endif %}
-
-                        </span>
-
-                        </a>
-                    </li>
-
-                </ul>
-            </nav>
+            <h4 class="title is-4">{{ task.title }}</h4>
         </div>
         <div class="column is-narrow">
             <div class="buttons">
                 {% if task.pr_number %}
-                    <a href="{% url 'view_pull_request_default_tab' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-small is-page-loader has-text-success-40">
+                    <a href="{% url 'view_pull_request_default_tab' owner=repo_owner repo=repo_name pr_number=task.pr_number %}" class="button is-page-loader has-text-success-40">
                         <span class="icon is-small"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
                     </a>
 
                 {% endif %}
-                <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-small">
+                <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button">
                     <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
                 </a>
-                <a class="button is-small" id="view-prompt-button">
+                <a class="button" id="view-prompt-button">
                     <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
                 </a>
 
@@ -98,32 +80,38 @@
         {%  if task.status == "completed" %}
         <div class="columns">
             <div class="column is-1 content has-text-centered is-size-4">
+                <span class="icon is-large"><i class="fas fa-check-circle"></i></span>
             </div>
-            <div class="column is-11 content is-size-6">
+            <div class="column is-11 is-size-6">
 
-                {% include 'markdown_container.html' with markdown=task.result id="result" %}
+                {% include 'markdown_container.html' with markdown=task.result id="result" classes="content" %}
 
-
-
-                <!-- Follow-up Form -->
-                <div class="content">
+                <!-- Message Form -->
+                <div class="content mt-3">
                     <form action="{% url 'create_followup_task' owner=repo_owner repo=repo_name task_id=task.id %}" method="post">
                         {% csrf_token %}
-                        <div class="field">
-                            <div class="control">
-                                <textarea class="textarea" name="task_description" placeholder="Now, use that information to ..."></textarea>
+                        <div class="field has-addons">
+                            {% if task.pr_number %}
+                                <div class="control">
+                                    <a class="button is-rounded"
+                                       href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="review" %}">
+                                        <span class="icon"><i class="fa fa-code-branch"></i></span>
+                                        <span>#{{ task.pr_number }}</span>
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="control is-expanded">
+                                <input class="input is-rounded" type="text" name="task_description" placeholder="Continue as conversation" />
                             </div>
-                        </div>
-                        <div class="field is-grouped">
                             <div class="control">
-                                <button class="button is-link is-small" type="submit" id="generate-button">
-                                    <span class="icon"><i class="fa fa-play"></i></span>
-                                    <span>Run Follow-Up Task</span>
+                                <button class="button is-link is-rounded" type="submit" id="send-button">
+                                    <span class="icon"><i class="fa fa-arrow-up"></i></span>
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
 
@@ -132,7 +120,7 @@
 
         {% if task.status == "failed" %}
         <div class="content is-size-5 has-text-weight-light p-5 has-text-centered">
-            The agent <b class="has-text-danger">{{ task.status }}</b> the task and responded:
+            The engine <b class="has-text-danger">{{ task.status }}</b> the task and responded:
         </div>
         <div class="box content has-background-danger-light">
             {% include 'markdown_container.html' with markdown=task.result id="result" %}

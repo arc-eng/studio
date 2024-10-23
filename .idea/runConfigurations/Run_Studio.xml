@@ -7,6 +7,7 @@
     <envs>
       <env name="DJANGO_SETTINGS_MODULE" value="studio.settings" />
       <env name="PYTHONUNBUFFERED" value="1" />
+      <env name="SESSION_COOKIE_DOMAIN" value=".helping-willing-seasnail.ngrok-free.app" />
     </envs>
     <option name="SDK_HOME" value="" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />

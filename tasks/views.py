@@ -2,6 +2,7 @@ from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from chat.models import ChatConversation, ChatMessage
@@ -71,12 +72,12 @@ def create_task(request, owner, repo, api_key):
 @login_required
 @require_POST
 @needs_api_key
-def create_followup_task(request, owner, repo, task_id):
-    task = ArcaneEngine().get_task(task_id)
+def create_followup_task(request, owner, repo, task_id, api_key=None):
+    task = ArcaneEngine(api_key).get_task(task_id)
 
     chat = ChatConversation.objects.create(user=request.user,
                                            repo=BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user))
     ChatMessage.objects.create(conversation=chat, message=task.user_request, task_id=task.id, result=task.result)
-    chat.continue_conversation(request.POST.get('task_description'))
+    chat.continue_conversation(request.POST.get('task_description'), api_key)
 
-    return redirect('chat_overview')
+    return redirect(reverse('view_chat', args=[chat.id]))
