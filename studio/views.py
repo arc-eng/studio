@@ -30,7 +30,7 @@ def how_it_works(request):
     }, {
         'name': 'Pull Requests',
         'icon': 'fa-code-branch has-text-success-35',
-        'description': 'Generate comprehensive and beautiful PR descriptions in seconds.',
+        'description': 'Supports you in managing pull requests and code reviews.',
         'link': reverse('pr_manager_home')
     }, {
         'name': 'Build',
