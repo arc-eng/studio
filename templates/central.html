@@ -50,23 +50,7 @@
                 </div>
             </div>
             <div class="column">
-                <p class="title is-4">Open Pull Requests</p>
-                <div class="table-container">
-                    <table class="table is-fullwidth">
-                        <tbody>
-                            {% for pr in open_prs %}
-                            <tr>
-                                <td>
-                                    <a href="{{ pr.url }}" target="_blank">{{ pr.title }}</a>
-                                </td>
-                                <td>
-                                    <a href="{{ pr.url }}" target="_blank">{{ pr.repo }}</a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+
             </div>
         </div>
     </section>

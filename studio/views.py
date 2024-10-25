@@ -48,17 +48,7 @@ def how_it_works(request):
 
 def studio_home(request):
     if request.user.is_authenticated:
-        bookmarks = BookmarkedRepo.objects.filter(user=request.user)
-        github_token = get_github_token(request)
-        g = Github(github_token)
-        # Search for all open PRs for the user
-        open_prs = []
-        for bookmark in bookmarks:
-            repo = g.get_repo(f"{bookmark.owner}/{bookmark.repo_name}")
-            for pr in repo.get_pulls(state="open"):
-                open_prs.append(pr)
         return render_with_repositories(request, "central.html", {
-            "open_prs": open_prs,
             "active_app": "home",
         }, None, None)
     return render(request, "studio_home.html", {

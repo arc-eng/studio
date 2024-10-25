@@ -9,7 +9,7 @@
     <div class="control has-icons-left">
         <div class="select is-dark">
             <select name="repo_id" id="repo-selector">
-                <option value="">Select a repository</option>
+                <option value="" disabled>Select a repository</option>
                 {% for owner, repos in bookmarked_repos.items %}
                     {% for bookmark in repos %}
                         {% if active_app == "tasks" %}
