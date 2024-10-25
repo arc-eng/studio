@@ -210,9 +210,13 @@
             <div class="navbar-end">
                 {% block extra_navbar_right %}{% endblock %}
                 <div class="navbar-item">
-                    {% url 'contribute' as contribute_url %}
-                    <a class="button is-small is-dark is-outlined" href="{{ contribute_url }}">
-                        <span class="icon"><i class="fas fa-plus"></i></span>
+                    <a class="button is-small is-page-loader" href="{% url 'repositories:repo_overview' %}">
+                        <span class="icon"><i class="fas fa-bookmark"></i></span>
+                    </a>
+                </div>
+                <div class="navbar-item">
+                    <a class="button is-small is-page-loader" href="{% url 'contribute' %}">
+                        <span class="icon"><i class="fas fa-info"></i></span>
                     </a>
                 </div>
                 <div class="navbar-item">
