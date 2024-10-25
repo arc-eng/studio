@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from github import Github
+from github.GithubException import GithubException
 
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
@@ -56,8 +57,16 @@ def studio_home(request, owner=None, repo=None):
                 return redirect('studio_home_repo', owner=owner, repo=repo)
             else:
                 return redirect('repositories:repo_overview')
-        g = Github(get_github_token(request))
-        pull_requests = g.get_repo(f"{owner}/{repo}").get_pulls(state='open')
+        try:
+            g = Github(get_github_token(request))
+            pull_requests = g.get_repo(f"{owner}/{repo}").get_pulls(state='open')
+        except GithubException as e:
+            if e.status == 401:
+                return redirect(reverse('user_logout'))
+            else:
+                return render(request, "error.html", {
+                    "error": str(e),
+                })
 
         return render_with_repositories(request, "central.html", {
             "pull_requests": pull_requests if pull_requests.totalCount > 0 else None,
