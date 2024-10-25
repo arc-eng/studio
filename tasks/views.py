@@ -33,7 +33,6 @@ def view_task(request, owner, repo, task_id, api_key):
         pass
     return render_with_repositories(request, "view_task.html", {
         "task": task,
-        "selected_repo": task.github_project,
         "active_app": "tasks",
         "task_result": task_result,
     }, owner, repo)
@@ -47,6 +46,7 @@ def list_tasks(request, owner=None, repo=None, api_key=None):
         if first_bookmark:
             owner = first_bookmark.owner
             repo = first_bookmark.repo_name
+            return redirect(reverse('list_tasks', args=[owner, repo]))
         else:
             redirect('repositories:repo_overview')
     tasks = [t for t in ArcaneEngine(api_key).list_tasks() if t.github_project == f"{owner}/{repo}"]

@@ -11,36 +11,43 @@
 
 {% block repo_content %}
 
-
     <section class="section content">
         <p class="title is-1">
-            Home
+            Arcane Studio
         </p>
         <p class="subtitle is-3">
-            Welcome to Arcane Studio
+            <code>
+                <span class="icon"><i class="fab fa-github"></i></span>
+                {{ repo_owner }} / {{ repo_name }}
+            </code>
+        </p>
+        <p class="is-size-5">
+            This is your dashboard with quick access to the main functionalities of the studio. You can create tasks, start conversations, and
+            have quick access to your open pull requests.
         </p>
         <div class="columns">
-            <div class="column">
+            <div class="column is-5">
                 <!-- Message Form -->
                 <div class="">
 
-                    <form method="post" >
+                    <form method="post" id="taskForm">
                         {% csrf_token %}
 
-
                         <div class="field">
-                            <label class="label">Get work done on <code>{{ repo_owner }} / {{ repo_name }}</code></label>
                             <div class="control">
-                                <textarea class="textarea" name="message" placeholder="Provide instructions for a task or start a conversation"></textarea>
+                                <textarea class="textarea" name="task_description" placeholder="Provide instructions for a task or start a conversation"></textarea>
                             </div>
                         </div>
                         <div class="field is-grouped">
                             <div class="control">
-                                <button class="button has-text-primary-25" type="submit" id="send-button">
+                                <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
+                                <input type="hidden" name="repo_name" value="{{ repo_name }}">
+                                <input type="hidden" name="repo_id" value="{{ selected_repo.id }}">
+                                <button class="button has-text-primary-25" type="submit" name="run-task-button" onclick="submitForm('{% url 'create_task' owner=repo_owner repo=repo_name  %}')">
                                     <span class="icon"><i class="fa fa-play"></i></span>
                                     <span>Run Task</span>
                                 </button>
-                                <button class="button has-text-info-25" type="submit" id="send-button">
+                                <button class="button has-text-info-25" type="submit" name="start-conversation-button" onclick="submitForm('{% url 'start_conversation'  %}')">
                                     <span class="icon"><i class="fa fa-play"></i></span>
                                     <span>Start Conversation</span>
                                 </button>
@@ -49,14 +56,58 @@
                     </form>
                 </div>
             </div>
-            <div class="column">
+            <div class="column is-7">
+                <!-- Pull Requests -->
+                {% if pull_requests %}
 
+
+                    <div class="table-container">
+                        <table class="table is-fullwidth">
+                            <tbody>
+                            {% for pr in pull_requests %}
+                                <tr>
+                                    <td class="is-narrow">
+                                        <a href="{{ pr.html_url }}" target="_blank">#{{ pr.number }}</a>
+                                    </td>
+                                    <td>
+                                        {{ pr.title }}
+                                    </td>
+                                    <td>
+                                        <div class="buttons">
+                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='describe' %}">
+                                                <span class="icon"><i class="fa fa-file-waveform"></i></span>
+                                            </a>
+                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='review' %}">
+                                                <span class="icon"><i class="fa fa-magnifying-glass"></i></span>
+                                            </a>
+                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='change' %}">
+                                                <span class="icon"><i class="fa fa-pencil"></i></span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                {% else %}
+                    <div class="content is-size-5 has-text-weight-light has-text-centered">
+                        <p>No open pull requests</p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </section>
 
 
     <script>
+        function submitForm(actionUrl) {
+            const form = document.getElementById('taskForm');
+            form.action = actionUrl;
+        }
+
         $('form').on('submit', function() {
             // Disable the button
             $('#send-button').prop('disabled', true);

@@ -46,21 +46,31 @@ def how_it_works(request):
     return render(request, "how_it_works.html", {'tools': tools})
 
 
-def studio_home(request):
+def studio_home(request, owner=None, repo=None):
     if request.user.is_authenticated:
+        if not owner or owner == 'None':
+            first_bookmark = BookmarkedRepo.objects.first()
+            if first_bookmark:
+                owner = first_bookmark.owner
+                repo = first_bookmark.repo_name
+                return redirect('studio_home_repo', owner=owner, repo=repo)
+            else:
+                return redirect('repositories:repo_overview')
+        g = Github(get_github_token(request))
+        pull_requests = g.get_repo(f"{owner}/{repo}").get_pulls(state='open')
+
         return render_with_repositories(request, "central.html", {
+            "pull_requests": pull_requests if pull_requests.totalCount > 0 else None,
             "active_app": "home",
-        }, None, None)
+        }, owner, repo)
+
     return render(request, "studio_home.html", {
         "active_app": "home",
     })
 
 
-def contribute(request, owner=None, repo=None):
+def contribute(request):
     return render(request, "contribute.html", {
-        "repo_owner": owner,
-        "repo_name": repo,
-        "selected_repo": f"{owner}/{repo}",
         "active_app": "contribute",
     })
 
