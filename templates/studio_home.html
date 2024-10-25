@@ -79,7 +79,7 @@
                     <span>Arcane Studio</span>
                 </h1>
                 <h2 class="subtitle is-3">
-                    Smart tools to streamline your daily work
+                    Smart dev tools to streamline your daily work
                 </h2>
             </div>
         </div>
@@ -89,15 +89,15 @@
 
         <div class="column is-7-desktop is-6-tablet">
             <div class="laptop">
-                <video autoplay loop muted playsinline>
-                    <source src="https://storage.googleapis.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
+                <video id="videoPlayer" autoplay muted playsinline>
+                    <source src="https://storage.googleapis.com/arc-eng-videos/task_demo_2.mp4" type="video/mp4" id="videoSource">
                     Your browser does not support the video tag.
                 </video>
             </div>
         </div>
         <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
             <div class=" content pl-5">
-                <p class="title is-2">Dev Tools for every day</p>
+                <p class="title is-2">Tools for every day</p>
                 <p class="subtitle is-4">Seamlessly integrated and customizable</p>
                 <p class="is-size-5">
                     Arcane Studio is a collection of web-based tools designed to streamline your
@@ -251,6 +251,28 @@
             $('.clickable-card').click(function() {
                 window.location = "{% url 'how_it_works' %}";
             });
+
+            const videoList = [
+                "https://storage.googleapis.com/arc-eng-videos/task_demo_2.mp4",
+                "https://storage.googleapis.com/arc-eng-videos/pr_demo_2.mp4",
+                "https://storage.googleapis.com/arc-eng-videos/build_demo_3.mp4",
+                "https://storage.googleapis.com/arc-eng-videos/chat_demo_4.mp4",
+            ];
+            let currentVideo = 0;
+
+            // Function to play the next video
+            function playNextVideo() {
+                currentVideo++;
+                if (currentVideo < videoList.length) {
+                    $("#videoSource").attr("src", videoList[currentVideo]);
+                    $("#videoPlayer")[0].load();
+                    $("#videoPlayer")[0].play();
+                }
+            }
+
+            // Event listener for when a video ends
+            $("#videoPlayer").on("ended", playNextVideo);
+
         });
     </script>
 {% endblock %}

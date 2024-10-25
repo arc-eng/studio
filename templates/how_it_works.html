@@ -12,35 +12,39 @@
                     </span>
                 </h1>
                 <h2 class="subtitle is-3 is-4-mobile">
-                    Smart developer tools that meet you where you're at
+                    Simple & intuitive prompt-based interfaces
                 </h2>
             </div>
         </div>
     </section>
 
 
-    <section class="section content">
+    <section class="section">
         <div class="columns">
-
-
             <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
-                <div class=" content ">
-                    <p class="title is-2">The Tools</p>
-                    <p class="subtitle is-4">Use ours or build your own</p>
+                <div class="content ">
                     <p class="is-size-5">
-                        At the top of the page, you'll find a list of tools that are available to you. Each tool
-                        provides a different user experience. Choose the tool that best fits your needs and click on it to get started.
+                        At the top of the page you'll find a list of tools, each with a different user experience. Choose the tool that best fits your needs and click on it to get started.
+
                     </p>
-                    <a href="{% url 'contribute' %}" class="button is-rounded">
-                        <span>Learn how to build your own tools</span>
-                        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-                    </a>
+
+                    <p class="is-size-5">
+                        Built using the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>, our tools use generative AI to understand
+                        natural language prompts. Given a prompt, the engine will use its <a href="https://docs.arcane.engineer/capabilities.html" target="_blank">capabilities</a> to interact with your Github repositories and other data sources like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
+
+                    </p>
+                    <p class="has-text-centered">
+                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-medium is-rounded has-text-info-25">
+                            <span>Login to get started</span>
+                            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </p>
                 </div>
             </div>
             <div class="column is-7-desktop is-6-tablet">
                 <div class="table-container">
 
-                    <table class="table is-hoverable">
+                    <table class="table">
                         <tbody>
                         {% for tool in tools %}
                             <tr style="border:none">
@@ -57,44 +61,21 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        <tr style="border:none">
+                            <td></td>
+                            <td class="has-text-centered">
+                                <a href="{% url 'contribute' %}" class="button is-rounded">
+                                    <span>Learn how to build your own tools</span>
+                                </a>
+                            </td>
+
+                        </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <section class="section content">
-        <div class="columns">
-
-            <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
-                <div class="content p-3">
-                    <p class="title is-2">Simple and Intuitive</p>
-                    <p class="subtitle is-4">prompt-based interfaces</p>
-                    <p class="is-size-5">
-                        Built using the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>, our tools use generative AI to understand
-                        natural language prompts. Given a prompt, the engine will use its <a href="https://docs.arcane.engineer/capabilities.html" target="_blank">capabilities</a> to interact with your Github repositories and other data sources like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
-
-                    </p>
-                    <p class="has-text-centered">
-                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-medium is-fullwidth is-rounded has-text-info-25">
-                            <span>Login to get started</span>
-                            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-                        </a>
-                    </p>
 
                 </div>
             </div>
-            <div class="column is-7-desktop is-6-tablet">
-                <div class="laptop m-3">
-                    <video autoplay loop muted playsinline>
-                        <source src="https://storage.googleapis.com/arc-eng-videos/chat_demo_3.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
+
         </div>
     </section>
 
