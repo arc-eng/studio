@@ -63,6 +63,8 @@ def view_chat(request, chat_id, api_key):
 def start_conversation(request, api_key):
     if request.method == "POST":
         message = request.POST.get("message")
+        if not message:
+            message = request.POST.get("task_description")
         repo_id = request.POST.get("repo_id")
         if not message:
             raise ValueError("Message is required.")

@@ -271,7 +271,7 @@ APPEND_SLASH = False
 ROOT_PATH = os.getenv('ROOT_PATH', '/')
 LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', '/')
 # Redirect to home after login
-LOGIN_REDIRECT_URL = f"{ROOT_PATH}/repositories/".replace('//', '/')
+LOGIN_REDIRECT_URL = ROOT_PATH
 
 
 SENTRY_DSN = os.getenv("SENTRY_DSN", None)

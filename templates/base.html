@@ -156,8 +156,12 @@
     {% block navbar %}
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="{% url 'studio_home' %}">
-            <span class="button is-small {% if active_app == 'home' %}is-static{% endif %}">
+            {% if repo_name %}
+            <a class="navbar-item" href="{% url 'studio_home_repo' owner=repo_owner repo=repo_name %}">
+            {% else %}
+                <a class="navbar-item" href="{% url 'studio_home' %}">
+            {% endif %}
+            <span class="button is-small is-page-loader {% if active_app == 'home' %}is-static{% endif %}">
                 <span class="icon"><i class="fas fa-home"></i></span>
             </span>
             </a>

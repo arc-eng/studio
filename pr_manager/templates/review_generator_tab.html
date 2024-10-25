@@ -180,6 +180,10 @@
 
 
     $('.card-header').click(function() {
+        
+        // Close open card
+        $('.card-header').not(this).removeClass('is-active');
+        $('.card-content').not($(this).next('.card-content')).slideUp(200);
 
         // Animate height
         $(this).next('.card-content').slideToggle(200);

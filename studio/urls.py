@@ -32,6 +32,7 @@ all_patterns = [
         ),
     ),
     path("", views.studio_home, name="studio_home"),
+    path("home/<str:owner>/<str:repo>/", views.studio_home, name="studio_home_repo"),
     path('accounts/', include('allauth.urls')),
     path('admin/', admin.site.urls),
     path("pull-request-manager/", include("pr_manager.urls")),
