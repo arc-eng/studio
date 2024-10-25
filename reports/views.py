@@ -21,7 +21,7 @@ def view_reports(request, owner, repo):
     reports = sorted(reports, key=lambda x: x.created_at, reverse=True)
     return render_with_repositories(request, "list_reports.html", {
         "reports": reports,
-        "active_tab": "reports",
+        "active_app": "reports",
     }, owner, repo)
 
 
@@ -49,10 +49,10 @@ def view_report(request, owner, repo, report_id, api_key):
         return render_with_repositories(request, "view_report.html", {
             "report": report,
             "task": task,
-            "active_tab": "reports",
+            "active_app": "reports",
         }, owner, repo)
     else:
         return render_with_repositories(request, "view_task.html", {
             "task": task,
-            "active_tab": "reports",
+            "active_app": "reports",
         }, owner, repo)

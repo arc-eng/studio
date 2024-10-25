@@ -3,6 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from github import Github
+
+from repositories.models import BookmarkedRepo
+from repositories.views import render_with_repositories
+from studio.github import get_github_token
 
 
 def terms_of_service(request):
@@ -30,7 +35,7 @@ def how_it_works(request):
     }, {
         'name': 'Pull Requests',
         'icon': 'fa-code-branch has-text-success-35',
-        'description': 'Generate comprehensive and beautiful PR descriptions in seconds.',
+        'description': 'Supports you in managing pull requests and code reviews.',
         'link': reverse('pr_manager_home')
     }, {
         'name': 'Build',
@@ -41,12 +46,13 @@ def how_it_works(request):
     return render(request, "how_it_works.html", {'tools': tools})
 
 
-def studio_home(request, owner=None, repo=None):
+def studio_home(request):
+    if request.user.is_authenticated:
+        return render_with_repositories(request, "central.html", {
+            "active_app": "home",
+        }, None, None)
     return render(request, "studio_home.html", {
-        "repo_owner": owner,
-        "repo_name": repo,
-        "selected_repo": f"{owner}/{repo}",
-        "active_tab": "home",
+        "active_app": "home",
     })
 
 
@@ -55,7 +61,7 @@ def contribute(request, owner=None, repo=None):
         "repo_owner": owner,
         "repo_name": repo,
         "selected_repo": f"{owner}/{repo}",
-        "active_tab": "contribute",
+        "active_app": "contribute",
     })
 
 
@@ -64,9 +70,6 @@ def user_logout(request):
     # Log out the user
     logout(request)
     return redirect(reverse("studio_home"))
-
-
-
 
 
 def health_check(request):

@@ -36,7 +36,7 @@ category_colors = {
 def home(request):
     if not request.user.is_authenticated:
         return render(request, "pr_manager_preview.html", {
-            "active_tab": "pull-request-manager",
+            "active_app": "pull-request-manager",
         })
     return redirect("view_pull_request_default", owner=None, repo=None)
 
@@ -150,7 +150,7 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
             "prs": None,
             "selected_pr": 0,
             "diff_data": "",
-            "active_tab": "pull-request-manager",
+            "active_app": "pull-request-manager",
         }, owner, repo)
     selected_pr = get_selected_pull_request(prs, pr_number)
     diff_data, error = load_diff_data(github_token, owner, repo, selected_pr.number)
@@ -166,7 +166,7 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "selected_pr": selected_pr,
         "diff_data": diff_data,
         "task": task,
-        "active_tab": "pull-request-manager",
+        "active_app": "pull-request-manager",
         "pr_tab": pr_tab,
         "category_colors": category_colors,
     }, owner, repo)

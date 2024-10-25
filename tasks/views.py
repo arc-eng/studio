@@ -16,7 +16,7 @@ from studio.decorators import needs_api_key
 def home(request):
     if not request.user.is_authenticated:
         return render(request, "tasks_preview.html", {
-            "active_tab": "tasks",
+            "active_app": "tasks",
         })
     return redirect("list_tasks", owner=None, repo=None)
 
@@ -34,7 +34,7 @@ def view_task(request, owner, repo, task_id, api_key):
     return render_with_repositories(request, "view_task.html", {
         "task": task,
         "selected_repo": task.github_project,
-        "active_tab": "tasks",
+        "active_app": "tasks",
         "task_result": task_result,
     }, owner, repo)
 
@@ -53,7 +53,7 @@ def list_tasks(request, owner=None, repo=None, api_key=None):
 
     return render_with_repositories(request, "list_tasks.html", {
         "tasks": tasks,
-        "active_tab": "tasks",
+        "active_app": "tasks",
     }, owner, repo)
 
 

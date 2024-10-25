@@ -60,7 +60,7 @@ def show_repo_picker(request):
 @login_required
 def repo_overview(request):
     return render_with_repositories(request, 'repositories/overview.html', {
-        'active_tab': 'bookmarks',
+        'active_app': 'bookmarks',
     })
 
 
@@ -89,6 +89,11 @@ def render_with_repositories(request, template_name, context, org=None, repo_nam
         if repo.owner not in bookmarked_repos_by_owner:
             bookmarked_repos_by_owner[repo.owner] = []
         bookmarked_repos_by_owner[repo.owner].append(repo)
+
+    if not org:
+        org = repos[0].owner
+    if not repo_name:
+        repo_name = repos[0].repo_name
 
     context['bookmarked_repos'] = bookmarked_repos_by_owner
     context['repo_owner'] = org
