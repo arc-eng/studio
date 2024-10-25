@@ -43,7 +43,7 @@ class BuildSystemDescription(BaseModel):
 def home(request):
     if not request.user.is_authenticated:
         return render(request, "build_preview.html", {
-            "active_tab": "build",
+            "active_app": "build",
         })
     return redirect("build_overview", owner=None, repo=None)
 
@@ -101,7 +101,7 @@ def build_overview(request, owner=None, repo=None, api_key=None):
 
     return render_with_repositories(request, "build_home.html", {
         "task": task,
-        "active_tab": "build",
+        "active_app": "build",
         "system": system
     }, owner, repo)
 

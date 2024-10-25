@@ -35,7 +35,7 @@ def user_profile(request):
 
     return render(request, "user_profile.html", {
         "needs_engine_login": needs_engine_login,
-        "active_tab": "profile",
+        "active_app": "profile",
     })
 
 

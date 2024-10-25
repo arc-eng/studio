@@ -3,6 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from github import Github
+
+from repositories.models import BookmarkedRepo
+from repositories.views import render_with_repositories
+from studio.github import get_github_token
 
 
 def terms_of_service(request):
@@ -41,12 +46,23 @@ def how_it_works(request):
     return render(request, "how_it_works.html", {'tools': tools})
 
 
-def studio_home(request, owner=None, repo=None):
+def studio_home(request):
+    if request.user.is_authenticated:
+        bookmarks = BookmarkedRepo.objects.filter(user=request.user)
+        github_token = get_github_token(request)
+        g = Github(github_token)
+        # Search for all open PRs for the user
+        open_prs = []
+        for bookmark in bookmarks:
+            repo = g.get_repo(f"{bookmark.owner}/{bookmark.repo_name}")
+            for pr in repo.get_pulls(state="open"):
+                open_prs.append(pr)
+        return render_with_repositories(request, "central.html", {
+            "open_prs": open_prs,
+            "active_app": "home",
+        }, None, None)
     return render(request, "studio_home.html", {
-        "repo_owner": owner,
-        "repo_name": repo,
-        "selected_repo": f"{owner}/{repo}",
-        "active_tab": "home",
+        "active_app": "home",
     })
 
 
@@ -55,7 +71,7 @@ def contribute(request, owner=None, repo=None):
         "repo_owner": owner,
         "repo_name": repo,
         "selected_repo": f"{owner}/{repo}",
-        "active_tab": "contribute",
+        "active_app": "contribute",
     })
 
 
@@ -64,9 +80,6 @@ def user_logout(request):
     # Log out the user
     logout(request)
     return redirect(reverse("studio_home"))
-
-
-
 
 
 def health_check(request):

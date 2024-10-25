@@ -5,8 +5,12 @@
 {% block content %}
 
 
-<div class="container has-background-white tiny-rounded p-3">
+<div class="container">
     <div class="columns">
+        <div class="column is-9">
+            {% block chat_content %}
+            {% endblock %}
+        </div>
         <div class="column is-3">
             <p class="has-text-centered has-text-grey my-4">
                 <span>Past Conversations</span>
@@ -26,10 +30,7 @@
                 <span class="icon"><i class="fa fa-plus"></i></span>
             </a>
         </div>
-        <div class="column is-9">
-            {% block chat_content %}
-            {% endblock %}
-        </div>
+
     </div>
 </div>
 <script>

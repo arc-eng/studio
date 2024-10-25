@@ -1,0 +1,85 @@
+{% extends "base_repos.html" %}
+
+{% block title %}Arcane Studio{% endblock %}
+
+<p class="title is-1">
+    Home
+</p>
+<p class="subtitle is-3">
+    Welcome to Arcane Studio
+</p>
+
+{% block repo_content %}
+
+
+    <section class="section content">
+        <p class="title is-1">
+            Home
+        </p>
+        <p class="subtitle is-3">
+            Welcome to Arcane Studio
+        </p>
+        <div class="columns">
+            <div class="column">
+                <!-- Message Form -->
+                <div class="">
+
+                    <form method="post" >
+                        {% csrf_token %}
+
+
+                        <div class="field">
+                            <label class="label">Get work done on <code>{{ repo_owner }} / {{ repo_name }}</code></label>
+                            <div class="control">
+                                <textarea class="textarea" name="message" placeholder="Provide instructions for a task or start a conversation"></textarea>
+                            </div>
+                        </div>
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button has-text-primary-25" type="submit" id="send-button">
+                                    <span class="icon"><i class="fa fa-play"></i></span>
+                                    <span>Run Task</span>
+                                </button>
+                                <button class="button has-text-info-25" type="submit" id="send-button">
+                                    <span class="icon"><i class="fa fa-play"></i></span>
+                                    <span>Start Conversation</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="column">
+                <p class="title is-4">Open Pull Requests</p>
+                <div class="table-container">
+                    <table class="table is-fullwidth">
+                        <tbody>
+                            {% for pr in open_prs %}
+                            <tr>
+                                <td>
+                                    <a href="{{ pr.url }}" target="_blank">{{ pr.title }}</a>
+                                </td>
+                                <td>
+                                    <a href="{{ pr.url }}" target="_blank">{{ pr.repo }}</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        $('form').on('submit', function() {
+            // Disable the button
+            $('#send-button').prop('disabled', true);
+            // Make the input read-only to prevent further input but allow the form to submit it
+            $('textarea[name="message"]').prop('readonly', true);
+        });
+
+    </script>
+
+{% endblock %}

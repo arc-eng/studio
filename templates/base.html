@@ -4,7 +4,7 @@
 {% load allauth %}
 
 <!DOCTYPE html>
-<html lang="en" class="has-background-light">
+<html lang="en" class="has-background-white">
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1PVNMNEWKS"></script>
@@ -148,16 +148,16 @@
         });
     </script>
 </head>
-<body class="has-background-light">
+<body class="has-background-white">
 
 
 <div class="page-container container is-fullwidth">
 
     {% block navbar %}
-    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="{% url 'studio_home' %}">
-            <span class="button is-small {% if active_tab == 'home' %}is-static{% endif %}">
+            <span class="button is-small {% if active_app == 'home' %}is-static{% endif %}">
                 <span class="icon"><i class="fas fa-home"></i></span>
             </span>
             </a>
@@ -174,28 +174,28 @@
             <!-- Navbar items -->
             <div class="navbar-start">
                 <a class="navbar-item" href="{% url 'chat_home' %}">
-                <span class="button is-page-loader is-small {% if active_tab == 'chat' %}is-static{% endif %}">
+                <span class="button is-page-loader is-small {% if active_app == 'chat' %}is-static{% endif %}">
                     <span class="icon"><i class="fas fa-comment"></i></span>
                     <span>Chat</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'tasks_home' %}">
-                <span class="button is-page-loader is-small {% if active_tab == 'tasks' %}is-static{% endif %}">
+                <span class="button is-page-loader is-small {% if active_app == 'tasks' %}is-static{% endif %}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'pr_manager_home' %}">
-                <span class="button is-page-loader is-small {% if active_tab == 'pull-request-manager' %}is-static{% endif %}">
+                <span class="button is-page-loader is-small {% if active_app == 'pull-request-manager' %}is-static{% endif %}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'build_home' %}">
-                <span class="button is-small is-page-loader {% if active_tab == 'build' %}is-static{% endif %}">
+                <span class="button is-small is-page-loader {% if active_app == 'build' %}is-static{% endif %}">
                     <span class="icon"><i class="fas fa-hammer"></i></span>
                     <span>Build</span>
                 </span>
@@ -204,6 +204,7 @@
 
             <!-- Navbar end -->
             <div class="navbar-end">
+                {% block extra_navbar_right %}{% endblock %}
                 <div class="navbar-item">
                     {% url 'contribute' as contribute_url %}
                     <a class="button is-small is-dark is-outlined" href="{{ contribute_url }}">
@@ -231,12 +232,12 @@
     {% endblock %}
 
 
-    <div class="content-wrap container">
+    <div class="content-wrap container py-5">
         {% block content %}{% endblock %}
     </div>
     <hr/>
 
-    <footer class="footer has-background-light  has-text-grey">
+    <footer class="footer has-text-grey has-background-white">
         <div class="columns">
             <div class="column is-three-fifths">
                 <p class="title is-5 has-text-grey">

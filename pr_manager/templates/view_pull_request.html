@@ -30,6 +30,8 @@
 
 {% block repo_content %}
 
+    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions, get recommendations, apply changes" %}
+
 
     {% if not prs %}
         <p class="content has-text-weight-light is-size-5">
@@ -37,7 +39,7 @@
         </p>
     {% else %}
     
-    <div class="columns">
+    <div class="columns mt-3">
         <div class="column is-5">
             <div class="tabs is-toggle is-toggle-rounded is-fullwidth is-small">
                 <ul>

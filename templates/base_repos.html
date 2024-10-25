@@ -1,53 +1,52 @@
 {% extends 'base.html' %}
 
+{% block extra_navbar_right %}
+
+
+
+<div class="navbar-item">
+    {% url 'contribute' as contribute_url %}
+    <div class="control has-icons-left">
+        <div class="select is-dark">
+            <select name="repo_id" id="repo-selector">
+                <option value="">Select a repository</option>
+                {% for owner, repos in bookmarked_repos.items %}
+                    {% for bookmark in repos %}
+                        {% if active_app == "tasks" %}
+                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% elif active_app == "pull-request-manager" %}
+                            {% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% elif active_app == "reports" %}
+                            {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% elif active_app == "build" %}
+                            {% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% else %}
+                            {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
+                        {% endif %}
+
+                        <option data-url="{{ repo_link }}"
+                                value="{{ bookmark.full_name }}"
+                                {% if bookmark.owner == repo_owner and bookmark.repo_name == repo_name %}selected{% endif %}>
+                            {{ bookmark.owner }} / {{ bookmark.repo_name }}
+                        </option>
+                    {% endfor %}
+                {% endfor %}
+            </select>
+        </div>
+        <span class="icon is-left">
+    <i class="fab fa-github"></i>
+  </span>
+    </div>
+
+</div>
+{% endblock %}
+
 {% block content %}
 
 
 
-    <div class="has-background-white tiny-rounded">
-
-        <div class="tabs is-fullwidth mb-0">
-            <ul>
-                {#  Repo Tabs  #}
-                <li class="{% if active_tab == "bookmarks" %}is-active{% endif %}">
-                    <a class="is-page-loader" href="{% url 'repositories:repo_overview' %}">
-                        <span class="icon"><i class="fas fa-link"></i></span>
-                    </a>
-                </li>
-                {% for owner, repos in bookmarked_repos.items %}
-                    {% for bookmark in repos %}
-                        <li class="{% if  bookmark.full_name == selected_repo %}is-active{% endif %}">
-                            {% if active_tab == "tasks" %}
-                                {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                            {% elif active_tab == "pull-request-manager" %}
-                                {% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                            {% elif active_tab == "reports" %}
-                                {% url 'view_reports' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                            {% elif active_tab == "build" %}
-                                {% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                            {% else %}
-                                {% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name as repo_link %}
-                            {% endif %}
-
-                            <a href="{{ repo_link }}" class="">
-                                {#                            <span class="icon"><i class="fab fa-github"></i></span>#}
-                                <span>
-                                <figure class="image is-24x24 mr-2">
-                                    <img
-                                            src="{{ bookmark.img_url }}"
-                                            class="is-rounded" />
-                                </figure>
-                            </span>
-                                <span>{{ bookmark.repo_name }}</span>
-                            </a>
-                        </li>
-                    {% endfor %}
-
-                {% endfor %}
-
-            </ul>
-        </div>
-        <div class="p-5">
+    <div class="">
+        <div class="">
             {% block repo_content %}
 
             {% endblock %}
@@ -59,6 +58,14 @@
         $('.repo-menu-item').click(function() {
             $(this).addClass('is-unselectable').attr('disabled', 'disabled');
         });
+        $('#repo-selector').on('change', function() {
+            const url = $(this).find(':selected').data('url');
+            if (url) {
+                console.log(url);
+                window.location.href=url;
+            }
+        });
+
     });
     </script>
 

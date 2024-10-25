@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 def home(request):
     if not request.user.is_authenticated:
         return render(request, "chat_preview.html", {
-            "active_tab": "chat",
+            "active_app": "chat",
         })
     return redirect("start_conversation")
 
@@ -54,7 +54,7 @@ def view_chat(request, chat_id, api_key):
         "chats": user_chats.order_by('-id').all(),
         "selected_chat": chat,
         "messages": messages,
-        "active_tab": "chat",
+        "active_app": "chat",
     })
 
 
@@ -86,7 +86,7 @@ def start_conversation(request, api_key):
     return render(request, "start_conversation.html", {
         "bookmarked_repos": BookmarkedRepo.objects.filter(user=request.user).all(),
         "chats": ChatConversation.objects.filter(user=request.user).order_by('-id').all(),
-        "active_tab": "chat",
+        "active_app": "chat",
    })
 
 
