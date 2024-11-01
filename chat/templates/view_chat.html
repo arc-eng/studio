@@ -120,7 +120,7 @@
                         {% if selected_chat.branch %}
                             <div class="control">
                                 <a class="button is-rounded"
-                                   href="{% url 'view_pull_request' owner=selected_chat.repo.owner repo=selected_chat.repo.repo_name pr_number=selected_chat.pr_number %}">
+                                   href="{% url 'view_pull_request_default_tab' owner=selected_chat.repo.owner repo=selected_chat.repo.repo_name pr_number=selected_chat.pr_number %}">
                                     <span class="icon"><i class="fa fa-code-branch"></i></span>
                                     <span>#{{ selected_chat.pr_number }}</span>
                                 </a>
