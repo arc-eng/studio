@@ -4,16 +4,14 @@
 ![Django](https://img.shields.io/badge/Django-3.2%2B-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-Arcane Studio is a collection of productivity-boosting tools built on top of the [Arcane Engine](https://arcane.engineer/engine). 
-The engine takes natural language instructions (Tasks) and executes them on the users' behalf using its capabilities, 
-which include reading, writing, and editing code and interacting with issues, tickets, wikis, etc via integrations.
+Arcane Studio est une collection d'outils de productivité construits sur le [Arcane Engine](https://arcane.engineer/engine). Le moteur exécute des instructions en langage naturel (Tâches) au nom des utilisateurs en utilisant ses capacités, qui incluent la lecture, l'écriture et l'édition de code et l'interaction avec des problèmes, des tickets, des wikis, etc. via des intégrations.
 
 ## 🛠️ Stack
-- **Backend**: Python and Django
-- **Frontend**: Django templates, BulmaCSS, and jQuery
+- **Backend** : Python et Django
+- **Frontend** : Modèles Django, BulmaCSS et jQuery
 
-## 🐳 Quickstart with Docker
-You can use Docker to run the project locally. Make sure you have Docker installed on your machine.
+## 🐳 Démarrage rapide avec Docker
+Vous pouvez utiliser Docker pour exécuter le projet localement. Assurez-vous d'avoir Docker installé sur votre machine.
 
 ```shell
 git clone https://github.com/arc-eng/studio.git
@@ -21,38 +19,38 @@ cd studio
 docker-compose up --build
 ```
 
-## 🚀 Installation and Setup
+## 🚀 Installation et Configuration
 
-### Prerequisites
+### Prérequis
 - Python 3.8+
 
 ### Installation
-1. Clone the repository:
+1. Clonez le dépôt :
    ```sh
    git clone https://github.com/arc-eng/studio.git
    ```
-2. Navigate to the project directory:
+2. Accédez au répertoire du projet :
    ```sh
    cd studio
    ```
-3. Install the dependencies:
+3. Installez les dépendances :
    ```sh
    poetry install
    ```
-4. Apply migrations:
+4. Appliquez les migrations :
    ```sh
    python manage.py migrate
    ```
-5. Run the development server:
+5. Exécutez le serveur de développement :
    ```sh
    python manage.py runserver
    ```
 
-## 🤝 Contributing
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) first.
+## 🤝 Contribuer
+Les contributions sont les bienvenues ! Veuillez lire d'abord les [directives de contribution](CONTRIBUTING.md).
 
-## 📄 License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## 📄 Licence
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## 📧 Contact
-For any inquiries, please contact us at [support@arcane.engineer](mailto:support@arcane.engineer).
+Pour toute demande, veuillez nous contacter à [support@arcane.engineer](mailto:support@arcane.engineer).
