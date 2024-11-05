@@ -49,7 +49,7 @@
                         {% for tool in tools %}
                             <tr style="border:none">
                                 <td class="is-narrow" style="border:none">
-                                    <a href="{{ tool.link }}" class="button is-medium is-fullwidth">
+                                    <a href="{{ tool.link }}" class="button is-medium is-fullwidth is-shadowless">
                                         <span class="icon">
                                             <i class="fas {{ tool.icon }}"></i>
                                         </span>
@@ -64,7 +64,7 @@
                         <tr style="border:none">
                             <td></td>
                             <td class="has-text-centered">
-                                <a href="{% url 'contribute' %}" class="button is-rounded">
+                                <a href="{% url 'contribute' %}" class="button is-dark">
                                     <span>Learn how to build your own tools</span>
                                 </a>
                             </td>
