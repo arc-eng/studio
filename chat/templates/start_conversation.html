@@ -12,7 +12,7 @@
             <!-- Repo selector -->
             <div class="field">
                 <div class="control has-icons-left">
-                    <div class="select is-fullwidth is-primary">
+                    <div class="select is-fullwidth is-link">
                         <select name="repo_id">
                             <option value="">Select a repository</option>
                             {% for repo in bookmarked_repos %}
@@ -29,12 +29,12 @@
 
             <div class="field">
                 <div class="control">
-                    <textarea class="textarea is-primary" name="message" placeholder="Do this and return that"></textarea>
+                    <textarea class="textarea is-link" name="message" placeholder="Do this and return that"></textarea>
                 </div>
             </div>
             <div class="field is-grouped">
                 <div class="control">
-                    <button class="button has-text-primary-25" type="submit" id="send-button">
+                    <button class="button is-link" type="submit" id="send-button">
                         <span class="icon"><i class="fa fa-play"></i></span>
                         <span>Start Conversation</span>
                     </button>

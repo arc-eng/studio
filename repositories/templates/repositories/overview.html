@@ -34,28 +34,28 @@
                         {{ bookmark.owner }} / {{ bookmark.repo_name }}
                     </td>
                     <td class="is-narrow">
-                        <a href="{% url 'start_conversation' %}" class="button is-small is-page-loader">
+                        <a href="{% url 'start_conversation' %}" class="button is-small is-page-loader is-ghost">
                             <span class="icon"><i class="fas fa-comment"></i></span>
                         </a>
-                        <a href="{% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
+                        <a href="{% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
                             <span class="icon"><i class="fas fa-gears"></i></span>
                         </a>
-                        <a href="{% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
+                        <a href="{% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
                             <span class="icon"><i class="fas fa-code-branch"></i></span>
                         </a>
-                        <a href="{% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader">
+                        <a href="{% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
                             <span class="icon"><i class="fas fa-hammer"></i></span>
                         </a>
                     </td>
                     <td class="is-narrow">
                         <a href="https://github.com/{{ bookmark.full_name }}"
-                           class="button is-small is-page-loader"
+                           class="button is-small is-page-loader is-ghost"
                            target="_blank">
                             <span class="icon"><i class="fas fa-arrow-up-right-from-square"></i></span>
                         </a>
                     </td>
                     <td class="is-flex">
-                        <a class="button is-danger is-small is-outlined is-light is-page-loader"
+                        <a class="button is-danger is-small is-ghost has-text-danger is-page-loader"
                            href="{% url 'repositories:unbookmark_repo' org_name=owner repo_name=bookmark.repo_name %}">
                             <span class="icon"><i class="fas fa-trash"></i></span>
                         </a>
@@ -63,22 +63,14 @@
                 </tr>
                 {% endfor %}
             {% endfor %}
-            {%  if bookmarked_repos|length %}
-            <tr>
-                <td class="is-narrow">
-                    <a class="button is-rounded is-outlined is-page-loader is-small is-dark is-light" href="{% url 'repositories:show_repo_picker' %}">
-                        <span class="icon"><i class="fas fa-plus"></i></span>
-                    </a>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-            </tr>
-            {% endif %}
             </tbody>
         </table>
+        {%  if bookmarked_repos|length %}
+        <a class="button is-rounded is-page-loader is-dark" href="{% url 'repositories:show_repo_picker' %}">
+            <span class="icon"><i class="fas fa-plus"></i></span>
+            <span>Add Repository</span>
+        </a>
+        {% endif %}
     </div>
 
 {% endblock %}
