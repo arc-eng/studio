@@ -29,13 +29,7 @@
                         </span>
                     </a>
                 </p>
-                <p class="level-item">
-                    <a href="{% url 'delete_chat' selected_chat.id %}" class="button is-ghost has-text-danger">
-                        <span class="icon is-small">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </a>
-                </p>
+
                 <p class="level-item has-text-centered title is-5" id="chat-title">
                     {{ selected_chat.title }}
                 </p>
@@ -43,7 +37,7 @@
 
             <!-- Right side -->
             <div class="level-right">
-                <p class="level-item has-text-centered">
+                <p class="level-item">
                     <a href="https://github.com/{{ selected_chat.repo.full_name }}"
                        class="button is-ghost"
                        target="_blank">
@@ -58,6 +52,13 @@
                             {{ selected_chat.repo.full_name }}
                         {% endif %}
                     </span>
+                    </a>
+                </p>
+                <p class="level-item">
+                    <a href="{% url 'delete_chat' selected_chat.id %}" class="button is-ghost has-text-danger">
+                        <span class="icon is-small">
+                            <i class="fa fa-trash"></i>
+                        </span>
                     </a>
                 </p>
             </div>

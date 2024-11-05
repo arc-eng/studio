@@ -15,16 +15,18 @@
             <p class="has-text-centered has-text-grey my-3">
                 <span>Past Conversations</span>
             </p>
-            {%  for chat in chats %}
+
                 <div class="buttons m-1">
+                    {%  for chat in chats %}
                     <a href="{% url 'view_chat' chat.id %}"
                        class="button is-ghost is-align-content-start is-align-items-start  is-justify-content-start is-fullwidth {% if chat == selected_chat %}is-static{% endif %}">
                         {{ chat.title }}
                     </a>
+                    {% endfor %}
                 </div>
 
 
-            {% endfor %}
+
         </div>
 
     </div>
