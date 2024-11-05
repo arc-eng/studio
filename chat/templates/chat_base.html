@@ -12,23 +12,19 @@
             {% endblock %}
         </div>
         <div class="column is-3">
-            <p class="has-text-centered has-text-grey my-4">
+            <p class="has-text-centered has-text-grey my-3">
                 <span>Past Conversations</span>
             </p>
             {%  for chat in chats %}
                 <div class="buttons m-1">
                     <a href="{% url 'view_chat' chat.id %}"
-                       class="button is-small is-rounded is-align-content-start is-align-items-start  is-justify-content-start is-fullwidth {% if chat == selected_chat %}is-static{% endif %}">
+                       class="button is-ghost is-align-content-start is-align-items-start  is-justify-content-start is-fullwidth {% if chat == selected_chat %}is-static{% endif %}">
                         {{ chat.title }}
                     </a>
                 </div>
 
 
             {% endfor %}
-            <a href="{% url 'start_conversation' %}"
-               class="button is-fullwidth is-rounded is-small mt-3">
-                <span class="icon"><i class="fa fa-plus"></i></span>
-            </a>
         </div>
 
     </div>

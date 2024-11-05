@@ -30,8 +30,8 @@
 {% block repo_content %}
 
     <div class="columns mb-5">
-        <div class="column is-1 has-text-centered">
-            <a class="button" href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
+        <div class="column is-1">
+            <a class="button is-ghost" href="{% url 'list_tasks' owner=repo_owner repo=repo_name %}">
                 <span class="icon"><i class="fas fa-arrow-left"></i></span>
             </a>
         </div>
@@ -46,10 +46,10 @@
                     </a>
 
                 {% endif %}
-                <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button">
+                <a href="https://arcane.engineer/dashboard/tasks/{{ task.id }}/" target="_blank" class="button is-ghost">
                     <span class="icon is-small"><i class="fas fa-arrow-up-right-from-square"></i></span> <span>Details</span>
                 </a>
-                <a class="button" id="view-prompt-button">
+                <a class="button is-ghost" id="view-prompt-button">
                     <span class="icon is-small"><i class="fas fa-eye"></i></span> <span>Prompt</span>
                 </a>
 
@@ -64,7 +64,7 @@
 
         <div class="is-hidden mb-3" id="prompt-box">
             <div class="columns">
-                <div class="column is-1 has-text-centered is-size-4">
+                <div class="column is-1 is-size-4">
                     <span class="icon is-large"><i class="fas fa-user"></i></span>
                 </div>
                 <div class="column is-11 content is-family-monospace">
@@ -78,8 +78,8 @@
 
 
         {%  if task.status == "completed" %}
-        <div class="columns">
-            <div class="column is-1 content has-text-centered is-size-4">
+        <div class="columns p-0">
+            <div class="column is-1 content has-text-centered is-size-4 p-0 m-0">
                 <span class="icon is-large"><i class="fas fa-check-circle"></i></span>
             </div>
             <div class="column is-11 is-size-6">
@@ -102,9 +102,9 @@
                             {% endif %}
                             <div class="control is-expanded">
                                 {% if task.pr_number %}
-                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue conversation on PR #{{ task.pr_number }}" >
+                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue task as conversation on PR #{{ task.pr_number }}" >
                                 {% else %}
-                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue conversation" />
+                                    <input class="input is-rounded" type="text" name="task_description" placeholder="Continue task as conversation" />
                                 {% endif %}
                             </div>
                             <div class="control">
