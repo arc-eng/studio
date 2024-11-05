@@ -1,12 +1,21 @@
-<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth p-3">
+<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth">
     <input type="hidden" name="owner" value="{{ repo_owner }}">
     <input type="hidden" name="repo" value="{{ repo_name }}">
     <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
     {% csrf_token %}
 
+    <div class="field">
+        <div class="control">
+            <button class="button has-text-info-25 is-fullwidth generate-button">
+                <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
+                <span>Generate New Description & Title</span>
+            </button>
+        </div>
+    </div>
+
     <div class="field" id="emoji-selector">
         <p class="control has-icons-left">
-                            <span class="select is-fullwidth is-info">
+                            <span class="select is-fullwidth is-small">
                               <select name="emojis">
                                 <option value="readability" selected>Use emojis to enhance readability</option>
                                 <option value="readability_and_fun">Emojis for readability and fun</option>
@@ -21,7 +30,7 @@
 
     <div class="field" id="content-size-field">
         <p class="control has-icons-left">
-                            <span class="select is-info is-fullwidth">
+                            <span class="select is-fullwidth is-small">
                               <select name="content_size">
                                 <option value="brief" selected>Keep it brief and concise</option>
                                 <option value="medium">Brief, but elaborate where necessary</option>
@@ -35,7 +44,7 @@
     </div>
     <div class="field" id="structure-field">
         <p class="control has-icons-left">
-                            <span class="select is-fullwidth is-info">
+                            <span class="select is-fullwidth is-small">
                               <select name="structure">
                                 <option value="topics" selected>Write bullet points grouped by topics</option>
                                 <option value="files">Write bullet points grouped by file</option>
@@ -49,7 +58,7 @@
     </div>
     <div class="field" id="additional-notes-field">
         <div class="control">
-                            <textarea class="textarea is-info"
+                            <textarea class="textarea is-small"
                                       name="additional_instructions"
                                       placeholder="(Optional) additional instructions"></textarea>
         </div>
@@ -57,12 +66,5 @@
     </div>
 
 
-    <div class="field">
-        <div class="control">
-            <button class="button has-text-info-25 is-fullwidth generate-button">
-                <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
-                <span>Generate new description and title</span>
-            </button>
-        </div>
-    </div>
+
 </form>

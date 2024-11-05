@@ -30,7 +30,7 @@
 
 {% block repo_content %}
 
-    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions, get recommendations, apply changes" %}
+    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions & reviews" classes="p-0"%}
 
 
     {% if not prs %}
@@ -41,7 +41,16 @@
     
     <div class="columns mt-3">
         <div class="column is-5">
-            <div class="tabs is-toggle is-toggle-rounded is-fullwidth is-small">
+
+            <div class="select is-fullwidth mb-3">
+                <select name="pr_number" id="pr-select">
+                    {% for pr in prs %}
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="tabs is-toggle is-fullwidth is-small">
                 <ul>
                     <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
@@ -63,23 +72,23 @@
                     </li>
                 </ul>
             </div>
+
+
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
 
                 {% if task and task.status != "completed" %}
-                    <p class="title is-5 has-text-centered">
+                    <p class="is-5 p-3 has-text-grey">
                         <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
                         <span>Generating title and description</span>
                     </p>
 
                     {% include 'task_live_updates.html' %}
                 {% else %}
-                    <p class="title is-5 p-3">
-                        {{ selected_pr.title }}
-
-                    </p>
+                    <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right m-3">
+                        <span class="icon is-small"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
                     {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content p-3" %}
 
-                    <hr />
 
                     <p class="is-size-5 mb-5 has-text-grey is-hidden">
                         Customize the options below to create the perfect PR description in seconds.
@@ -100,18 +109,6 @@
             </div>
         </div>
         <div class="column is-7">
-
-            <div class="select mb-3 is-inline-block is-small is-link">
-                <select name="pr_number" id="pr-select">
-                    {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                        {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-inline-block is-small">
-                <span class="icon is-small"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-            </a>
 
             <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
             <div id="diff-output"></div>

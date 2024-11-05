@@ -2,10 +2,6 @@
 {% if review %}
     {% if review.summary %}
         <div class="content" id="code-review">
-            <p class="title is-4 p-3">
-                {{ selected_pr.title }}
-
-            </p>
             <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right m-3">
                 <input type="hidden" name="owner" value="{{ repo_owner }}">
                 <input type="hidden" name="repo" value="{{ repo_name }}">
@@ -122,8 +118,8 @@
             {% endfor %}
         </div>
     {% else %}
-        <p class="title is-5 has-text-centered">
-            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+        <p class="is-5 p-3 has-text-grey">
+            <span class="icon"><i class="fa fa-rotate fa-spin"></i></span>
             <span>Analyzing code changes</span>
         </p>
         {% include 'task_live_updates.html' with task=review_task %}
