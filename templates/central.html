@@ -35,7 +35,7 @@
 
                         <div class="field">
                             <div class="control">
-                                <textarea class="textarea" name="task_description" placeholder="Provide instructions for a task or start a conversation"></textarea>
+                                <textarea class="textarea is-link" name="task_description" placeholder="Provide instructions for a task or start a conversation"></textarea>
                             </div>
                         </div>
                         <div class="field is-grouped">
@@ -43,13 +43,16 @@
                                 <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
                                 <input type="hidden" name="repo_name" value="{{ repo_name }}">
                                 <input type="hidden" name="repo_id" value="{{ selected_repo.id }}">
-                                <button class="button has-text-primary-25" type="submit" name="run-task-button" onclick="submitForm('{% url 'create_task' owner=repo_owner repo=repo_name  %}')">
+                                <button class="button is-link" type="submit" name="run-task-button" onclick="submitForm('{% url 'create_task' owner=repo_owner repo=repo_name  %}')">
                                     <span class="icon"><i class="fa fa-play"></i></span>
-                                    <span>Run Task</span>
+                                    <span>Run a Task</span>
                                 </button>
-                                <button class="button has-text-info-25" type="submit" name="start-conversation-button" onclick="submitForm('{% url 'start_conversation'  %}')">
-                                    <span class="icon"><i class="fa fa-play"></i></span>
-                                    <span>Start Conversation</span>
+                                <span class="has-text-centered px-2 has-text-weight-light is-size-4">
+                                    or
+                                </span>
+                                <button class="button is-link" type="submit" name="start-conversation-button" onclick="submitForm('{% url 'start_conversation'  %}')">
+                                    <span class="icon"><i class="fa fa-comment"></i></span>
+                                    <span>Start a Conversation</span>
                                 </button>
                             </div>
                         </div>
@@ -74,13 +77,13 @@
                                     </td>
                                     <td>
                                         <div class="buttons">
-                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='describe' %}">
+                                            <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='describe' %}">
                                                 <span class="icon"><i class="fa fa-file-waveform"></i></span>
                                             </a>
-                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='review' %}">
+                                            <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='review' %}">
                                                 <span class="icon"><i class="fa fa-magnifying-glass"></i></span>
                                             </a>
-                                            <a class="button is-small is-page-loader" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='change' %}">
+                                            <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='change' %}">
                                                 <span class="icon"><i class="fa fa-pencil"></i></span>
                                             </a>
                                         </div>
