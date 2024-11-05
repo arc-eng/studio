@@ -52,8 +52,9 @@
                             </figure>
                         </a>
                         {% else %}
-                            <a class="button is-light" href="{% url 'github_login' %}">
-                                Log in
+                            <a class="button is-dark is-rounded is-outlined" href="{% url 'github_login' %}?next={% url 'studio_home' %}">
+                                <span class="icon"><i class="fab fa-github"></i></span>
+                                <span>Login</span>
                             </a>
                         {% endif %}
 
@@ -71,7 +72,7 @@
 {% block content %}
 
     <section class="hero is-dark is-bold has-round-corners">
-        <a class="github-fork-ribbon" href="https://github.com/arc-eng/studio" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+        
         <div class="hero-body">
             <div class="container">
                 <h1 class="title is-1">
@@ -109,7 +110,7 @@
                     like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
 
                 </p>
-                <a href="{% url 'how_it_works' %}" class="button is-rounded is-medium has-text-info-25">
+                <a href="{% url 'how_it_works' %}" class="button is-rounded is-large has-text-info-25 is-shadowless">
                     <span>See how it works</span>
                     <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
                 </a>

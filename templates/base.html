@@ -210,12 +210,12 @@
             <div class="navbar-end">
                 {% block extra_navbar_right %}{% endblock %}
                 <div class="navbar-item">
-                    <a class="button is-page-loader is-outlined is-dark" href="{% url 'repositories:repo_overview' %}">
+                    <a class="button is-page-loader is-shadowless" href="{% url 'repositories:repo_overview' %}">
                         <span class="icon"><i class="fas fa-bookmark"></i></span>
                     </a>
                 </div>
                 <div class="navbar-item">
-                    <a class="button is-page-loader is-outlined is-dark" href="{% url 'contribute' %}">
+                    <a class="button is-page-loader is-shadowless" href="{% url 'contribute' %}">
                         <span class="icon"><i class="fas fa-info"></i></span>
                     </a>
                 </div>
@@ -227,7 +227,7 @@
                             </figure>
                         </a>
                     {% else %}
-                        <a class="button is-dark is-rounded" href="{% url 'github_login' %}?next={% url 'tasks_home' %}">
+                        <a class="button is-dark is-rounded is-outlined" href="{% url 'github_login' %}?next={% url 'studio_home' %}">
                             <span class="icon"><i class="fab fa-github"></i></span>
                             <span>Login</span>
                         </a>

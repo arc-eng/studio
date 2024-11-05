@@ -28,7 +28,7 @@
                     context switching by using Chat to manage your daily work.
 
                 </p>
-                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25">
+                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25 is-shadowless is-large">
                     <span>Login and start a conversation</span>
                     <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
                 </a>
