@@ -33,4 +33,7 @@ COPY . /code/
 # Expose port 8000 for uwsgi
 EXPOSE 8000
 
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl --fail http://localhost:8000/ || exit 1
+
 CMD ["sh", "-c", "uvicorn --host 0.0.0.0 --port 8000 studio.asgi:application"]
