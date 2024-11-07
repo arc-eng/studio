@@ -33,4 +33,4 @@ COPY . /code/
 # Expose port 8000 for uwsgi
 EXPOSE 8000
 
-CMD ["sh", "-c", "uvicorn --host 0.0.0.0 --port 8000 studio.asgi:application"]
+CMD ["sh", "-c", "uvicorn --host 0.0.0.0 --port 8000 --lifespan off studio.asgi:application"]
