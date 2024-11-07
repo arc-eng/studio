@@ -210,7 +210,7 @@
             <div class="navbar-end">
                 {% block extra_navbar_right %}{% endblock %}
                 <div class="navbar-item">
-                    <a class="button is-page-loader is-shadowless" href="{% url 'repositories:repo_overview' %}">
+                    <a class="button is-page-loader is-shadowless {% if active_app == 'bookmarks' %}is-static{% endif %}" href="{% url 'repositories:repo_overview' %}">
                         <span class="icon"><i class="fas fa-bookmark"></i></span>
                     </a>
                 </div>

@@ -4,14 +4,14 @@
 {% endblock %}
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Select repositories to work with in Arcane Studio" %}
+    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Bookmarked Repositories" %}
 
     {%  if not bookmarked_repos|length %}
         <p class="is-size-5 has-text-weight-light mb-5">
-            Start by picking the repositories you want to work with.
+            Start by picking the Github repos you want to work with.
         </p>
         <p class="is-size-5 has-text-weight-light mb-5">
-            <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader">Let's go</a>
+            <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader is-shadowless">Let's go</a>
         </p>
     {% endif %}
 
@@ -21,10 +21,10 @@
             <tbody>
             {% for owner, bookmarks in bookmarked_repos.items %}
                 {% for bookmark in bookmarks %}
-                <tr>
+                <tr class="is-size-5">
 
                     <td class="is-narrow">
-                        <figure class="image is-24x24 mt-1 ml-1 has-circle">
+                        <figure class="image is-24x24 mt-1 has-circle">
                             <img
                                     src="{{ bookmark.img_url }}"
                                     class="is-rounded" />
@@ -56,7 +56,7 @@
                     </td>
                     <td class="is-flex">
                         <a class="button is-danger is-small is-ghost has-text-danger is-page-loader"
-                           href="{% url 'repositories:unbookmark_repo' org_name=owner repo_name=bookmark.repo_name %}">
+                           href="{% url 'repositories:unbookmark_repo' owner_name=owner repo_name=bookmark.repo_name %}">
                             <span class="icon"><i class="fas fa-trash"></i></span>
                         </a>
                     </td>
@@ -66,7 +66,7 @@
             </tbody>
         </table>
         {%  if bookmarked_repos|length %}
-        <a class="button is-rounded is-page-loader is-dark" href="{% url 'repositories:show_repo_picker' %}">
+        <a class="button is-page-loader is-link is-small" href="{% url 'repositories:show_repo_picker' %}">
             <span class="icon"><i class="fas fa-plus"></i></span>
             <span>Add Repository</span>
         </a>

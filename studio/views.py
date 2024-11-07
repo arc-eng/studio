@@ -50,7 +50,7 @@ def how_it_works(request):
 def studio_home(request, owner=None, repo=None):
     if request.user.is_authenticated:
         if not owner or owner == 'None':
-            first_bookmark = BookmarkedRepo.objects.first()
+            first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
             if first_bookmark:
                 owner = first_bookmark.owner
                 repo = first_bookmark.repo_name

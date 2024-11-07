@@ -17,6 +17,7 @@ from build.prompts import DISCOVER_BUILD_FILES, APPLY_RECOMMENDATION
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
+from studio.util import handle_engine_api_exception
 
 logger = logging.getLogger(__name__)
 
@@ -52,14 +53,16 @@ def home(request):
 @needs_api_key
 def build_overview(request, owner=None, repo=None, api_key=None):
     if not owner or owner == 'None':
-        first_bookmark = BookmarkedRepo.objects.first()
+        first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
         if first_bookmark:
             owner = first_bookmark.owner
             repo = first_bookmark.repo_name
             return redirect('build_overview', owner=owner, repo=repo)
         else:
             return redirect('repositories:repo_overview')
-    bookmark = BookmarkedRepo.objects.filter(owner=owner, repo_name=repo).first()
+    bookmark = BookmarkedRepo.objects.filter(user=request.user, owner=owner, repo_name=repo).first()
+    if not bookmark:
+        return render(request, "error.html", {"error": "Repository not found or unauthorized access"})
     task = None
     # Create a build system instance for the repo if not exists
     system:BuildSystem = BuildSystem.objects.filter(user=request.user, repo=bookmark).first()
@@ -143,14 +146,7 @@ def apply_recommendation(request, api_key):
         recommendation.task_id = task.id
         recommendation.save()
     except arcane.exceptions.ApiException as e:
-        logger.error(f"Failed to create task: {e}")
-        msg = str(e)
-        parsed_json = json.loads(e.body)
-        if parsed_json.get('details'):
-            msg = parsed_json.get('details')
-        return render(request, "error.html", {
-            "error": msg
-        })
+        return handle_engine_api_exception(request, e, repo.owner, repo.repo_name)
 
     return redirect(reverse('view_task', args=(repo.owner, repo.repo_name, task.id,)))
 

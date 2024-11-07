@@ -39,7 +39,6 @@ def render_paginated_repo_picker(request, repos, repo_count, search_query=None):
 
 
 @login_required
-# @cache_page(60 * 15, cache="special_cache")
 def show_repo_picker(request):
     g = Github(get_github_token(request), per_page=PAGE_SIZE)
     github_user = g.get_user()
@@ -65,19 +64,31 @@ def repo_overview(request):
 
 
 @login_required
-def bookmark_repo(request, org_name, repo_name):
+def bookmark_repo(request, owner_name, repo_name):
     BookmarkedRepo.objects.update_or_create(
-        owner=org_name,
-        repo_name=repo_name,
+        owner=request.POST.get('repo_owner'),
+        repo_name=request.POST.get('repo_name'),
         img_url=request.POST.get('img_url'),
         user=request.user)
     return redirect('repositories:repo_overview')
 
 
 @login_required
-def unbookmark_repo(request, org_name, repo_name):
-    BookmarkedRepo.objects.filter(owner=org_name, repo_name=repo_name, user=request.user).delete()
+def unbookmark_repo(request, owner_name, repo_name):
+    BookmarkedRepo.objects.filter(owner=owner_name, repo_name=repo_name, user=request.user).delete()
     return redirect('repositories:repo_overview')
+
+
+@login_required
+def install_repo(request, owner_name, repo_name):
+    try:
+        bookmark = BookmarkedRepo.objects.get(owner=owner_name, repo_name=repo_name, user=request.user)
+    except BookmarkedRepo.DoesNotExist:
+        return render(request, "error.html", {"error": "Repository not found"})
+    return render(request, "repositories/install_repo.html", {
+        "repo": bookmark,
+        "active_app": "bookmarks",
+    })
 
 
 def render_with_repositories(request, template_name, context, org=None, repo_name=None):
@@ -92,12 +103,12 @@ def render_with_repositories(request, template_name, context, org=None, repo_nam
         if repo.owner == org and repo.repo_name == repo_name:
             context['selected_repo'] = repo
 
-    if not org:
-        org = repos[0].owner
-    if not repo_name:
-        repo_name = repos[0].repo_name
-        context['selected_repo'] = repos[0]
-
+    if len(repos) > 0:
+        if not org:
+            org = repos[0].owner
+        if not repo_name:
+            repo_name = repos[0].repo_name
+            context['selected_repo'] = repos[0]
 
     context['bookmarked_repos'] = bookmarked_repos_by_owner
     context['repo_owner'] = org

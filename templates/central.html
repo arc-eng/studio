@@ -43,14 +43,14 @@
                                 <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
                                 <input type="hidden" name="repo_name" value="{{ repo_name }}">
                                 <input type="hidden" name="repo_id" value="{{ selected_repo.id }}">
-                                <button class="button is-link" type="submit" name="run-task-button" onclick="submitForm('{% url 'create_task' owner=repo_owner repo=repo_name  %}')">
+                                <button class="button is-link send-button" type="submit" name="run-task-button" onclick="submitForm('{% url 'create_task' owner=repo_owner repo=repo_name  %}')">
                                     <span class="icon"><i class="fa fa-play"></i></span>
                                     <span>Run a Task</span>
                                 </button>
                                 <span class="has-text-centered px-2 has-text-weight-light is-size-4">
                                     or
                                 </span>
-                                <button class="button is-link" type="submit" name="start-conversation-button" onclick="submitForm('{% url 'start_conversation'  %}')">
+                                <button class="button is-link send-button" type="submit" name="start-conversation-button" onclick="submitForm('{% url 'start_conversation'  %}')">
                                     <span class="icon"><i class="fa fa-comment"></i></span>
                                     <span>Start a Conversation</span>
                                 </button>
@@ -117,7 +117,9 @@
             // Make the input read-only to prevent further input but allow the form to submit it
             $('textarea[name="message"]').prop('readonly', true);
         });
-
+        $('.send-button').click(function() {
+            $(this).addClass('is-loading');
+        });
     </script>
 
 {% endblock %}
