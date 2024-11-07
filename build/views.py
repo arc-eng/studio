@@ -104,6 +104,7 @@ def build_overview(request, owner=None, repo=None, api_key=None):
                 system.error = f"Failed to parse task result: {str(e)}"
         elif task.status == "failed":
             system.error = task.result
+            system.last_update = timezone.now()
             system.save()
 
     return render_with_repositories(request, "build_home.html", {

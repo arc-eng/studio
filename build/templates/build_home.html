@@ -18,6 +18,13 @@
         <section class="section is-error content">
             <p>Failed to collect system information:</p>
             <p>{{ system.error }}</p>
+            <form method="post" action="{% url 'reset_build_system' %}">
+                {% csrf_token %}
+                <input type="hidden" name="system_id" value="{{ system.id }}">
+                <button type="submit" class="button is-large reset-button">
+                    Try Again
+                </button>
+            </form>
         </section>
     {% else %}
 
