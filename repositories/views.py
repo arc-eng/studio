@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
 from django.shortcuts import render, redirect
 from github import Github, UnknownObjectException
 
@@ -43,15 +42,8 @@ def show_repo_picker(request):
     g = Github(get_github_token(request), per_page=PAGE_SIZE)
     github_user = g.get_user()
 
-    # Find user repos in Django cache
-    repos = cache.get(f"{github_user.login}_repos")
-    repos_count = cache.get(f"{github_user.login}_repos_count")
-
-    if not repos:
-        repos = github_user.get_repos(sort='pushed', direction='desc')
-        repos_count = repos.totalCount
-        cache.set(f"{github_user.login}_repos", repos, 60 * 5)
-        cache.set(f"{github_user.login}_repos_count", repos_count, 60 * 5)
+    repos = github_user.get_repos(sort='pushed', direction='desc', type='owner')
+    repos_count = repos.totalCount
 
     return render_paginated_repo_picker(request, repos, repos_count)
 
@@ -120,6 +112,7 @@ def render_with_repositories(request, template_name, context, org=None, repo_nam
 def find_repositories(request):
     """Find Github repositories for the user."""
     g = Github(get_github_token(request), per_page=PAGE_SIZE)
+
     search_query = request.GET.get('query').replace(' ', '+').strip()
     if not search_query:
         return redirect('repositories:show_repo_picker')
