@@ -3,6 +3,7 @@ import logging
 from typing import List
 
 import arcane
+from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -70,9 +71,12 @@ def build_overview(request, owner=None, repo=None, api_key=None):
         system = BuildSystem.objects.create(user=request.user, repo=bookmark)
     if not system.task_id:
         # Run task to collect build system information
-        task = ArcaneEngine(api_key).create_task(f"{owner}/{repo}", DISCOVER_BUILD_FILES,
-                                                 output_format="json",
-                                                 output_structure=json.dumps(BuildSystemDescription.model_json_schema()))
+        try:
+            task = ArcaneEngine(api_key).create_task(f"{owner}/{repo}", DISCOVER_BUILD_FILES,
+                                                     output_format="json",
+                                                     output_structure=json.dumps(BuildSystemDescription.model_json_schema()))
+        except ApiException as e:
+            return handle_engine_api_exception(request, e, owner, repo)
         system.task_id = task.id
         system.save()
     elif not system.last_update:
