@@ -2,7 +2,6 @@ import logging
 
 from arcane import ApiException
 from arcane.engine import ArcaneEngine
-from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -30,7 +29,7 @@ def user_profile(request):
                 request.user.save()
         except ApiException as e:
             # Indicates the user hasn't used the engine yet
-            logger.error(f"Failed to create API key: {e}")
+            logger.info(f"User {request.user} has not used the engine yet")
             needs_engine_login = True
 
     return render(request, "user_profile.html", {

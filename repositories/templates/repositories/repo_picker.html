@@ -98,6 +98,10 @@
             </div>
 
             {% endif %}
+            <div class="panel-block">
+                <p class="is-size-7 has-text-grey">To see your private repositories,
+                    <a href="https://github.com/apps/arcane-engine/installations/new?next={{ request.scheme }}%3A//{{ request.get_host }}{{ studio_url|urlencode }}">granted permission</a> on Github</p>
+            </div>
 
             <div class="panel-block">
                 <a class="button is-dark is-outlined is-fullwidth" href="{% url 'repositories:repo_overview' %}">
