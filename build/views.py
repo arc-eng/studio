@@ -61,6 +61,8 @@ def build_overview(request, owner=None, repo=None, api_key=None):
         else:
             return redirect('repositories:repo_overview')
     bookmark = BookmarkedRepo.objects.filter(user=request.user, owner=owner, repo_name=repo).first()
+    if not bookmark:
+        return render(request, "error.html", {"error": "Repository not found or unauthorized access"})
     task = None
     # Create a build system instance for the repo if not exists
     system:BuildSystem = BuildSystem.objects.filter(user=request.user, repo=bookmark).first()
