@@ -6,13 +6,13 @@
 {% block repo_content %}
 
     {% if system.is_loading %}
-        <section class="section content">
-            <p class="title is-3">
-                <span class="icon has-text-info is-large"><i class="fa fa-rotate fa-spin"></i></span>
+        <div class=" content">
+            <p class="title is-5">
+                <span class="icon is-large"><i class="fa fa-rotate fa-spin"></i></span>
                 <span>Detecting build scripts and config files ...</span>
             </p>
             {% include 'task_live_updates.html' with task=task %}
-        </section>
+        </div>
 
     {% elif system.error %}
         <section class="section is-error content">

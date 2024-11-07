@@ -7,13 +7,13 @@
         <div class="content">
             <p class="title is-4">{{ user.username }}</p>
             <p class="subtitle is-6">{{ user.email }}</p>
-
         {% if needs_engine_login %}
             <p class="is-size-5">
             Looks like this is your first time using the <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine Platform</a>.
             </p>
             <p class="is-size-5">We need to connect your studio account to the central platform to enable the AI-driven tools.</p>
-            <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-page-loader">
+            {% url 'studio_home' as studio_url %}
+            <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.scheme }}%3A//{{ request.get_host }}{{ studio_url|urlencode }}" class="button is-medium is-page-loader">
                 <span>Connect</span>
                 <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
             </a>

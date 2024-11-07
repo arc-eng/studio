@@ -11,6 +11,7 @@ from chat.models import ChatConversation, ChatMessage
 from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
+from studio.util import handle_engine_api_exception
 
 
 def home(request):
@@ -42,7 +43,7 @@ def view_task(request, owner, repo, task_id, api_key):
 @needs_api_key
 def list_tasks(request, owner=None, repo=None, api_key=None):
     if not owner or owner == 'None':
-        first_bookmark = BookmarkedRepo.objects.first()
+        first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
         if first_bookmark:
             owner = first_bookmark.owner
             repo = first_bookmark.repo_name
@@ -69,12 +70,7 @@ def create_task(request, owner, repo, api_key):
             try:
                 task = ArcaneEngine(api_key).create_task(f"{owner}/{repo}", task_description)
             except ApiException as e:
-                msg = str(e)
-                if e.data and e.data.error:
-                    msg = e.data.error
-                return render(request, "error.html", {
-                    "error": f"Failed to create task: {msg}",
-                })
+                return handle_engine_api_exception(request, e, owner, repo)
             return redirect('view_task', owner=owner, repo=repo, task_id=task.id)
 
 

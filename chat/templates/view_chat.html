@@ -169,8 +169,9 @@
                 $('#in-progress-message').html(`<span>${htmlMessage}<span>`);
             }
 
-            if (msgType === "title_update" && $('#chat-title').innerText==="New Chat") {
+            if (msgType === "title_update") {
                 $('#chat-title').html(data['data']);
+                $('#task-title').html(data['data']);
             }
         };
 

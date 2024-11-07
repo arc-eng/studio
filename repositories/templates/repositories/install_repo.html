@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="hero is-medium">
+        <div class="hero-body">
+            <p class="title">Permission Required</p>
+            <p class="subtitle">The engine needs permission to access <code>{{ repo.owner }} / {{ repo.repo_name }}</code></p>
+            <p>
+                In order to create tasks, the Arcane Engine needs permission to access your code, issues, pull requests, and other data in this repository.
+            </p>
+            <p class="mt-5">
+                {% url 'studio_home_repo' owner=repo.owner repo=repo.repo_name as studio_url %}
+                <a href="https://github.com/apps/arcane-engine/installations/new?next={{ request.scheme }}%3A//{{ request.get_host }}{{ studio_url|urlencode }}" class="button is-shadowless">Grant Permission</a>
+            </p>
+        </div>
+    </section>
+
+
+{% endblock %}

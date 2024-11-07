@@ -41,22 +41,6 @@ def home(request):
     return redirect("view_pull_request_default", owner=None, repo=None)
 
 
-def get_github_repo(github_token, owner, repo):
-    """Retrieve the GitHub repository object."""
-    try:
-        g = Github(github_token)
-        return g.get_repo(f"{owner}/{repo}"), None
-    except GithubException as e:
-        if e.status == 401:
-            return None, "Unauthorized access."
-        return None, str(e)
-
-
-def get_pull_requests(github_repo):
-    """Fetch open pull requests for the specified repository."""
-    return github_repo.get_pulls(state='open')
-
-
 def get_selected_pull_request(prs, pr_number):
     """Determine the selected pull request based on the provided PR number."""
     selected_pr = prs[0] if prs.totalCount > 0 else None
@@ -133,7 +117,7 @@ def get_review_task(owner, repo, user, pr_number, api_key, selected_pr):
 def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="describe", api_key=None):
     """Main function to view a pull request, orchestrating helper functions."""
     if not owner or owner == 'None':
-        first_bookmark = BookmarkedRepo.objects.first()
+        first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
         if first_bookmark:
             owner = first_bookmark.owner
             repo = first_bookmark.repo_name
@@ -141,10 +125,19 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         else:
             return redirect('repositories:repo_overview')
     github_token = get_github_token(request)
-    github_repo, error = get_github_repo(github_token, owner, repo)
-    if error:
-        return render(request, "error.html", {"error": error})
-    prs = get_pull_requests(github_repo)
+
+    try:
+        g = Github(github_token)
+        github_repo = g.get_repo(f"{owner}/{repo}")
+        prs = github_repo.get_pulls(state='open')
+    except GithubException as e:
+        if e.status == 401:
+            return redirect(reverse('user_logout'))
+        else:
+            return render(request, "error.html", {
+                "error": str(e),
+            })
+
     if prs.totalCount == 0:
         return render_with_repositories(request, "view_pull_request.html", {
             "prs": None,

@@ -36,7 +36,7 @@
             </a>
         </div>
         <div class="column is-flex  is-align-items-center">
-            <h4 class="title is-4">{{ task.title }}</h4>
+            <h4 class="title is-4" id="task-title">{% if task.title == "A title" %}Running task ...{% else %}{{ task.title }}{% endif %}</h4>
         </div>
         <div class="column is-narrow">
             <div class="buttons">
@@ -78,8 +78,8 @@
 
 
         {%  if task.status == "completed" %}
-        <div class="columns p-0">
-            <div class="column is-1 content has-text-centered is-size-4 p-0 m-0">
+        <div class="columns">
+            <div class="column is-1 content is-size-4 ">
                 <span class="icon is-large"><i class="fas fa-check-circle"></i></span>
             </div>
             <div class="column is-11 is-size-6">

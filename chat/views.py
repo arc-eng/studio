@@ -5,10 +5,12 @@ from arcane import ApiException
 from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from chat.models import ChatConversation, ChatMessage
 from repositories.models import BookmarkedRepo
 from studio.decorators import needs_api_key
+from studio.util import handle_engine_api_exception
 
 logger = logging.getLogger(__name__)
 
@@ -69,14 +71,12 @@ def start_conversation(request, api_key):
         if not message:
             raise ValueError("Message is required.")
         else:
+            repo = BookmarkedRepo.objects.get(pk=repo_id)
             try:
-                repo = BookmarkedRepo.objects.get(pk=repo_id)
                 logger.info(f"Creating chat for user {request.user.username} in repo {repo.full_name}")
                 new_task = ArcaneEngine(api_key).create_task(repo.full_name, message)
             except ApiException as e:
-                return render(request, "error.html", {
-                    "error": str(e) if not e.data else e.data.error,
-                })
+                return handle_engine_api_exception(request, e, repo.owner, repo.repo_name)
             chat = ChatConversation.objects.create(user=request.user,
                                                    repo=repo)
 
