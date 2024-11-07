@@ -2,33 +2,52 @@
 
 {% block content %}
 
-    <div class="has-background-white-bis tiny-rounded p-4">
-        <a href="{% url 'user_logout' %}" class="button is-small is-pulled-right">Logout</a>
+    <section class="section">
+
         <div class="content">
-            <p class="title is-4">{{ user.username }}</p>
-            <p class="subtitle is-6">{{ user.email }}</p>
+
         {% if needs_engine_login %}
-            <p class="is-size-5">
-            Looks like this is your first time using the <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine Platform</a>.
+            <p class="title is-size-3">
+                Welcome to Arcane Studio!
             </p>
-            <p class="is-size-5">We need to connect your studio account to the central platform to enable the AI-driven tools.</p>
+            <p>
+                This application is built on top of the <a href="https://arcane.engineer/engine" target="_blank">Arcane Engine Platform</a>,
+            which makes it easy for developers to build tools using natural language instructions.
+            Before you can start using this and other platform applications, you need to connect your GitHub account to the Arcane Engine. This will also enable you to:
+            </p>
+            <ul>
+                <li>Monitor your tasks and credit usage in the <a href="https://arcane.engineer/dashboard/tasks/" target="_blank">dashboard</a> </li>
+                <li>Use the <a href="https://arcane.engineer/cli" target="_blank">Arcane CLI</a> to automate tasks from your terminal </li>
+                <li>Write your own tools using the <a href="https://arcane.engineer/development-kit/" target="_blank">SDK</a> and <a href="https://arcane.engineer/api/swagger-ui/" target="_blank">API</a> </li>
+            </ul>
             {% url 'studio_home' as studio_url %}
             <a href="https://arcane.engineer/accounts/github/login/?process=login&next={{ request.scheme }}%3A//{{ request.get_host }}{{ studio_url|urlencode }}" class="button is-medium is-page-loader">
-                <span>Connect</span>
+                <span>Connect to the Engine</span>
                 <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
             </a>
         {% else %}
+            <p class="title is-4"><span class="icon"><i class="fas fa-user"></i></span> {{ user.username }}</p>
+            <p class="subtitle is-6">{{ user.email }}</p>
+            <p class="py-5">
+            <span class="icon has-text-success"><i class="fas fa-check-circle"></i></span> Your account is connected to the Arcane Engine
+            </p>
             <form method="post" action="{% url 'delete_user_data' %}">
                 {% csrf_token %}
-                <button class="button is-danger is-outlined" type="submit" id="delete-button">
+                <a href="{% url 'user_logout' %}" class="button is-shadowless">Logout</a>
+                <a href="https://arcane.engineer/dashboard/tasks/" class="button is-shadowless" target="_blank">
+                    <span class="icon is-large"><i class="fas fa-gears"></i></span>
+                    
+                    <span>Open Dashboard</span></a>
+                <button class="button is-danger is-shadowless" type="submit" id="delete-button">
                     <span class="icon is-large"><i class="fas fa-trash"></i></span>
                     <span>Delete all my data</span>
                 </button>
+
             </form>
         {% endif %}
         </div>
 
-    </div>
+    </section>
     <script>
         $(document).ready(function() {
             $('#delete-button').click(function() {
