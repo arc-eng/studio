@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "studio"
-version = "0.8.19"
+version = "0.8.20"
 description = "Flagship application to showcase the Arcane Engineer platform"
 authors = ["Marco lamina <marco@arcane.engineer>"]
 license = "MIT"
