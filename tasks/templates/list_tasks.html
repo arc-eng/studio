@@ -71,11 +71,11 @@
                 <tr>
                     <td class=" is-narrow">
                         {% if task.status == 'completed' %}
-                            <span class="icon has-text-success"><i class="fa fa-square-check"></i></span>
+                            <span class="icon has-text-success is-small"><i class="fa fa-square-check"></i></span>
                         {% elif task.status == 'failed' %}
-                            <span class="icon has-text-danger"><i class="fa fa-triangle-exclamation"></i></span>
+                            <span class="icon has-text-danger is-small"><i class="fa fa-triangle-exclamation"></i></span>
                         {% elif task.status == 'scheduled' or task.status == "running" %}
-                            <span class="icon has-text-info"><i class="fa fa-rotate fa-spin"></i></span>
+                            <span class="icon has-text-info is-small"><i class="fa fa-rotate fa-spin"></i></span>
                         {% endif %}
 
                     </td>
@@ -87,7 +87,7 @@
                     </td>
                     <td class="is-narrow">
                         {% if task.pr_number %}
-                            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank" class="button is-small">
+                            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank">
                                 <span class="icon is-small"><i class="fab fa-github"></i></span> <span>#{{ task.pr_number }}</span>
                             </a>
 

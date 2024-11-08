@@ -161,7 +161,7 @@
             {% else %}
                 <a class="navbar-item" href="{% url 'studio_home' %}">
             {% endif %}
-            <span class="button is-page-loader is-outlined is-dark {% if active_app == 'home' %}is-static{% endif %}">
+            <span class="button is-page-loader is-shadowless {% if active_app == 'home' %}is-dark{% endif %}">
                 <span class="icon"><i class="fas fa-home"></i></span>
             </span>
             </a>
@@ -178,28 +178,28 @@
             <!-- Navbar items -->
             <div class="navbar-start">
                 <a class="navbar-item" href="{% url 'chat_home' %}">
-                <span class="button is-page-loader is-outlined is-dark {% if active_app == 'chat' %}is-static{% endif %}">
+                <span class="button is-page-loader is-shadowless {% if active_app == 'chat' %}is-dark{% endif %}">
                     <span class="icon"><i class="fas fa-comment"></i></span>
                     <span>Chat</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'tasks_home' %}">
-                <span class="button is-page-loader is-outlined is-dark {% if active_app == 'tasks' %}is-static{% endif %}">
+                <span class="button is-page-loader is-shadowless {% if active_app == 'tasks' %}is-dark{% endif %}">
                     <span class="icon"><i class="fas fa-gears"></i></span>
                     <span>Tasks</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'pr_manager_home' %}">
-                <span class="button is-page-loader is-outlined is-dark {% if active_app == 'pull-request-manager' %}is-static{% endif %}">
+                <span class="button is-page-loader is-shadowless {% if active_app == 'pull-request-manager' %}is-dark{% endif %}">
                     <span class="icon"><i class="fas fa-code-branch"></i></span>
                     <span>Pull Requests</span>
                 </span>
                 </a>
 
                 <a class="navbar-item" href="{% url 'build_home' %}">
-                <span class="button is-page-loader is-outlined is-dark {% if active_app == 'build' %}is-static{% endif %}">
+                <span class="button is-page-loader is-shadowless {% if active_app == 'build' %}is-dark{% endif %}">
                     <span class="icon"><i class="fas fa-hammer"></i></span>
                     <span>Build</span>
                 </span>
@@ -210,7 +210,7 @@
             <div class="navbar-end">
                 {% block extra_navbar_right %}{% endblock %}
                 <div class="navbar-item">
-                    <a class="button is-page-loader is-shadowless {% if active_app == 'bookmarks' %}is-static{% endif %}" href="{% url 'repositories:repo_overview' %}">
+                    <a class="button is-page-loader is-shadowless {% if active_app == 'bookmarks' %}is-dark{% endif %}" href="{% url 'repositories:repo_overview' %}">
                         <span class="icon"><i class="fas fa-bookmark"></i></span>
                     </a>
                 </div>
@@ -227,7 +227,7 @@
                             </figure>
                         </a>
                     {% else %}
-                        <a class="button is-dark is-rounded is-outlined" href="{% url 'github_login' %}?next={% url 'studio_home' %}">
+                        <a class="button is-rounded is-shadowless" href="{% url 'github_login' %}?next={% url 'studio_home' %}">
                             <span class="icon"><i class="fab fa-github"></i></span>
                             <span>Login</span>
                         </a>

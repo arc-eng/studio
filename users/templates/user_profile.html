@@ -33,15 +33,21 @@
             </p>
             <form method="post" action="{% url 'delete_user_data' %}">
                 {% csrf_token %}
-                <a href="{% url 'user_logout' %}" class="button is-shadowless">Logout</a>
-                <a href="https://arcane.engineer/dashboard/tasks/" class="button is-shadowless" target="_blank">
-                    <span class="icon is-large"><i class="fas fa-gears"></i></span>
-                    
-                    <span>Open Dashboard</span></a>
-                <button class="button is-danger is-shadowless" type="submit" id="delete-button">
-                    <span class="icon is-large"><i class="fas fa-trash"></i></span>
-                    <span>Delete all my data</span>
-                </button>
+                <div class="buttons">
+                    <a href="{% url 'user_logout' %}" class="button is-shadowless">
+                        <span class="icon is-large"><i class="fas fa-sign-out-alt"></i></span>
+                        <span>Logout</span>
+                    </a>
+                    <a href="https://arcane.engineer/dashboard/tasks/" class="button is-shadowless" target="_blank">
+                        <span class="icon is-large"><i class="fas fa-gears"></i></span>
+
+                        <span>Open Dashboard</span></a>
+                    <button class="button is-danger is-shadowless" type="submit" id="delete-button">
+                        <span class="icon is-large"><i class="fas fa-trash"></i></span>
+                        <span>Delete all my data</span>
+                    </button>
+                </div>
+
 
             </form>
         {% endif %}
