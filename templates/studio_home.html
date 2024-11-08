@@ -80,7 +80,7 @@
                     <span>Arcane Studio</span>
                 </h1>
                 <h2 class="subtitle is-3">
-                    Smart dev tools to streamline your daily work
+                    Intelligent tools to accelerate your Github workflows
                 </h2>
             </div>
         </div>
@@ -98,22 +98,20 @@
         </div>
         <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
             <div class=" content pl-5">
-                <p class="title is-2">Tools for every day</p>
-                <p class="subtitle is-4">Seamlessly integrated and customizable</p>
+                <p class="title is-2">Simple, fast and intuitive</p>
+                <p class="subtitle is-4">Say goodbye to juggling multiple tools and browser tabs</p>
                 <p class="is-size-5">
-                    Arcane Studio is a collection of web-based tools designed to streamline your
-                    daily work.
+                    Arcane Studio is a collection of tools that streamline and accelerate the most common workflows
+                    in software development with intuitive, prompt-based interfaces and intelligent automation.
                 </p>
-                <p class="is-size-5">
-                    Powered by the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>,
-                    the studio uses generative AI to interact with your Github repositories and other data sources
-                    like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
-
-                </p>
-                <a href="{% url 'how_it_works' %}" class="button is-rounded is-large has-text-info-25 is-shadowless">
-                    <span>See how it works</span>
-                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-                </a>
+                <div class="buttons">
+                    <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-large is-link">
+                        <span>Start for free</span>
+                    </a>
+                    <a href="{% url 'how_it_works' %}" class="button is-large is-ghost">
+                        <span>Learn more</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

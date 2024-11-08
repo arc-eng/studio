@@ -42,7 +42,7 @@
                     </li>
                 </ul>
                 </p>
-                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25 is-shadowless is-large">
+                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
                     <span>Login and manage your PRs</span>
                     <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
                 </a>

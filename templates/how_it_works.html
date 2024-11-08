@@ -34,9 +34,8 @@
 
                     </p>
                     <p class="has-text-centered">
-                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-medium is-rounded has-text-info-25 is-shadowless is-large">
-                            <span>Login to get started</span>
-                            <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-link is-large is-fullwidth">
+                            <span>Start with 500 free credits</span>
                         </a>
                     </p>
                 </div>
@@ -56,7 +55,7 @@
                                         <span>{{ tool.name }}</span>
                                     </a>
                                 </td>
-                                <td class="has-text-weight-light is-size-5" style="border:none">
+                                <td class="is-size-5" style="border:none">
                                     {{ tool.description}}
                                 </td>
                             </tr>
@@ -64,7 +63,7 @@
                         <tr style="border:none">
                             <td></td>
                             <td class="has-text-centered">
-                                <a href="{% url 'contribute' %}" class="button is-dark">
+                                <a href="{% url 'contribute' %}" class="button is-shadowless">
                                     <span>Learn how to build your own tools</span>
                                 </a>
                             </td>
