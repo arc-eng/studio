@@ -131,7 +131,7 @@
         }
 
         .has-round-corners {
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         {% block css %}
@@ -154,7 +154,7 @@
 <div class="page-container container is-fullwidth">
 
     {% block navbar %}
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar my-3" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             {% if repo_name %}
             <a class="navbar-item" href="{% url 'studio_home_repo' owner=repo_owner repo=repo_name %}">
@@ -240,7 +240,7 @@
     {% endblock %}
 
 
-    <div class="content-wrap container pt-5">
+    <div class="content-wrap container">
         {% block content %}{% endblock %}
     </div>
     <hr/>
