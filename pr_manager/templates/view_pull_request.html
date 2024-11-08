@@ -42,7 +42,7 @@
     <div class="columns mt-3">
         <div class="column is-5">
 
-            <div class="select is-fullwidth is-link mb-3">
+            <div class="select is-fullwidth is-link mb-1">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
                         <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
@@ -50,7 +50,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="tabs is-toggle is-fullwidth is-small">
+            <div class="tabs is-fullwidth mb-0 mx-3">
                 <ul>
                     <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
