@@ -29,7 +29,7 @@
                     prompts:
                 </p>
                 <div class="control has-icons-left">
-                    <div class="select is-fullwidth is-info">
+                    <div class="select is-fullwidth is-link is-medium">
                         <select id="task-prompts">
                             <option value="">Select an example prompt</option>
                             <option value="Find the CI/CD pipeline definition, read it and suggest improvements">Suggest improvements to CI/CD pipeline</option>
@@ -46,10 +46,10 @@
                   </span>
                 </div>
                 <div class="mb-3">
-                    <textarea class="textarea is-info mt-3" name="task_description" placeholder="Describe work to be done and provide relevant details / context"></textarea>
+                    <textarea class="textarea is-medium is-link mt-3" name="task_description" placeholder="Describe work to be done and provide relevant details / context"></textarea>
                 </div>
                 <p>
-                    <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-medium is-rounded has-text-info-25">
+                    <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
                         <span>Login and run a task</span>
                         <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
                     </a>
