@@ -12,7 +12,7 @@
                 Build
             </h1>
             <h2 class="subtitle is-3">
-                Manage build scripts and config files with ease
+                Maintenance for your build system
             </h2>
         </div>
     </div>
@@ -24,29 +24,28 @@
                 <p class="title is-2">One-Click Optimizations</p>
                 <p class="subtitle is-4">for scripts, config files & more</p>
                 <p>
-                    Maintaining build scripts and configuration files can be a pain. Use the Build tool to manage your
-                    build scripts and configuration files with ease:
+                    Keeping build scripts and configuration files clean and tidy can be a pain. Use the Build tool to
+                    keep an organized and well-maintained build system!
                 </p>
                 <p>
-                <ul>
-                    <li>
-                        <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
-                        <strong>File Discovery</strong> - The tool will automatically discover build scripts and configuration files in your repository
-                    </li>
-                    <li>
-                        <span class="icon"><i class="fas fa-check"></i></span>
-                        <strong>Recommendations</strong> - For each detected file, the tool will recommend optimizations and best practices
-                    </li>
-                    <li>
-                        <span class="icon"><i class="fas fa-bolt"></i></span>
-                        <strong>One-Click Actions</strong> - Automatically apply recommended optimizations with a single click
-                    </li>
-                </ul>
+                    <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
+                        <span>Login and start optimizing</span>
+                        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                    </a>
                 </p>
-                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
-                    <span>Login and start optimizing</span>
-                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-                </a>
+                <p>
+                    <span class="icon"><i class="fas fa-magnifying-glass"></i></span>
+                    <strong>File Discovery</strong> - The tool will automatically discover build scripts and configuration files in your repository
+                </p>
+                <p>
+                    <span class="icon"><i class="fas fa-check"></i></span>
+                    <strong>Recommendations</strong> - For each detected file, the tool will recommend optimizations and best practices
+                </p>
+                <p>
+                    <span class="icon"><i class="fas fa-bolt"></i></span>
+                    <strong>One-Click Actions</strong> - Automatically apply recommended optimizations with a single click
+                </p>
+
             </div>
         </div>
         <div class="column is-7-desktop is-6-tablet">

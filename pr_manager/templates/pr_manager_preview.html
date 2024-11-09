@@ -29,23 +29,19 @@
                     When you finished your review, generate a beautiful PR description in seconds.
                 </p>
                 <p>
-                    Here are some real-life examples from the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>:
-                <ul>
-                    <li>
-                        <a href="https://github.com/arc-eng/studio/pull/12" target="_blank">💬 Implement chat application</a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/arc-eng/studio/pull/9" target="_blank">🔒 Implement login via allauth</a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/arc-eng/studio/pull/10" target="_blank">🚀 Add Helm Chart for Deployment</a>
-                    </li>
-                </ul>
+                    <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
+                        <span>Login and manage your PRs</span>
+                        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+                    </a>
                 </p>
-                <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
-                    <span>Login and manage your PRs</span>
-                    <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
-                </a>
+                <p>
+                    We at Arcane Engineering use PR manager to generate descriptions for the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>. See for yourself:
+                    <a href="https://github.com/arc-eng/studio/pull/50" target="_blank" class="button is-fullwidth mt-5 is-small is-shadowless is-rounded">🔧 Update and Enhance Repository Management and UI</a>
+                    <a href="https://github.com/arc-eng/studio/pull/46" target="_blank" class="button is-fullwidth my-1 is-small is-shadowless is-rounded">🔧 Revamp UI Elements for Enhanced Usability</a>
+                    <a href="https://github.com/arc-eng/studio/pull/38" target="_blank" class="button is-fullwidth mb-5 is-small is-shadowless is-rounded">🔍 Refactor view_pull_request Function with Enhanced Documentation</a>
+
+                </p>
+
             </div>
         </div>
         <div class="column is-7-desktop is-6-tablet">
