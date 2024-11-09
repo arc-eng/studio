@@ -26,22 +26,22 @@ def how_it_works(request):
     tools = [{
         'name': 'Chat',
         'icon': 'fa-comment',
-        'description': 'Imagine ChatGPT, but with access your code, wikis and other sources.',
+        'description': 'Analyze issues, workshop ideas, generate content',
         'link': reverse('chat_home')
     }, {
         'name': 'Tasks',
         'icon': 'fa-gears has-text-info-35',
-        'description': 'A quick and easy way to hand off work to the engine.',
+        'description': 'A quick and easy way to hand off work to the engine',
         'link': reverse('tasks_home')
     }, {
-        'name': 'Pull Requests',
+        'name': 'PRs',
         'icon': 'fa-code-branch has-text-success-35',
-        'description': 'Supports you in managing pull requests and code reviews.',
+        'description': 'Supports you in managing pull requests and code reviews',
         'link': reverse('pr_manager_home')
     }, {
         'name': 'Build',
         'icon': 'fa-hammer has-text-danger-35',
-        'description': 'One-click optimizations for build scripts and config files.',
+        'description': 'One-click optimizations for build scripts and config files',
         'link': reverse('build_home')
     }]
     return render(request, "how_it_works.html", {'tools': tools})

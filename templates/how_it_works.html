@@ -8,7 +8,7 @@
             <div class="container">
                 <h1 class="title is-1 is-2-mobile">
                     <span>
-                        Your new favorite <span class="has-text-primary-25"><span class="icon is-large"><i class="fas fa-toolbox"></i></span> tool belt</span>
+                        Your new favorite <span class=""><span class="icon is-large"><i class="fas fa-toolbox"></i></span> tool belt</span>
                     </span>
                 </h1>
                 <h2 class="subtitle is-3 is-4-mobile">
@@ -27,17 +27,18 @@
                         At the top of the page you'll find a list of tools, each with a different user experience. Choose the tool that best fits your needs and click on it to get started.
 
                     </p>
+                    <p class="has-text-centered">
+                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-link is-large is-fullwidth">
+                            <span>Start with 500 free credits</span>
+                        </a>
+                    </p>
 
                     <p class="is-size-5">
                         Built using the <a href="https://arcane.engineer/engine/">Arcane Engine Platform</a>, our tools use generative AI to understand
                         natural language prompts. Given a prompt, the engine will use its <a href="https://docs.arcane.engineer/capabilities.html" target="_blank">capabilities</a> to interact with your Github repositories and other data sources like issues, pull requests, wikis and <a href="https://docs.arcane.engineer/integrations.html" target="_blank">more</a>.
 
                     </p>
-                    <p class="has-text-centered">
-                        <a href="{% url 'github_login' %}?next={% url 'repositories:repo_overview' %}" class="button is-link is-large is-fullwidth">
-                            <span>Start with 500 free credits</span>
-                        </a>
-                    </p>
+
                 </div>
             </div>
             <div class="column is-7-desktop is-6-tablet">
@@ -55,17 +56,22 @@
                                         <span>{{ tool.name }}</span>
                                     </a>
                                 </td>
-                                <td class="is-size-5" style="border:none">
+                                <td class="is-size-5  is-vcentered" style="border:none">
                                     {{ tool.description}}
                                 </td>
                             </tr>
                         {% endfor %}
                         <tr style="border:none">
-                            <td></td>
-                            <td class="has-text-centered">
-                                <a href="{% url 'contribute' %}" class="button is-shadowless">
-                                    <span>Learn how to build your own tools</span>
+                            <td class="is-narrow" style="border:none">
+                                <a href="{% url 'contribute' %}" class="button is-medium is-fullwidth is-shadowless">
+                                        <span class="icon">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                    <span>Custom</span>
                                 </a>
+                            </td>
+                            <td class="is-size-5  is-vcentered" style="border:none">
+                                Build your own tool using the Arcane Engine <a href="https://arcane.engineer/api/swagger-ui/">API</a> and <a href="https://arcane.engineer/development-kit/">SDK</a>
                             </td>
 
                         </tr>
