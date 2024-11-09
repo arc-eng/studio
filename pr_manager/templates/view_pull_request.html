@@ -30,7 +30,7 @@
 
 {% block repo_content %}
 
-    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions & reviews" classes="p-0"%}
+{#    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions & reviews" classes="p-0"%}#}
 
 
     {% if not prs %}
@@ -39,18 +39,9 @@
         </p>
     {% else %}
     
-    <div class="columns mt-3">
+    <div class="columns">
         <div class="column is-5">
-
-            <div class="select is-fullwidth is-link mb-1">
-                <select name="pr_number" id="pr-select">
-                    {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="tabs is-fullwidth mb-0 mx-3">
+            <div class="tabs is-fullwidth">
                 <ul>
                     <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
@@ -72,6 +63,15 @@
                     </li>
                 </ul>
             </div>
+            <div class="select is-fullwidth">
+                <select name="pr_number" id="pr-select">
+                    {% for pr in prs %}
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
 
 
             <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
