@@ -100,7 +100,7 @@
             {% endif %}
             <div class="panel-block">
                 <p class="is-size-7 has-text-grey">To see your private repositories,
-                    <a href="https://github.com/apps/arcane-engine/installations/new?next={{ request.scheme }}%3A//{{ request.get_host }}{{ studio_url|urlencode }}">grant permission</a> on Github</p>
+                    <a href="https://github.com/apps/arcane-engine/installations/new?redirect_uri={{ request.build_absolute_uri|urlencode }}">grant permission</a> on Github</p>
             </div>
 
             <div class="panel-block">
