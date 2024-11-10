@@ -4,73 +4,119 @@
 {% endblock %}
 
 {% block repo_content %}
-    {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Bookmarked Repositories" %}
+
 
     {%  if not bookmarked_repos|length %}
-        <p class="is-size-5 has-text-weight-light mb-5">
-            Start by picking the Github repos you want to work with.
-        </p>
-        <p class="is-size-5 has-text-weight-light mb-5">
-            <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader is-shadowless">Let's go</a>
-        </p>
-    {% endif %}
+        <section class="section">
+        {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="<span class='icon has-text-success'><i class='fas fa-check-circle'></i></span> Success" %}
 
+        <div class="content">
+            <p class="is-size-5 mb-5">
 
-    <div class="table-container">
-        <table class="table  ">
-            <tbody>
-            {% for owner, bookmarks in bookmarked_repos.items %}
-                {% for bookmark in bookmarks %}
-                <tr class="is-size-5">
+                <span>Your Github account has been successfully linked to the Arcane Engine.</span>
+            </p>
+            <p class="is-size-5 mb-5">
+                {% url 'repositories:repo_overview' as bookmarks_url %}
+                Next, pick the repositories you'd like to work with. Make sure that you've
+                <a href="https://github.com/apps/arcane-engine/installations/new?redirect_uri={{ request.scheme }}%3A//{{ request.get_host }}{{ bookmarks_url|urlencode }}">granted permission</a> on Github
+                for the engine to access your code, issues and pull requests.
+            </p>
+            </p>
+            <p class="is-size-5 has-text-weight-light mb-5">
+                <a href="{% url 'repositories:show_repo_picker' %}" class="button is-medium is-page-loader is-shadowless">Select Repositories</a>
+            </p>
+        </div>
+        </section>
+    {% else %}
+        {%  if total_repo_count == 1 %}
+            <section class="section">
+                <p class="is-size-5">
+                    <span class="icon has-text-success"><i class="fas fa-check"></i></span>
+                    <span>Setup Complete! What would you like to do first?</span>
+                </p>
+                <div class="buttons my-5">
+                    <a class="button is-page-loader is-shadowless is-link" href="{% url 'repositories:show_repo_picker' %}">
+                        <span class="icon"><i class="fas fa-plus"></i></span>
+                        <span>Add another repository</span>
+                    </a>
+                    <a class="button is-page-loader is-shadowless" href="{% url 'pr_manager_home' %}">
+                        <span class="icon"><i class="fas fa-code-branch"></i></span>
+                        <span>Work on a pull request</span>
+                    </a>
+                    <a class="button is-page-loader is-shadowless" href="{% url 'chat_home' %}">
+                        <span class="icon"><i class="fas fa-comments"></i></span>
+                        <span>Start a chat</span>
+                    </a>
+                    <a class="button is-page-loader is-shadowless" href="{% url 'tasks_home' %}">
+                        <span class="icon"><i class="fas fa-play"></i></span>
+                        <span>Run a task</span>
+                    </a>
+                </div>
 
-                    <td class="is-narrow">
-                        <figure class="image is-24x24 mt-1 has-circle">
-                            <img
-                                    src="{{ bookmark.img_url }}"
-                                    class="is-rounded" />
-                        </figure>
-                    </td>
-                    <td class="is-narrow">
-                        {{ bookmark.owner }} / {{ bookmark.repo_name }}
-                    </td>
-                    <td class="is-narrow">
-                        <a href="{% url 'start_conversation' %}" class="button is-small is-page-loader is-ghost">
-                            <span class="icon"><i class="fas fa-comment"></i></span>
-                        </a>
-                        <a href="{% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
-                            <span class="icon"><i class="fas fa-gears"></i></span>
-                        </a>
-                        <a href="{% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
-                            <span class="icon"><i class="fas fa-code-branch"></i></span>
-                        </a>
-                        <a href="{% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
-                            <span class="icon"><i class="fas fa-hammer"></i></span>
-                        </a>
-                    </td>
-                    <td class="is-narrow">
-                        <a href="https://github.com/{{ bookmark.full_name }}"
-                           class="button is-small is-page-loader is-ghost"
-                           target="_blank">
-                            <span class="icon"><i class="fas fa-arrow-up-right-from-square"></i></span>
-                        </a>
-                    </td>
-                    <td class="is-flex">
-                        <a class="button is-danger is-small is-ghost has-text-danger is-page-loader"
-                           href="{% url 'repositories:unbookmark_repo' owner_name=owner repo_name=bookmark.repo_name %}">
-                            <span class="icon"><i class="fas fa-trash"></i></span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            {% endfor %}
-            </tbody>
-        </table>
-        {%  if bookmarked_repos|length %}
-        <a class="button is-page-loader is-link is-small" href="{% url 'repositories:show_repo_picker' %}">
-            <span class="icon"><i class="fas fa-plus"></i></span>
-            <span>Add Repository</span>
-        </a>
+            </section>
+
+        {% else %}
+            {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Bookmarked Repositories" %}
+            <div class="table-container">
+                <table class="table ">
+                    <tbody>
+                    {% for owner, bookmarks in bookmarked_repos.items %}
+                        {% for bookmark in bookmarks %}
+                            <tr class="is-size-5">
+
+                                <td class="is-narrow">
+                                    <figure class="image is-24x24 mt-1 has-circle">
+                                        <img
+                                                src="{{ bookmark.img_url }}"
+                                                class="is-rounded" />
+                                    </figure>
+                                </td>
+                                <td class="is-narrow">
+                                    {{ bookmark.owner }} / {{ bookmark.repo_name }}
+                                </td>
+                                <td class="is-narrow">
+                                    <a href="{% url 'start_conversation' %}" class="button is-small is-page-loader is-ghost">
+                                        <span class="icon"><i class="fas fa-comment"></i></span>
+                                    </a>
+                                    <a href="{% url 'list_tasks' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
+                                        <span class="icon"><i class="fas fa-gears"></i></span>
+                                    </a>
+                                    <a href="{% url 'view_pull_request_default' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
+                                        <span class="icon"><i class="fas fa-code-branch"></i></span>
+                                    </a>
+                                    <a href="{% url 'build_overview' owner=bookmark.owner repo=bookmark.repo_name %}" class="button is-small is-page-loader is-ghost">
+                                        <span class="icon"><i class="fas fa-hammer"></i></span>
+                                    </a>
+                                </td>
+                                <td class="is-narrow">
+                                    <a href="https://github.com/{{ bookmark.full_name }}"
+                                       class="button is-small is-page-loader is-ghost"
+                                       target="_blank">
+                                        <span class="icon"><i class="fas fa-arrow-up-right-from-square"></i></span>
+                                    </a>
+                                </td>
+                                <td class="is-flex">
+                                    <a class="button is-danger is-small is-ghost has-text-danger is-page-loader"
+                                       href="{% url 'repositories:unbookmark_repo' owner_name=owner repo_name=bookmark.repo_name %}">
+                                        <span class="icon"><i class="fas fa-trash"></i></span>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                <a class="button is-page-loader is-link is-small" href="{% url 'repositories:show_repo_picker' %}">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>Add Repository</span>
+                </a>
+            </p>
         {% endif %}
-    </div>
+
+
+
+    {% endif %}
 
 {% endblock %}

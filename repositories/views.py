@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from github import Github, UnknownObjectException
 
+from studio.decorators import needs_api_key
 from studio.github import get_github_token
 from .models import BookmarkedRepo
 
@@ -49,7 +50,8 @@ def show_repo_picker(request):
 
 
 @login_required
-def repo_overview(request):
+@needs_api_key
+def repo_overview(request, api_key=None):
     return render_with_repositories(request, 'repositories/overview.html', {
         'active_app': 'bookmarks',
     })
@@ -101,10 +103,10 @@ def render_with_repositories(request, template_name, context, org=None, repo_nam
         if not repo_name:
             repo_name = repos[0].repo_name
             context['selected_repo'] = repos[0]
-
     context['bookmarked_repos'] = bookmarked_repos_by_owner
     context['repo_owner'] = org
     context['repo_name'] = repo_name
+    context['total_repo_count'] = len(repos)
     return render(request, template_name, context)
 
 
