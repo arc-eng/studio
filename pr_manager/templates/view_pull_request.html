@@ -38,10 +38,22 @@
             No open pull requests in <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
         </p>
     {% else %}
+
+    <div class="content">
+        <div class="select is-fullwidth is-medium">
+            <select name="pr_number" id="pr-select">
+                {% for pr in prs %}
+                    <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                            {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
     
     <div class="columns">
         <div class="column is-5">
-            <div class="tabs is-fullwidth">
+            <div class="tabs is-fullwidth my-0">
                 <ul>
                     <li class="is-active tab" id="description-tab" data-tab-id="describe">
                         <a>
@@ -55,22 +67,9 @@
                             <span>Review</span>
                         </a>
                     </li>
-                    <li id="change-tab" class="tab" data-tab-id="change">
-                        <a>
-                            <span class="icon is-small"><i class="fas fa-code"></i></span>
-                            <span>Change</span>
-                        </a>
-                    </li>
                 </ul>
             </div>
-            <div class="select is-fullwidth">
-                <select name="pr_number" id="pr-select">
-                    {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+
 
 
 
@@ -93,9 +92,7 @@
                             {{ task.result }}
                         </p>
                     {% else %}
-                        <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right m-3">
-                            <span class="icon is-small"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                        </a>
+
                         {% if selected_pr.body %}
                             {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content p-3 mb-5" %}
                         {% else %}
@@ -115,13 +112,34 @@
                     {% include 'review_generator_tab.html' %}
                 </p>
             </div>
-            <div id="change-tab-container" class="tab-container is-hidden" data-tab-id="change">
-                <p class="is-size-5 has-text-weight-light p-3">
-                    Soon, you will be able to apply changes to the PR using prompts.
-                </p>
-            </div>
         </div>
         <div class="column is-7">
+            <h4 class="title is-4 has-text-grey has-text-centered mb-1">
+                Code Changes
+                <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right mr-3">
+                    <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </a>
+            </h4>
+        <hr class="my-3"/>
+
+            <div class="table-container">
+                <table class="table is-fullwidth is-hoverable">
+                    <tbody>
+                    {% for commit in commits %}
+                        <tr>
+                            <td>
+                                <figure class="image is-32x32">
+                                    <img src="{{ commit.commit.author.avatar_url }}" alt="{{ commit.commit.author.name }}" class="is-rounded">
+                                </figure>
+                            </td>
+                            <td>{{ commit.commit.message }}</td>
+                            <td>{{ commit.commit.author.date|timesince }} ago</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
 
             <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
             <div id="diff-output"></div>

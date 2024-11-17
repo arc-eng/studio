@@ -152,6 +152,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
     task = get_task_description(owner, repo, request.user, selected_pr.number, api_key)
     review_task, review = get_review_task(owner, repo, request.user, selected_pr.number, api_key, selected_pr)
 
+    commits = list(selected_pr.get_commits().reversed)
+
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,
         "review": review,
@@ -162,6 +164,7 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "active_app": "pull-request-manager",
         "pr_tab": pr_tab,
         "category_colors": category_colors,
+        "commits": commits
     }, owner, repo)
 
 
