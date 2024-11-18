@@ -2,7 +2,7 @@
 {% if task.status == "scheduled" or task.status == "running" %}
     <!-- Render task events using BulmaCSS Table -->
     <div class="table-container">
-        <table class="table is-fullwidth">
+        <table class="table is-fullwidth" id="live-update-table">
             <tbody>
             <tr>
                 <td><span id="second-counter" class="has-text-weight-light"></span></td>
@@ -92,7 +92,7 @@
                         taskEvents.push(event);
                         event.icon = ACTION_FA_ICON_MAP[event.action] || "check";
                         const htmlMessage = window.md.render(event.message.trim());
-                        $('.table tbody').append(`
+                        $('#live-update-table tbody').append(`
                                 <tr>
                                     <td class="has-text-weight-light">${counter}</td>
                                     <td><span class="icon"><i class="fa fa-${event.icon}"></i></span></td>
@@ -101,8 +101,8 @@
                             `);
 
                         // Swap the last and second to last row in the table
-                        const lastRow = $('.table tbody tr:last');
-                        const secondLastRow = $('.table tbody tr:nth-last-child(2)');
+                        const lastRow = $('#live-update-table tbody tr:last');
+                        const secondLastRow = $('#live-update-table tbody tr:nth-last-child(2)');
                         lastRow.insertBefore(secondLastRow);
                     }
 

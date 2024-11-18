@@ -26,11 +26,18 @@
     margin-top: 10px; /* Add some margin to the top */
 }
 
+    .tab-container {
+        border-left: 1px solid rgb(214, 217, 224);
+        border-right: 1px solid rgb(214, 217, 224);
+        border-bottom: 1px solid rgb(214, 217, 224);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
 {% endblock %}
 
 {% block repo_content %}
 
-{#    {% include 'app_header.html' with title="Pull Requests" subtitle="Generate descriptions & reviews" classes="p-0"%}#}
 
 
     {% if not prs %}
@@ -39,32 +46,93 @@
         </p>
     {% else %}
 
-    <div class="content">
-        <div class="select is-fullwidth is-medium">
-            <select name="pr_number" id="pr-select">
-                {% for pr in prs %}
-                    <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                            {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
-                {% endfor %}
-            </select>
-        </div>
 
-    </div>
-    
+    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}
     <div class="columns">
+        <div class="column is-7">
+            <div class="content">
+                <div class="select is-fullwidth is-medium">
+                    <select name="pr_number" id="pr-select">
+                        {% for pr in prs %}
+                            <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                                    {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+
+            <h4 class="title is-4 has-text-grey has-text-centered mt-3 is-hidden">
+                Code Changes
+                <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right mr-3">
+                    <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </a>
+            </h4>
+
+            {# Commit table #}
+            <div class="table-container">
+                <table class="table is-fullwidth is-hoverable">
+                    <tbody>
+                    {% for commit in commits %}
+                        <tr style="border: none;">
+                            <td class="is-narrow" style="border: none;">
+                                <figure class="image is-32x32">
+                                    <img src="{{ commit.avatar_url }}" alt="{{ commit.commit.author.name }}" class="is-rounded">
+                                </figure>
+                            </td>
+                            <td class="is-vcentered" style="border: none;">
+                                <a href="{{ commit.html_url }}" target="_blank">{{ commit.commit.message }}</a>
+                            </td>
+                            <td class="is-narrow" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <td class="is-narrow is-vcentered">
+                                <figure class="image is-32x32">
+                                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.username }}" class="is-rounded" />
+                                </figure>
+                            </td>
+                            <td class="is-vcentered" colspan="2">
+                                <form action="" method="post"  class="">
+                                    {% csrf_token %}
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <input class="input" type="text" name="task_description" placeholder="Quickly make changes to the PR" >
+                                        </div>
+                                        <div class="control">
+                                            <button class="button is-link" type="submit" id="send-button">
+                                                <span class="icon"><i class="fa fa-play"></i></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+
+            <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
+            <div id="diff-output"></div>
+        </div>
         <div class="column is-5">
-            <div class="tabs is-fullwidth my-0">
+            <div class="tabs mb-0 is-fullwidth is-boxed is-medium">
                 <ul>
-                    <li class="is-active tab" id="description-tab" data-tab-id="describe">
-                        <a>
-                            <span class="icon is-small"><i class="fas fa-file-waveform"></i></span>
-                            <span>Describe</span>
-                        </a>
-                    </li>
+
                     <li id="review-tab" class="tab" data-tab-id="review">
                         <a>
                             <span class="icon is-small"><i class="fas fa-magnifying-glass"></i></span>
-                            <span>Review</span>
+                            <span>Code Review</span>
+                        </a>
+                    </li>
+                    <li class="is-active tab" id="description-tab" data-tab-id="describe">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-file-waveform"></i></span>
+                            <span>PR Description</span>
                         </a>
                     </li>
                 </ul>
@@ -94,7 +162,7 @@
                     {% else %}
 
                         {% if selected_pr.body %}
-                            {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content p-3 mb-5" %}
+                            {% include 'markdown_container.html' with markdown=selected_pr.body id="current-desc" classes="content mb-5 p-3" %}
                         {% else %}
                             <p class="is-size-5 mb-5 has-text-weight-light p-3">
                                 This PR has no description
@@ -113,37 +181,7 @@
                 </p>
             </div>
         </div>
-        <div class="column is-7">
-            <h4 class="title is-4 has-text-grey has-text-centered mb-1">
-                Code Changes
-                <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right mr-3">
-                    <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-                </a>
-            </h4>
-        <hr class="my-3"/>
 
-            <div class="table-container">
-                <table class="table is-fullwidth is-hoverable">
-                    <tbody>
-                    {% for commit in commits %}
-                        <tr>
-                            <td>
-                                <figure class="image is-32x32">
-                                    <img src="{{ commit.commit.author.avatar_url }}" alt="{{ commit.commit.author.name }}" class="is-rounded">
-                                </figure>
-                            </td>
-                            <td>{{ commit.commit.message }}</td>
-                            <td>{{ commit.commit.author.date|timesince }} ago</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-
-            <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
-            <div id="diff-output"></div>
-        </div>
     </div>
     
     {% endif %}

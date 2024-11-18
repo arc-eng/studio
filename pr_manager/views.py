@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 
@@ -153,6 +154,23 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
     review_task, review = get_review_task(owner, repo, request.user, selected_pr.number, api_key, selected_pr)
 
     commits = list(selected_pr.get_commits().reversed)
+    for commit in commits:
+        if commit.author:
+            commit.login = commit.author.login
+            commit.avatar_url = commit.author.avatar_url
+        else:
+            email = commit.commit.author.email
+            username = commit.commit.author.name
+            if email == "bot@arcane.engineer":
+                avatar_url = "https://avatars.githubusercontent.com/in/845970?s=60&v=4"
+            else:
+                avatar_url = (
+                    f"https://www.gravatar.com/avatar/{hashlib.md5(email.encode()).hexdigest()}?d=identicon"
+                    if email
+                    else "https://github.com/identicons/default.png"
+                )
+            commit.login = username
+            commit.avatar_url = avatar_url
 
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,

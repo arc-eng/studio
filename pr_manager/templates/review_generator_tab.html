@@ -15,9 +15,9 @@
             {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
 
             {% for finding in review.findings.all %}
-                <div class="card p-0">
+                <div class="card p-0 is-borderless mx-3">
 
-                    <header class="card-header p-2 has-round-corners"
+                    <header class="card-header p-2 has-round-corners is-shadowless is-borderless"
                             data-file="{{ finding.file }}"
                             data-line-start="{{ finding.line_start }}">
 
@@ -140,7 +140,7 @@
                     <button class="button is-link is-fullwidth generate-button" type="submit">
 
                         <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
-                        <span>Generate a code review</span>
+                        <span>Review My Code Changes</span>
                     </button>
                 </div>
             </div>
