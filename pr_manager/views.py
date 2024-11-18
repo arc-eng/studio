@@ -17,7 +17,7 @@ from repositories.models import BookmarkedRepo
 from repositories.views import render_with_repositories
 from studio.decorators import needs_api_key
 from studio.github import get_github_token
-from .models import PullRequestDescription, PullRequestReview, ReviewFinding
+from .models import PullRequestDescription, PullRequestReview, ReviewFinding, PullRequestChangeRequest
 from .prompts import emoji_prompt, structure_prompt, style_prompt, PR_DESCRIPTION, CODE_REVIEW, CodeReview, Category, \
     APPLY_RECOMMENDATION
 
@@ -153,7 +153,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
     task = get_task_description(owner, repo, request.user, selected_pr.number, api_key)
     review_task, review = get_review_task(owner, repo, request.user, selected_pr.number, api_key, selected_pr)
 
-    commits = list(selected_pr.get_commits().reversed)
+    # Get the commits for the selected PR
+    commits = list(selected_pr.get_commits())
     for commit in commits:
         if commit.author:
             commit.login = commit.author.login
@@ -172,6 +173,13 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
             commit.login = username
             commit.avatar_url = avatar_url
 
+    # Find all non-completed change requests for the PR
+    change_requests = PullRequestChangeRequest.objects.filter(repo__owner=owner,
+                                                              repo__repo_name=repo,
+                                                              user=request.user,
+                                                              pr_number=selected_pr.number,
+                                                              completed=False)
+
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,
         "review": review,
@@ -182,7 +190,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "active_app": "pull-request-manager",
         "pr_tab": pr_tab,
         "category_colors": category_colors,
-        "commits": commits
+        "commits": commits,
+        "change_requests": change_requests
     }, owner, repo)
 
 
@@ -272,6 +281,27 @@ def apply_recommendation(request, api_key):
     finding.task_id = task.id
     finding.save()
     return redirect(reverse('view_task', args=(repo.owner, repo.repo_name, task.id)))
+
+
+@login_required
+@needs_api_key
+def apply_change_request(request, api_key):
+    change_request = request.POST.get('change_request')
+    repo_owner = request.POST.get('repo_owner')
+    repo_name = request.POST.get('repo_name')
+    pr_number = request.POST.get('pr_number')
+    repo = BookmarkedRepo.objects.get(owner=repo_owner, repo_name=repo_name, user=request.user)
+    engine = ArcaneEngine(api_key)
+    task = engine.create_task(f"{repo_owner}/{repo_name}", change_request, pr_number=pr_number)
+    PullRequestChangeRequest.objects.create(
+        user=request.user,
+        repo=repo,
+        pr_number=pr_number,
+        prompt=change_request,
+        task_id=task.id
+    )
+
+    return redirect(reverse('view_pull_request', args=(repo_owner, repo_name, pr_number, "review")))
 
 
 @login_required

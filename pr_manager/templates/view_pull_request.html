@@ -26,13 +26,18 @@
     margin-top: 10px; /* Add some margin to the top */
 }
 
-    .tab-container {
-        border-left: 1px solid rgb(214, 217, 224);
-        border-right: 1px solid rgb(214, 217, 224);
-        border-bottom: 1px solid rgb(214, 217, 224);
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
-    }
+.tab-container {
+    border-left: 1px solid rgb(214, 217, 224);
+    border-right: 1px solid rgb(214, 217, 224);
+    border-bottom: 1px solid rgb(214, 217, 224);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.is-bordered {
+    border: 1px solid rgb(214, 217, 224);
+    border-radius: 5px;
+}
 
 {% endblock %}
 
@@ -50,16 +55,13 @@
     {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}
     <div class="columns">
         <div class="column is-7">
-            <div class="content">
-                <div class="select is-fullwidth is-medium">
-                    <select name="pr_number" id="pr-select">
-                        {% for pr in prs %}
-                            <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                                    {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
+            <div class="select is-fullwidth is-medium">
+                <select name="pr_number" id="pr-select">
+                    {% for pr in prs %}
+                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
             <h4 class="title is-4 has-text-grey has-text-centered mt-3 is-hidden">
@@ -70,7 +72,7 @@
             </h4>
 
             {# Commit table #}
-            <div class="table-container">
+            <div class="table-container has-round-corners is-bordered py-2 my-3">
                 <table class="table is-fullwidth is-hoverable">
                     <tbody>
                     {% for commit in commits %}
@@ -83,9 +85,10 @@
                             <td class="is-vcentered" style="border: none;">
                                 <a href="{{ commit.html_url }}" target="_blank">{{ commit.commit.message }}</a>
                             </td>
-                            <td class="is-narrow" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
+                            <td class="is-narrow has-text-grey" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
                         </tr>
                     {% endfor %}
+                    {% if not change_requests %}
                         <tr>
                             <td class="is-narrow is-vcentered">
                                 <figure class="image is-32x32">
@@ -93,14 +96,17 @@
                                 </figure>
                             </td>
                             <td class="is-vcentered" colspan="2">
-                                <form action="" method="post"  class="">
+                                <form action="{% url 'apply_pr_change_request' %}" method="post"  class="">
                                     {% csrf_token %}
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
-                                            <input class="input" type="text" name="task_description" placeholder="Quickly make changes to the PR" >
+                                            <input class="input" type="text" name="change_request" placeholder="Quickly make changes to the PR" >
+                                            <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
+                                            <input type="hidden" name="repo_name" value="{{ repo_name }}">
+                                            <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
                                         </div>
                                         <div class="control">
-                                            <button class="button is-link" type="submit" id="send-button">
+                                            <button class="button is-link" type="submit" id="send-button" disabled>
                                                 <span class="icon"><i class="fa fa-play"></i></span>
                                             </button>
                                         </div>
@@ -108,9 +114,16 @@
                                 </form>
                             </td>
                         </tr>
+                    {% endif %}
                     </tbody>
                 </table>
             </div>
+
+            {% if change_requests %}
+                {% for change_request in change_requests %}
+                    {% include 'task_live_updates.html' with task=change_request.task %}
+                {% endfor %}
+            {% endif %}
 
 
 
@@ -223,6 +236,21 @@
             if (describeTab) {
                 describeTab.click();
             }
+            // Enable send button when user types in the input field
+            $('input[name="change_request"]').on('input', function() {
+                // Disable if empty
+                if ($(this).val() === '') {
+                    $('#send-button').attr('disabled', 'disabled');
+                } else {
+                    $('#send-button').removeAttr('disabled');
+                }
+            });
+
+            $('#send-button').click(function() {
+                $(this).addClass('is-loading');
+                // Disable change request input
+                {#$('input[name="change_request"]').attr('disabled', 'disabled');#}
+            });
 
 
         });

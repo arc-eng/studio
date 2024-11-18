@@ -1,3 +1,4 @@
+from arcane.engine import ArcaneEngine
 from django.db import models
 
 
@@ -34,3 +35,23 @@ class PullRequestReview(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     summary = models.TextField(null=True, blank=False)
     task_id = models.CharField(max_length=255, null=True, blank=True)
+
+
+class PullRequestChangeRequest(models.Model):
+    user = models.ForeignKey("users.StudioUser", on_delete=models.CASCADE)
+    repo = models.ForeignKey("repositories.BookmarkedRepo", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    pr_number = models.IntegerField(null=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    prompt = models.TextField(null=True, blank=False)
+    task_id = models.CharField(max_length=255, null=True, blank=True)
+    completed = models.BooleanField(default=False)
+
+    @property
+    def task(self):
+        task = ArcaneEngine().get_task(self.task_id)
+
+        if task.status in ["completed", "failed"]:
+            self.completed = True
+            self.save()
+        return task
