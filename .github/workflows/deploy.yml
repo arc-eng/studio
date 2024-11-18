@@ -31,6 +31,7 @@ jobs:
     - name: Build Docker image
       run: |
         echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+        set -e
         make docker
 
     - name: Log in to Docker Hub
@@ -40,7 +41,9 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Push Docker image
-      run: make docker-push
+      run: |
+        set -e
+        make docker-push
 
     - name: Set up K8s
       uses: azure/setup-kubectl@v1
@@ -48,7 +51,11 @@ jobs:
         version: 'latest'
 
     - name: Create K8s secrets
-      run: make create-k8s-secrets
+      run: |
+        set -e
+        make create-k8s-secrets
 
     - name: Deploy to Kubernetes
-      run: make deploy
+      run: |
+        set -e
+        make deploy
