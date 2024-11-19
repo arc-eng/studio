@@ -2,7 +2,7 @@
 {% if review %}
     {% if review.summary %}
         <div class="content" id="code-review">
-            <form method="post" action="{% url 'generate_review' %}" class="is-inline-block is-pulled-right m-3">
+            <form method="post" action="{% url 'reset_pr_review' %}" class="is-inline-block is-pulled-right m-3">
                 <input type="hidden" name="owner" value="{{ repo_owner }}">
                 <input type="hidden" name="repo" value="{{ repo_name }}">
                 <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
@@ -23,12 +23,15 @@
 
                         <p class="card-header-title m-0 p-0 has-text-weight-normal">
                         <span class="tag mr-3
-                            {% if finding.criticality == 'Minor' %} is-link
+                            {% if finding.task_id %}is-success
+                            {% elif finding.criticality == 'Minor' %} is-link
                             {% elif finding.criticality == 'Major' %} is-warning
                             {% elif finding.criticality == 'Critical' %} is-danger
                             {% else %} is-light
                             {% endif %}
-                        ">{{ finding.criticality }}</span>
+                        ">{% if finding.task_id %}
+                            <span class="icon is-small"><i class="fas fa-check"></i></span>
+                            {% else %}{{ finding.criticality }}{% endif %}</span>
                         {{ finding.file|truncatechars:35 }}
                         </p>
                         <button class="card-header-icon p-0" aria-label="more options">

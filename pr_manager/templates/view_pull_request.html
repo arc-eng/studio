@@ -52,9 +52,9 @@
     {% else %}
 
 
-    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}
+{#    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}#}
     <div class="columns">
-        <div class="column is-7">
+        <div class="column is-11">
             <div class="select is-fullwidth is-medium">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
@@ -63,17 +63,37 @@
                     {% endfor %}
                 </select>
             </div>
+        </div>
+        <div class="column is-1">
+            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-medium is-fullwidth is-ghost">
+                <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+            </a>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column is-7">
+
 
             <h4 class="title is-4 has-text-grey has-text-centered mt-3 is-hidden">
                 Code Changes
                 <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right mr-3">
-                    <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+
                 </a>
             </h4>
 
             {# Commit table #}
-            <div class="table-container has-round-corners is-bordered py-2 my-3">
-                <table class="table is-fullwidth is-hoverable">
+            <div class="table-container has-round-corners is-bordered p-2">
+                <table class="table is-fullwidth is-hoverable is-narrow">
+                <thead>
+                    <tr style="border: none;">
+                        <th class="is-narrow has-text-centered" style="border: none;">
+                            #
+                        </th>
+                        <th style="border: none;">Code Changes</th>
+                        <th class="is-narrow has-text-right has-text-dark" style="border: none;">
+                            <span class="icon"><i class="fa fa-clock"></i></span>
+                        </th>
+                    </tr>
                     <tbody>
                     {% for commit in commits %}
                         <tr style="border: none;">
@@ -85,7 +105,7 @@
                             <td class="is-vcentered" style="border: none;">
                                 <a href="{{ commit.html_url }}" target="_blank">{{ commit.commit.message }}</a>
                             </td>
-                            <td class="is-narrow has-text-grey" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
+                            <td class="is-narrow has-text-grey has-text-right" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
                         </tr>
                     {% endfor %}
                     {% if not change_requests %}
@@ -154,7 +174,7 @@
 
 
 
-            <div id="describe-tab-container" class="tab-container"  data-tab-id="describe">
+            <div id="describe-tab-container" class="tab-container p-3"  data-tab-id="describe">
 
                 {% if task and task.status != "completed" and task.status != "failed" %}
                     <p class="is-5 p-3 has-text-grey">
@@ -188,7 +208,7 @@
                 {% endif %}
             </div>
 
-            <div id="review-tab-container" class="tab-container is-hidden" data-tab-id="review">
+            <div id="review-tab-container" class="tab-container is-hidden p-3" data-tab-id="review">
                 <p class="is-size-5">
                     {% include 'review_generator_tab.html' %}
                 </p>

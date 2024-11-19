@@ -177,6 +177,15 @@
         <div id="navbarBasicExample" class="navbar-menu">
             <!-- Navbar items -->
             <div class="navbar-start">
+                {% block extra_navbar_left %}{% endblock %}
+
+                <a class="navbar-item" href="{% url 'pr_manager_home' %}">
+                <span class="button is-page-loader is-shadowless {% if active_app == 'pull-request-manager' %}is-dark{% endif %}">
+                    <span class="icon"><i class="fas fa-code-branch"></i></span>
+                    <span>Pull Requests</span>
+                </span>
+                </a>
+            
                 <a class="navbar-item" href="{% url 'chat_home' %}">
                 <span class="button is-page-loader is-shadowless {% if active_app == 'chat' %}is-dark{% endif %}">
                     <span class="icon"><i class="fas fa-comment"></i></span>
@@ -191,12 +200,7 @@
                 </span>
                 </a>
 
-                <a class="navbar-item" href="{% url 'pr_manager_home' %}">
-                <span class="button is-page-loader is-shadowless {% if active_app == 'pull-request-manager' %}is-dark{% endif %}">
-                    <span class="icon"><i class="fas fa-code-branch"></i></span>
-                    <span>Pull Requests</span>
-                </span>
-                </a>
+                
 
                 <a class="navbar-item" href="{% url 'build_home' %}">
                 <span class="button is-page-loader is-shadowless {% if active_app == 'build' %}is-dark{% endif %}">
@@ -208,7 +212,7 @@
 
             <!-- Navbar end -->
             <div class="navbar-end">
-                {% block extra_navbar_right %}{% endblock %}
+
                 <div class="navbar-item">
                     <a class="button is-page-loader is-shadowless {% if active_app == 'bookmarks' %}is-dark{% endif %}" href="{% url 'repositories:repo_overview' %}">
                         <span class="icon"><i class="fas fa-bookmark"></i></span>

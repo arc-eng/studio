@@ -264,6 +264,21 @@ def generate_review(request, api_key):
 
 
 @login_required
+def reset_pr_review(request):
+    repo = request.POST.get('repo')
+    owner = request.POST.get('owner')
+    pr_number = request.POST.get('pr_number')
+    try:
+        bookmark = BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user)
+    except BookmarkedRepo.DoesNotExist:
+        return render(request, "error.html", {"error": "Repository not found"})
+
+    review = PullRequestReview.objects.get(user=request.user, repo=bookmark, pr_number=pr_number)
+    review.delete()
+    return redirect(reverse('view_pull_request', args=(owner, repo, pr_number, "review")))
+
+
+@login_required
 @needs_api_key
 def apply_recommendation(request, api_key):
     finding_id = request.POST.get('finding_id')
@@ -280,7 +295,15 @@ def apply_recommendation(request, api_key):
     task = engine.create_task(repo.full_name, prompt, pr_number=finding.review.pr_number)
     finding.task_id = task.id
     finding.save()
-    return redirect(reverse('view_task', args=(repo.owner, repo.repo_name, task.id)))
+    PullRequestChangeRequest.objects.create(
+        user=request.user,
+        repo=repo,
+        pr_number=finding.review.pr_number,
+        prompt=prompt,
+        task_id=task.id
+    )
+
+    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
 
 
 @login_required
