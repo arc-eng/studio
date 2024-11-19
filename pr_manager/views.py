@@ -313,16 +313,26 @@ def apply_change_request(request, api_key):
     repo_owner = request.POST.get('repo_owner')
     repo_name = request.POST.get('repo_name')
     pr_number = request.POST.get('pr_number')
-    repo = BookmarkedRepo.objects.get(owner=repo_owner, repo_name=repo_name, user=request.user)
-    engine = ArcaneEngine(api_key)
-    task = engine.create_task(f"{repo_owner}/{repo_name}", change_request, pr_number=pr_number)
-    PullRequestChangeRequest.objects.create(
-        user=request.user,
-        repo=repo,
-        pr_number=pr_number,
-        prompt=change_request,
-        task_id=task.id
-    )
+    try:
+        repo = BookmarkedRepo.objects.get(owner=repo_owner, repo_name=repo_name, user=request.user)
+        engine = ArcaneEngine(api_key)
+        task = engine.create_task(f"{repo_owner}/{repo_name}", change_request, pr_number=pr_number)
+        PullRequestChangeRequest.objects.create(
+            user=request.user,
+            repo=repo,
+            pr_number=pr_number,
+            prompt=change_request,
+            task_id=task.id
+        )
+    except BookmarkedRepo.DoesNotExist:
+        logger.error("Repository not found")
+        return render(request, "error.html", {"error": "Repository not found"})
+    except arcane.exceptions.ApiException as e:
+        logger.error(f"Failed to create task: {e}")
+        return render(request, "error.html", {"error": f"Failed to create task: {str(e)}"})
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}", exc_info=True)
+        return render(request, "error.html", {"error": "An unexpected error occurred. Please try again later."})
 
     return redirect(reverse('view_pull_request', args=(repo_owner, repo_name, pr_number, "review")))
 
