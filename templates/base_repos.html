@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
-{% block extra_navbar_right %}
+{% block extra_navbar_left %}
 
 
 
 <div class="navbar-item">
     {% url 'contribute' as contribute_url %}
     <div class="control has-icons-left">
-        <div class="select is-link">
+        <div class="select is-dark">
             <select name="repo_id" id="repo-selector">
                 <option value="" disabled>Select a repository</option>
                 {% for owner, repos in bookmarked_repos.items %}

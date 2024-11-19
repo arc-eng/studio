@@ -77,14 +77,13 @@
                                     </td>
                                     <td>
                                         <div class="buttons">
-                                            <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='describe' %}">
+                                            <a class="button is-small is-page-loader is-ghost"
+                                               aria-label="PR description"
+                                               href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='describe' %}">
                                                 <span class="icon"><i class="fa fa-file-waveform"></i></span>
                                             </a>
                                             <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='review' %}">
                                                 <span class="icon"><i class="fa fa-magnifying-glass"></i></span>
-                                            </a>
-                                            <a class="button is-small is-page-loader is-ghost" href="{% url 'view_pull_request' owner=selected_repo.owner repo=selected_repo.repo_name pr_number=pr.number pr_tab='change' %}">
-                                                <span class="icon"><i class="fa fa-pencil"></i></span>
                                             </a>
                                         </div>
                                     </td>
