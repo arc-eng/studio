@@ -54,7 +54,7 @@
 
 {#    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}#}
     <div class="columns">
-        <div class="column is-11">
+        <div class="column is-12">
             <div class="select is-fullwidth is-medium">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
@@ -64,94 +64,9 @@
                 </select>
             </div>
         </div>
-        <div class="column is-1">
-            <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="button is-medium is-fullwidth is-ghost">
-                <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
-            </a>
-        </div>
     </div>
     <div class="columns">
-        <div class="column is-7">
 
-
-            <h4 class="title is-4 has-text-grey has-text-centered mt-3 is-hidden">
-                Code Changes
-                <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}" target="_blank" class="is-pulled-right mr-3">
-
-                </a>
-            </h4>
-
-            {# Commit table #}
-            <div class="table-container has-round-corners is-bordered p-2">
-                <table class="table is-fullwidth is-hoverable is-narrow">
-                <thead>
-                    <tr style="border: none;">
-                        <th class="is-narrow has-text-centered" style="border: none;">
-                            #
-                        </th>
-                        <th style="border: none;">Code Changes</th>
-                        <th class="is-narrow has-text-right has-text-dark" style="border: none;">
-                            <span class="icon"><i class="fa fa-clock"></i></span>
-                        </th>
-                    </tr>
-                    <tbody>
-                    {% for commit in commits %}
-                        <tr style="border: none;">
-                            <td class="is-narrow" style="border: none;">
-                                <figure class="image is-32x32">
-                                    <img src="{{ commit.avatar_url }}" alt="{{ commit.commit.author.name }}" class="is-rounded">
-                                </figure>
-                            </td>
-                            <td class="is-vcentered" style="border: none;">
-                                <a href="{{ commit.html_url }}" target="_blank">{{ commit.commit.message }}</a>
-                            </td>
-                            <td class="is-narrow has-text-grey has-text-right" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
-                        </tr>
-                    {% endfor %}
-                    {% if not change_requests %}
-                        <tr>
-                            <td class="is-narrow is-vcentered">
-                                <figure class="image is-32x32">
-                                    <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.username }}" class="is-rounded" />
-                                </figure>
-                            </td>
-                            <td class="is-vcentered" colspan="2">
-                                <form action="{% url 'apply_pr_change_request' %}" method="post"  class="">
-                                    {% csrf_token %}
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
-                                            <input class="input" type="text" name="change_request" placeholder="Quickly make changes to the PR" >
-                                            <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
-                                            <input type="hidden" name="repo_name" value="{{ repo_name }}">
-                                            <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
-                                        </div>
-                                        <div class="control">
-                                            <button class="button is-link" type="submit" id="send-button" disabled>
-                                                <span class="icon"><i class="fa fa-play"></i></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endif %}
-                    </tbody>
-                </table>
-            </div>
-
-            {% if change_requests %}
-                {% for change_request in change_requests %}
-                    {% include 'task_live_updates.html' with task=change_request.task %}
-                {% endfor %}
-            {% endif %}
-
-
-
-
-
-            <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
-            <div id="diff-output"></div>
-        </div>
         <div class="column is-5">
             <div class="tabs mb-0 is-fullwidth is-boxed is-medium">
                 <ul>
@@ -214,7 +129,88 @@
                 </p>
             </div>
         </div>
+        <div class="column is-7">
 
+
+            {# Commit table #}
+            <div class="has-round-corners is-bordered mb-5">
+                <div class="content p-2 pb-1 mb-5 mt-1 has-text-centered" style="border-bottom: 1px solid rgb(214, 217, 224);">
+                    <span class="is-size-5 has-text-weight-normal has-text-grey-dark">
+                        <span class="icon is-medium"><i class="fa fa-code"></i></span>
+                        <span>Commits</span>
+
+                    </span>
+                    <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}/pull/{{ selected_pr.number }}"
+                       target="_blank"
+                       class="is-pulled-right"
+                    >
+                        <span class="icon is-medium"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                    </a>
+
+                </div>
+                <div class="table-container m-3">
+
+                    <table class="table is-fullwidth is-hoverable is-narrow p-3">
+                        <tbody>
+                        {% for commit in commits %}
+                            <tr style="border: none;">
+                                <td class="is-narrow" style="border: none;">
+                                    <figure class="image is-32x32">
+                                        <img src="{{ commit.avatar_url }}" alt="{{ commit.commit.author.name }}" class="is-rounded">
+                                    </figure>
+                                </td>
+                                <td class="is-vcentered" style="border: none;">
+                                    <a href="{{ commit.html_url }}" target="_blank">{{ commit.commit.message }}</a>
+                                </td>
+                                <td class="is-narrow has-text-grey has-text-right" style="border: none;">{{ commit.commit.author.date|timesince }} ago</td>
+                            </tr>
+                        {% endfor %}
+                        {% if not change_requests %}
+                            <tr>
+                                <td class="is-narrow is-vcentered">
+                                    <figure class="image is-32x32">
+                                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.username }}" class="is-rounded" />
+                                    </figure>
+                                </td>
+                                <td class="is-vcentered" colspan="2">
+                                    <form action="{% url 'apply_pr_change_request' %}" method="post"   class="my-2">
+                                        {% csrf_token %}
+                                        <div class="field has-addons">
+                                            <div class="control is-expanded">
+                                                <input class="input" type="text" name="change_request" placeholder="Quickly make changes to the PR" >
+                                                <input type="hidden" name="repo_owner" value="{{ repo_owner }}">
+                                                <input type="hidden" name="repo_name" value="{{ repo_name }}">
+                                                <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
+                                            </div>
+                                            <div class="control">
+                                                <button class="button is-link" type="submit" id="send-button" disabled>
+                                                    <span class="icon"><i class="fa fa-play"></i></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            {% if change_requests %}
+                {% for change_request in change_requests %}
+                    {% include 'task_live_updates.html' with task=change_request.task %}
+                {% endfor %}
+            {% endif %}
+
+
+
+
+
+            <pre id="diff-data" style="display: none;">{{ diff_data }}</pre>
+            <div id="diff-output"></div>
+        </div>
     </div>
     
     {% endif %}
