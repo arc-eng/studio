@@ -267,7 +267,7 @@ SOCIALACCOUNT_PROVIDERS = {
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = False
-APPEND_SLASH = False
+APPEND_SLASH = True
 ROOT_PATH = os.getenv('ROOT_PATH', '/')
 LOGIN_URL = (ROOT_PATH + '/accounts/github/login/?process=login').replace('//', '/')
 # Redirect to home after login
