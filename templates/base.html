@@ -179,35 +179,30 @@
             <div class="navbar-start">
                 {% block extra_navbar_left %}{% endblock %}
 
-                <a class="navbar-item" href="{% url 'pr_manager_home' %}">
-                <span class="button is-page-loader is-shadowless {% if active_app == 'pull-request-manager' %}is-dark{% endif %}">
-                    <span class="icon"><i class="fas fa-code-branch"></i></span>
-                    <span>Pull Requests</span>
-                </span>
-                </a>
-            
-                <a class="navbar-item" href="{% url 'chat_home' %}">
-                <span class="button is-page-loader is-shadowless {% if active_app == 'chat' %}is-dark{% endif %}">
-                    <span class="icon"><i class="fas fa-comment"></i></span>
-                    <span>Chat</span>
-                </span>
-                </a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">
+                        Tools
+                    </a>
 
-                <a class="navbar-item" href="{% url 'tasks_home' %}">
-                <span class="button is-page-loader is-shadowless {% if active_app == 'tasks' %}is-dark{% endif %}">
-                    <span class="icon"><i class="fas fa-gears"></i></span>
-                    <span>Tasks</span>
-                </span>
-                </a>
-
-                
-
-                <a class="navbar-item" href="{% url 'build_home' %}">
-                <span class="button is-page-loader is-shadowless {% if active_app == 'build' %}is-dark{% endif %}">
-                    <span class="icon"><i class="fas fa-hammer"></i></span>
-                    <span>Build</span>
-                </span>
-                </a>
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item" href="{% url 'pr_manager_home' %}">
+                            <span class="icon"><i class="fas fa-code-branch"></i></span>
+                            <span>Pull Requests</span>
+                        </a>
+                        <a class="navbar-item" href="{% url 'chat_home' %}">
+                            <span class="icon"><i class="fas fa-comment"></i></span>
+                            <span>Chat</span>
+                        </a>
+                        <a class="navbar-item" href="{% url 'tasks_home' %}">
+                            <span class="icon"><i class="fas fa-gears"></i></span>
+                            <span>Tasks</span>
+                        </a>
+                        <a class="navbar-item" href="{% url 'build_home' %}">
+                            <span class="icon"><i class="fas fa-hammer"></i></span>
+                            <span>Build</span>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Navbar end -->
