@@ -1,10 +1,9 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.10-slim
+# Use the official Python image from the Docker Hub for the build stage
+FROM python:3.10-slim AS builder
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-
 
 # Install system dependencies required for uWSGI compilation
 RUN apt-get update && apt-get install -y \
@@ -29,6 +28,19 @@ RUN pip install --no-cache-dir poetry uvicorn \
 
 # Copy project
 COPY . /code/
+
+# Final stage
+FROM python:3.10-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /code
+
+# Copy only the necessary files from the builder stage
+COPY --from=builder /code /code
 
 # Expose port 8000 for uwsgi
 EXPOSE 8000
