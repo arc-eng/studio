@@ -63,11 +63,11 @@
 {#    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}#}
     <div class="columns">
         <div class="column is-12">
-            <div class="select is-fullwidth is-medium">
+            <div class="select is-fullwidth is-large is-light">
                 <select name="pr_number" id="pr-select">
                     {% for pr in prs %}
                         <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} {{ pr.title }}</option>
+                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} - {{ pr.title }} </option>
                     {% endfor %}
                 </select>
             </div>
