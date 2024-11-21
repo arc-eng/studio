@@ -3,12 +3,17 @@
 {% block extra_navbar_left %}
 {% endblock %}
 
+{% block app_subtitle %}
+    {%  if total_repo_count > 1 %}
+    Bookmarked Repositories
+    {% endif %}
+{% endblock %}
+
 {% block repo_content %}
 
 
     {%  if not bookmarked_repos|length %}
         <section class="section">
-        {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="<span class='icon has-text-success'><i class='fas fa-check-circle'></i></span> Success" %}
 
         <div class="content">
             <p class="is-size-5 mb-5">
@@ -56,7 +61,6 @@
             </section>
 
         {% else %}
-            {% include 'app_header.html' with title="Bookmarked Repositories" subtitle="Bookmarked Repositories" %}
             <div class="table-container">
                 <table class="table ">
                     <tbody>
