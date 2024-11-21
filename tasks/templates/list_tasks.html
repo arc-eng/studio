@@ -9,9 +9,11 @@
 {% endblock %}
 
 {% block repo_content %}
-
-{% include 'app_header.html' with title="Tasks" subtitle="Hand over work to the Arcane Engine" %}
-
+    <div class="content">
+        <p class="has-text-weight-light is-size-5 is-fullwidth">
+            Describe a task in your own words or select an example prompt from the dropdown.
+        </p>
+    </div>
 <div class="columns">
     <div class="column">
         <div class="content" id="new-task-form">
@@ -23,6 +25,23 @@
                     </div>
                 </div>
                 <div class="field is-grouped">
+                    <div class="control has-icons-left is-flex">
+                        <div class="select is-fullwidth">
+                            <select id="task-prompts">
+                                <option value="">Select an example prompt</option>
+                                <option value="Find the CI/CD pipeline definition, read it and suggest improvements">Suggest improvements to CI/CD pipeline</option>
+                                <option value="Update the README file: Add emojis to the beginning of each section, correct spelling errors, make the layout and text more cohesive and add badges right below the main header.">Make the README file pretty</option>
+                                <option value="Find bash scripts in the main directory, read them, add error handling and comments and write them back to file.">Add error handling to bash scripts</option>
+                                <option value="Read the README.md to learn more about the project. Then, find index.html and add SEO tags to it.">Add SEO tags to index.html</option>
+                                <option value="List the `.` directory and read build scripts / configs. Then set up a linter for the project. Then tell me how to set this up as a pre-commit hook.">Add automated linting to the project</option>
+                                <option value="Find open Github issues labeled as 'bug', then read the latest one. Find and read the relevant code files, then respond with an analysis - how to reproduce it, probable cause and a fix suggestion.">Analyze a bug ticket</option>
+                                <option value="Read the README.md and other files in the root directory that tell you how the project is built and run. Then, write an onboarding guide for new developers on how to set it up and run the project locally.">Write onboarding guide</option>
+                            </select>
+                        </div>
+                        <span class="icon is-left">
+                    <i class="fas fa-lightbulb"></i>
+                  </span>
+                    </div>
                     <div class="control">
                         <button class="button is-link" type="submit" id="generate-button">
                             <span class="icon"><i class="fa fa-play"></i></span>
@@ -34,82 +53,56 @@
         </div>
     </div>
     <div class="column">
-        <div class="content">
+        {%  if tasks %}
+            <div class="table-container">
+                <table class="table is-fullwidth  is-rounded ">
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr>
+                            <td class=" is-narrow">
+                                {% if task.status == 'completed' %}
+                                    <span class="icon has-text-success is-small"><i class="fa fa-square-check"></i></span>
+                                {% elif task.status == 'failed' %}
+                                    <span class="icon has-text-danger is-small"><i class="fa fa-triangle-exclamation"></i></span>
+                                {% elif task.status == 'scheduled' or task.status == "running" %}
+                                    <span class="icon has-text-info is-small"><i class="fa fa-rotate fa-spin"></i></span>
+                                {% endif %}
 
-            <div class="control has-icons-left">
-                <div class="select is-fullwidth">
-                    <select id="task-prompts">
-                        <option value="">Select an example prompt</option>
-                        <option value="Find the CI/CD pipeline definition, read it and suggest improvements">Suggest improvements to CI/CD pipeline</option>
-                        <option value="Update the README file: Add emojis to the beginning of each section, correct spelling errors, make the layout and text more cohesive and add badges right below the main header.">Make the README file pretty</option>
-                        <option value="Find bash scripts in the main directory, read them, add error handling and comments and write them back to file.">Add error handling to bash scripts</option>
-                        <option value="Read the README.md to learn more about the project. Then, find index.html and add SEO tags to it.">Add SEO tags to index.html</option>
-                        <option value="List the `.` directory and read build scripts / configs. Then set up a linter for the project. Then tell me how to set this up as a pre-commit hook.">Add automated linting to the project</option>
-                        <option value="Find open Github issues labeled as 'bug', then read the latest one. Find and read the relevant code files, then respond with an analysis - how to reproduce it, probable cause and a fix suggestion.">Analyze a bug ticket</option>
-                        <option value="Read the README.md and other files in the root directory that tell you how the project is built and run. Then, write an onboarding guide for new developers on how to set it up and run the project locally.">Write onboarding guide</option>
-                    </select>
-                </div>
-                <span class="icon is-left">
-                    <i class="fas fa-lightbulb"></i>
-                  </span>
-            </div>
-            <p class="has-text-weight-light is-size-5 is-flex mt-3">
-                Describe a task in your own words or select an example prompt from the dropdown.
-            </p>
-        </div>
-    </div>
-</div>
+                            </td>
 
-<!-- New Task Form -->
+                            <td class="is-flex">
+                                <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
+                                    {{ task.title }}
+                                </a>
+                            </td>
+                            <td class="is-narrow">
+                                {% if task.pr_number %}
+                                    <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank">
+                                        <span class="icon is-small"><i class="fab fa-github"></i></span> <span>#{{ task.pr_number }}</span>
+                                    </a>
 
-
-{%  if tasks %}
-<div class="table-container">
-    <table class="table is-fullwidth  is-rounded ">
-        <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <td class=" is-narrow">
-                        {% if task.status == 'completed' %}
-                            <span class="icon has-text-success is-small"><i class="fa fa-square-check"></i></span>
-                        {% elif task.status == 'failed' %}
-                            <span class="icon has-text-danger is-small"><i class="fa fa-triangle-exclamation"></i></span>
-                        {% elif task.status == 'scheduled' or task.status == "running" %}
-                            <span class="icon has-text-info is-small"><i class="fa fa-rotate fa-spin"></i></span>
-                        {% endif %}
-
-                    </td>
-
-                    <td class="is-flex">
-                        <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=task.id %}">
-                            {{ task.title }}
-                        </a>
-                    </td>
-                    <td class="is-narrow">
-                        {% if task.pr_number %}
-                            <a href="https://github.com/{{ task.github_project }}/pull/{{ task.pr_number }}/files" target="_blank">
-                                <span class="icon is-small"><i class="fab fa-github"></i></span> <span>#{{ task.pr_number }}</span>
-                            </a>
-
-                        {% endif %}
-                    </td>
-                    <td class="is-narrow">
+                                {% endif %}
+                            </td>
+                            <td class="is-narrow">
                         <span class="has-font-weight-light is-family-monospace is-size-7">
                             {{ task.created | timesince }}
                         </span>
-                    </td>
+                            </td>
 
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+            <p class="content has-text-weight-light">
+                No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
+            </p>
+        {% endif %}
+    </div>
 </div>
 
-{% else %}
-    <p class="content has-text-weight-light">
-        No tasks created yet for <a href="https://github.com/{{ repo_owner }}/{{ repo_name }}" target="_blank">{{ repo_owner }}/{{ repo_name }}</a>
-    </p>
-{% endif %}
 
 <script>
     $(document).ready(function() {

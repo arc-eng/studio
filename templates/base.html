@@ -222,6 +222,11 @@
                     </div>
                 </div>
                 {% block extra_navbar_left %}{% endblock %}
+                {% block app_subtitle_navbar_item %}
+                <h3 class="navbar-item is-size-4 has-text-grey">
+                    {% block app_subtitle %}{% endblock %}
+                </h3>
+                {% endblock %}
             </div>
 
             <!-- Navbar end -->

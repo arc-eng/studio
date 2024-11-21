@@ -1,7 +1,21 @@
 {% extends "base_repos.html" %}
 
 {% block title %}Arcane Studio - Pull Requests{% endblock %}
-
+{% block app_subtitle_navbar_item %}
+<div class="navbar-item">
+    <div class="control has-icons-left">
+        <div class="select">
+            <select name="pr_number" id="pr-select">
+                {% for pr in prs %}
+                    <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
+                            {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} - {{ pr.title }} </option>
+                {% endfor %}
+            </select>
+        </div>
+        <span class="icon is-left"><i class="fas fa-code-branch"></i></span>
+    </div>
+</div>
+{% endblock %}
 {% block extra_header %}
     <!-- Stylesheet -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/diff2html/bundles/css/diff2html.min.css" />
@@ -60,20 +74,7 @@
     {% else %}
 
 
-{#    {% include 'app_header.html' with title="Tasks" subtitle="Review code changes and generate PR descriptions" %}#}
-    <div class="columns">
-        <div class="column is-12">
-            <div class="select is-fullwidth is-large is-light">
-                <select name="pr_number" id="pr-select">
-                    {% for pr in prs %}
-                        <option value="{% url 'view_pull_request' pr_number=pr.number owner=repo_owner repo=repo_name pr_tab=pr_tab %}"
-                                {% if pr.number == selected_pr.number %}selected{% endif %}>#{{ pr.number }} - {{ pr.title }} </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="columns">
+    <div class="columns mt-5">
 
         <div class="column is-5">
             <div class="tabs mb-0 is-fullwidth is-boxed is-medium">
