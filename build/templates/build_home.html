@@ -29,14 +29,13 @@
     {% else %}
 
         <div class="content">
-            <form method="post" action="{% url 'reset_build_system' %}" class="is-inline-block is-pulled-right">
+            <form method="post" action="{% url 'reset_build_system' %}" class="is-inline-block is-pulled-left">
                 {% csrf_token %}
                 <input type="hidden" name="system_id" value="{{ system.id }}">
-                <button type="submit" class="button is-large reset-button">
+                <button type="submit" class="button reset-button is-shadowless mr-5">
                     <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
                 </button>
             </form>
-            {% include 'app_header.html' with title="Build Scripts & Config Files" subtitle="One-click optimizations and improvements" classes="mb-5" %}
             <p>
                 {{ system.description }}
             </p>

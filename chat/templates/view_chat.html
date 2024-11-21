@@ -1,6 +1,6 @@
 {% extends "chat_base.html" %}
 {% block title %}{{ selected_chat.title }}{% endblock %}
-
+{% block app_subtitle %}{{ selected_chat.title }}{% endblock %}
 {% block css %}
     #chat-wrapper {
         max-height: 60vh;
@@ -30,9 +30,6 @@
                     </a>
                 </p>
 
-                <p class="level-item has-text-centered title is-5" id="chat-title">
-                    {{ selected_chat.title }}
-                </p>
             </div>
 
             <!-- Right side -->
@@ -46,7 +43,7 @@
                     </span>
                         <span class="is-family-monospace">
                         {% if selected_chat.branch %}
-                            {{ selected_chat.repo.full_name }}/{{ selected_chat.branch }}
+                            View PR #{{ selected_chat.pr_number }}
 
                         {% else %}
                             {{ selected_chat.repo.full_name }}
