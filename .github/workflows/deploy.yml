@@ -54,7 +54,7 @@ jobs:
     - name: Set up K8s
       uses: azure/setup-kubectl@v1
       with:
-        version: '1.21.0'
+        version: ${{ secrets.K8S_VERSION }}
       # This step sets up kubectl to interact with the Kubernetes cluster.
 
     - name: Create K8s secrets
