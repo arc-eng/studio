@@ -179,6 +179,13 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
                                                               user=request.user,
                                                               pr_number=selected_pr.number,
                                                               completed=False)
+    change_request_task = None
+    for change_request in change_requests:
+        if not change_request_task:
+            change_request_task = ArcaneEngine(api_key).get_task(change_request.task_id)
+            if change_request_task.status in ["completed", "failed"]:
+                change_request.completed = True
+                change_request.save()
 
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,
@@ -191,7 +198,7 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "pr_tab": pr_tab,
         "category_colors": category_colors,
         "commits": commits,
-        "change_requests": change_requests
+        "change_request_task": change_request_task
     }, owner, repo)
 
 

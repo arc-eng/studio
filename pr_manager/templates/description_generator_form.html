@@ -1,10 +1,10 @@
-<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth m-3">
+<form action="{% url 'generate_description' %}" method="post" class="is-fullwidth p-3 has-border-top has-background-light">
     <input type="hidden" name="owner" value="{{ repo_owner }}">
     <input type="hidden" name="repo" value="{{ repo_name }}">
     <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
     {% csrf_token %}
 
-    <div class="field">
+    <div class="field mt-3">
         <div class="control">
             <button class="button is-link is-fullwidth generate-button">
                 <span class="icon"><i class="fas fa-wand-magic-sparkles"></i></span>
