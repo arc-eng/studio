@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from arcane.engine import ArcaneEngine
 from django.db import models
 
@@ -46,12 +48,3 @@ class PullRequestChangeRequest(models.Model):
     prompt = models.TextField(null=True, blank=False)
     task_id = models.CharField(max_length=255, null=True, blank=True)
     completed = models.BooleanField(default=False)
-
-    @property
-    def task(self):
-        task = ArcaneEngine().get_task(self.task_id)
-
-        if task.status in ["completed", "failed"]:
-            self.completed = True
-            self.save()
-        return task

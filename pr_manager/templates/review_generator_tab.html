@@ -1,13 +1,13 @@
 
 {% if review %}
     {% if review.summary %}
-        <div class="content" id="code-review">
+        <div class="content mb-3" id="code-review">
             <form method="post" action="{% url 'reset_pr_review' %}" class="is-inline-block is-pulled-right m-3">
                 <input type="hidden" name="owner" value="{{ repo_owner }}">
                 <input type="hidden" name="repo" value="{{ repo_name }}">
                 <input type="hidden" name="pr_number" value="{{ selected_pr.number }}">
                 {% csrf_token %}
-                <button type="submit" class="button is-small reset-button has-text-info-25 has-text-weight-bold">
+                <button type="submit" class="button is-small is-shadowless reset-button has-text-danger">
                     <span class="icon"><i class="fa-solid fa-rotate-right"></i></span>
                 </button>
             </form>
@@ -15,7 +15,7 @@
             {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
 
             {% for finding in review.findings.all %}
-                <div class="card p-0 is-borderless mx-3">
+                <div class="card p-0 mx-3 has-background-light is-shadowless" style="border: 1px solid rgb(214, 217, 224);">
 
                     <header class="card-header p-2 has-round-corners is-shadowless is-borderless"
                             data-file="{{ finding.file }}"
@@ -69,37 +69,19 @@
                         {% include 'markdown_container.html' with markdown=finding.recommendation id_prefix="rec" id=finding.id classes="is-inline-block" %}
                         </span>
                             <div class="field has-addons mt-5">
-                                <p class="control">
+                                <div class="control">
                                     <button class="button is-static is-small">
                                         <span class="icon is-small"><i class="fas fa-lightbulb"></i></span>
                                     </button>
-                                </p>
-                                <p class="control">
+                                </div>
+                                <div class="control">
                                     <button class="button is-small has-text-link-25 copy-button" data-copy-text="{{ finding.recommendation }}">
                                         <span class="icon is-small"><i class="fas fa-copy"></i></span>
                                         <span>Copy</span>
                                     </button>
-                                </p>
-                                <p class="control">
+                                </div>
 
-                                    <form action="{% url 'comment_on_pr_review' %}" method="post">
-                                        <input type="hidden" name="line" value="{{ finding.line_start }}">
-                                        <input type="hidden" name="file" value="{{ finding.file }}">
-                                        <input type="hidden" name="comment" value="{{ finding.recommendation }}">
-                                        <input type="hidden" name="repo" value="{{ finding.review.repo.full_name }}">
-                                        <input type="hidden" name="pr_number" value="{{ finding.review.pr_number }}">
-
-
-                                        {% csrf_token %}
-
-                                        <button class="button is-small has-text-info-25 finding-action" type="submit">
-                                            <span class="icon is-small"><i class="fas fa-comment"></i></span>
-                                            <span>Comment</span>
-                                        </button>
-                                    </form>
-
-                                </p>
-                                <p class="control">
+                                <div class="control">
                                 <form action="{% url 'apply_review_finding_recommendation' %}" method="post">
                                     <input type="hidden" name="finding_id" value="{{ finding.id }}">
                                     {% csrf_token %}
@@ -110,7 +92,7 @@
                                     </button>
                                 </form>
 
-                                </p>
+                                </div>
                             </div>
 
                         </div>

@@ -50,8 +50,8 @@ There is a pull request I want you to review: #{pr_number}.
 I need you to review the changes made in the files and provide a list of findings.
 
 ### What constitutes a "finding"
-- An issue found in the file changes that should be addressed
-- A recommendation to fix the issue
+- An code change that will lead to problems if not addressed before merge
+- A concrete recommendation to fix the issue in code
 - The criticality of the issue (Minor, Major, Critical)
 - The category of the file changes (Security, Performance, Usability, Functionality, Maintainability, Readability, Style, Other)
 
@@ -60,7 +60,7 @@ I need you to review the changes made in the files and provide a list of finding
 - Code that could lead to performance issues
 - Code smells like duplicated code, long methods, etc.
 - Lack of comments or docstrings
-- Code style violations
+- Coding style violations
 - Incorrect or missing error handling
 - Incorrect or missing tests for complex logic
 - Poorly written code that could be refactored for better readability and maintainability
