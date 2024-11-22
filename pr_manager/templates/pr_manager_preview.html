@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Arcane Studio - Pull Requests{% endblock %}
 
 {% block content %}
@@ -12,48 +13,37 @@
                 Pull Request Manager
             </h1>
             <h2 class="subtitle is-3">
-                A unified interface for managing your pull requests
+                Maintain high code quality with minimal effort.
             </h2>
         </div>
     </div>
 </section>
 <section class="section">
     <div class="columns">
-        <div class="column is-5-desktop is-6-tablet is-flex is-align-items-center">
+        <div class="column is-5 is-flex is-align-items-center">
             <div class="content">
-                <p class="title is-2">Automate Descriptions & Reviews</p>
-                <p class="subtitle is-4">Your usual Github flow, just a lot faster</p>
+                <p class="title is-2">No team? No problem</p>
+                <p class="subtitle is-4">Code review & more for solo developers</p>
                 <p>
-                    Writing good PR descriptions and reviewing code changes is important, but can take up a lot of time.
-                    Use the PR Manager to get recommendations for your code changes and apply them with a single click.
-                    When you finished your review, generate a beautiful PR description in seconds.
+                    In software development teams, it is common to have a code review process in place.
+                    For obvious reasons, reviewing your own code is not as effective as having a second pair of eyes on it.
+                    Use PR Manager to identify issues in your code changes and fix them with a click of a button.
+                    Once you're ready to merge, generate a beautiful PR description in seconds.
                 </p>
                 <p>
                     <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large is-fullwidth">
-                        <span>Login and manage your PRs</span>
+                        <span>Login and get started for free</span>
                         <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
                     </a>
-                </p>
-                <p>
-                    We at Arcane Engineering use PR manager to generate descriptions for the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a>. See for yourself:
-                </p>
-                <p>
-                    <a href="https://github.com/arc-eng/studio/pull/38" target="_blank">🔍 Refactor view_pull_request Function with Enhanced Documentation</a>
-                </p>
-                <p>
-                    <a href="https://github.com/arc-eng/studio/pull/46" target="_blank">🔧 Revamp UI Elements for Enhanced Usability</a>
-                </p>
-                <p>
-                    <a href="https://github.com/arc-eng/studio/pull/50" target="_blank">🔧 Update and Enhance Repository Management and UI</a>
                 </p>
 
             </div>
         </div>
-        <div class="column is-7-desktop is-6-tablet">
+        <div class="column is-7">
 
-            <div class="laptop">
+            <div class="laptop ml-5">
                 <video autoplay loop muted playsinline>
-                    <source src="https://storage.googleapis.com/arc-eng-videos/pr_demo_4.mp4" type="video/mp4">
+                    <source src="https://storage.googleapis.com/arc-eng-videos/pr_demo_5.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
             </div>
@@ -63,6 +53,73 @@
     </div>
 
 
+</section>
+<section class="section">
+    <div class="columns">
+        <div class="column is-5">
+            <figure class="image">
+                <img src="https://storage.googleapis.com/arc-eng-videos/pr_manager_review_1.gif">
+            </figure>
+        </div>
+        <div class="column is-7">
+            <div class="content">
+                <p class="title is-3">Generate a Code Review</p>
+{#                <p class="subtitle is-4">What can you do with PR Manager?</p>#}
+                <p class="is-size-5">
+                    Our AI-powered engine will analyze your code changes, and provide you with a list of issues that need to be fixed.
+                    The best thing? You can apply the fixes with a click of a button.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="columns">
+        <div class="column is-5">
+            <figure class="image">
+                <img src="https://storage.googleapis.com/arc-eng-videos/pr_review_application.gif">
+            </figure>
+        </div>
+        <div class="column is-7">
+            <div class="content">
+                <p class="title is-3">Fix issues instantly</p>
+                <p class="is-size-5">
+                    Simply click "Apply" and the recommended fix will be added as a new commit to your branch.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="columns">
+        <div class="column is-5">
+            <video autoplay loop muted playsinline>
+                <source src="https://storage.googleapis.com/arc-eng-videos/pr_review_application.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="column is-7">
+            <div class="content">
+                <p class="title is-3">Add finishing touches</p>
+                <p class="is-size-5">
+                    Select your preferences and generate a beautiful PR description in seconds.
+                </p>
+                <p class="is-size-5">
+                    We at Arcane Engineering use PR manager to generate descriptions for the <a href="https://github.com/arc-eng/studio">Arcane Studio repository</a> -
+                    <a href="https://github.com/arc-eng/studio/pull/38" target="_blank">See</a>
+                    <a href="https://github.com/arc-eng/studio/pull/46" target="_blank">for</a>
+                    <a href="https://github.com/arc-eng/studio/pull/50" target="_blank">yourself</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section content has-text-centered">
+    <h1 class="title is-1">Are you ready?</h1>
+    <a href="{% url 'github_login' %}?next={{ request.build_absolute_uri|urlencode }}" class="button is-link is-large">
+        <span>Login and try for free</span>
+        <span class="icon is-large"><i class="fas fa-arrow-right"></i></span>
+    </a>
 </section>
 <script>
     $(document).ready(function() {
