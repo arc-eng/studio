@@ -1,6 +1,10 @@
 {% extends "chat_base.html" %}
 {% block title %}{{ selected_chat.title }}{% endblock %}
-{% block app_subtitle %}{{ selected_chat.title }}{% endblock %}
+{% block app_subtitle %}
+    {% if selected_chat.title != "New Chat" %}
+    {{ selected_chat.title }}
+    {% endif %}
+{% endblock %}
 {% block css %}
     #chat-wrapper {
         max-height: 60vh;

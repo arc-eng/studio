@@ -14,7 +14,7 @@
                 <div class="control has-icons-left">
                     <div class="select is-fullwidth is-link">
                         <select name="repo_id">
-                            <option value="">Select a repository</option>
+                            <option disabled>Select a repository</option>
                             {% for repo in bookmarked_repos %}
                             <option value="{{ repo.id }}">{{ repo.full_name }}</option>
                             {% endfor %}
