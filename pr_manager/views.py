@@ -115,31 +115,26 @@ def get_review_task(owner, repo, user, pr_number, api_key, selected_pr):
 
 @login_required
 @needs_api_key
-def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="describe", api_key=None):
-    """Main function to view a pull request, orchestrating helper functions."""
-    if not owner or owner == 'None':
-        first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
-        if first_bookmark:
-            owner = first_bookmark.owner
-            repo = first_bookmark.repo_name
-            return redirect('view_pull_request_default_tab', owner=owner, repo=repo, pr_number=pr_number)
-        else:
-            return redirect('repositories:repo_overview')
-    github_token = get_github_token(request)
+def view_pull_request(request, owner: str = None, repo: str = None, pr_number: int = 0, pr_tab: str = "describe", api_key: str = None):
+    """
+    Main function to view a pull request, orchestrating helper functions.
 
-    try:
-        g = Github(github_token)
-        github_repo = g.get_repo(f"{owner}/{repo}")
-        prs = github_repo.get_pulls(state='open')
-    except GithubException as e:
-        if e.status == 401:
-            return redirect(reverse('user_logout'))
-        if e.status == 404:
-            return redirect('repositories:install_repo', owner_name=owner, repo_name=repo)
-        else:
-            return render(request, "error.html", {
-                "error": str(e),
-            })
+    :param request: The HTTP request object.
+    :param owner: The owner of the repository.
+    :param repo: The name of the repository.
+    :param pr_number: The pull request number.
+    :param pr_tab: The tab to display in the pull request view.
+    :param api_key: The API key for authentication.
+    :return: HTTP response rendering the pull request view.
+    """
+    owner, repo = get_owner_and_repo(request, owner, repo)
+    if not owner or not repo:
+        return redirect('repositories:repo_overview')
+
+    github_token = get_github_token(request)
+    prs, error = fetch_pull_requests(github_token, owner, repo)
+    if error:
+        return handle_github_error(error, owner, repo)
 
     if prs.totalCount == 0:
         return render_with_repositories(request, "view_pull_request.html", {
@@ -148,45 +143,17 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
             "diff_data": "",
             "active_app": "pull-request-manager",
         }, owner, repo)
+
     selected_pr = get_selected_pull_request(prs, pr_number)
     diff_data, error = load_diff_data(github_token, owner, repo, selected_pr.number)
     if error:
         return render(request, "error.html", {"error": error})
+
     task = get_task_description(owner, repo, request.user, selected_pr.number, api_key)
     review_task, review = get_review_task(owner, repo, request.user, selected_pr.number, api_key, selected_pr)
+    commits = process_commits(selected_pr.get_commits())
 
-    # Get the commits for the selected PR
-    commits = list(selected_pr.get_commits())
-    for commit in commits:
-        if commit.author:
-            commit.login = commit.author.login
-            commit.avatar_url = commit.author.avatar_url
-        else:
-            email = commit.commit.author.email
-            username = commit.commit.author.name
-            if email == "bot@arcane.engineer":
-                avatar_url = "https://avatars.githubusercontent.com/in/845970?s=60&v=4"
-            else:
-                avatar_url = (
-                    f"https://www.gravatar.com/avatar/{hashlib.md5(email.encode()).hexdigest()}?d=identicon"
-                    if email
-                    else "https://github.com/identicons/default.png"
-                )
-            commit.login = username
-            commit.avatar_url = avatar_url
-
-    # Find all non-completed change requests for the PR
-    change_requests = PullRequestChangeRequest.objects.filter(repo__owner=owner,
-                                                              repo__repo_name=repo,
-                                                              user=request.user,
-                                                              pr_number=selected_pr.number)
-    change_request_task = None
-    for change_request in [cr for cr in change_requests if not cr.completed]:
-        if not change_request_task:
-            change_request_task = ArcaneEngine(api_key).get_task(change_request.task_id)
-            if change_request_task.status in ["completed", "failed"]:
-                change_request.completed = True
-                change_request.save()
+    change_requests, change_request_task = process_change_requests(owner, repo, request.user, selected_pr.number, api_key)
 
     return render_with_repositories(request, "view_pull_request.html", {
         "review_task": review_task,
@@ -203,182 +170,107 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "change_requests": change_requests,
     }, owner, repo)
 
+def get_owner_and_repo(request, owner: str, repo: str) -> tuple:
+    """
+    Retrieve the owner and repository name, defaulting to the first bookmarked repository if not provided.
 
-@login_required
-@require_POST
-@needs_api_key
-def generate_description(request, api_key):
-    pr_number = request.POST.get('pr_number')
-    owner = request.POST.get('owner')
-    repo = request.POST.get('repo')
-    emojis = request.POST.get('emojis')
-    content_size = request.POST.get('content_size')
-    structure = request.POST.get('structure')
-    additional_instructions = request.POST.get('additional_instructions', '')
+    :param request: The HTTP request object.
+    :param owner: The owner of the repository.
+    :param repo: The name of the repository.
+    :return: A tuple containing the owner and repository name.
+    """
+    if not owner or owner == 'None':
+        first_bookmark = BookmarkedRepo.objects.filter(user=request.user).first()
+        if first_bookmark:
+            return first_bookmark.owner, first_bookmark.repo_name
+    return owner, repo
 
-    engine = ArcaneEngine(api_key)
-    prompt = PR_DESCRIPTION.format(
-        pr_number=pr_number,
-        structure=structure_prompt(structure),
-        additional_instructions=additional_instructions,
-        emojis=emoji_prompt(emojis),
-        style=style_prompt(content_size)
-    )
+def fetch_pull_requests(github_token: str, owner: str, repo: str):
+    """
+    Fetch open pull requests from the GitHub repository.
 
+    :param github_token: The GitHub token for authentication.
+    :param owner: The owner of the repository.
+    :param repo: The name of the repository.
+    :return: A tuple containing the pull requests and any error encountered.
+    """
     try:
-        task = engine.create_task(f"{owner}/{repo}", prompt)
-        bookmark = BookmarkedRepo.objects.get(owner=owner, repo_name=repo)
-        # Create a new PullRequestDescription instance
-
-        PullRequestDescription.objects.filter(user=request.user, repo=bookmark).delete()
-        PullRequestDescription.objects.create(
-            user=request.user,
-            repo=bookmark,
-            pr_number=pr_number,
-            task_id=task.id
-        )
-    except arcane.exceptions.ApiException as e:
-        logger.error(f"Failed to create task: {e}")
-        msg = str(e)
-        parsed_json = json.loads(e.body)
-        if parsed_json.get('details'):
-            msg = parsed_json.get('details')
-        return render(request, "error.html", {
-            "error": msg
-        })
-
-    return redirect(reverse('view_pull_request', args=(owner, repo, pr_number, "describe")))
-
-
-@login_required
-@needs_api_key
-def generate_review(request, api_key):
-    repo = request.POST.get('repo')
-    owner = request.POST.get('owner')
-    pr_number = request.POST.get('pr_number')
-    try:
-        bookmark = BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user)
-    except BookmarkedRepo.DoesNotExist:
-        return render(request, "error.html", {"error": "Repository not found"})
-
-    engine = ArcaneEngine(api_key)
-    review, _ = PullRequestReview.objects.get_or_create(user=request.user, repo=bookmark, pr_number=pr_number)
-    task = engine.create_task(f"{owner}/{repo}", CODE_REVIEW.format(pr_number=pr_number),
-                              output_format="json",
-                              output_structure=json.dumps(CodeReview.model_json_schema()))
-    review.task_id = task.id
-    review.summary = None
-    review.save()
-    return redirect(reverse('view_pull_request', args=(owner, repo, pr_number, "review")))
-
-
-@login_required
-def reset_pr_review(request):
-    repo = request.POST.get('repo')
-    owner = request.POST.get('owner')
-    pr_number = request.POST.get('pr_number')
-    try:
-        bookmark = BookmarkedRepo.objects.get(owner=owner, repo_name=repo, user=request.user)
-    except BookmarkedRepo.DoesNotExist:
-        return render(request, "error.html", {"error": "Repository not found"})
-
-    review = PullRequestReview.objects.get(user=request.user, repo=bookmark, pr_number=pr_number)
-    review.delete()
-    return redirect(reverse('view_pull_request', args=(owner, repo, pr_number, "review")))
-
-
-@login_required
-@needs_api_key
-def apply_recommendation(request, api_key):
-    finding_id = request.POST.get('finding_id')
-    finding = ReviewFinding.objects.get(id=finding_id)
-    repo = finding.review.repo
-    if not finding.review.user == request.user:
-        return render(request, "error.html", {"error": "You are not authorized to apply this recommendation"})
-    prompt = APPLY_RECOMMENDATION.format(
-        file=finding.file,
-        issue=finding.issue,
-        recommendation=finding.recommendation
-    )
-    engine = ArcaneEngine(api_key)
-    task = engine.create_task(repo.full_name, prompt, pr_number=finding.review.pr_number)
-    finding.task_id = task.id
-    finding.save()
-    PullRequestChangeRequest.objects.create(
-        user=request.user,
-        repo=repo,
-        pr_number=finding.review.pr_number,
-        prompt=prompt,
-        task_id=task.id
-    )
-
-    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "changes")))
-
-
-@login_required
-@needs_api_key
-def dismiss_recommendation(request, api_key):
-    finding_id = request.POST.get('finding_id')
-    finding = ReviewFinding.objects.get(id=finding_id)
-    repo = finding.review.repo
-    # Check if the user has permission to dismiss the finding
-    if not (finding.review.user == request.user or request.user.is_staff):
-        return render(request, "error.html", {"error": "You are not authorized to dismiss this recommendation"})
-    finding.dismissed = True
-    finding.save()
-
-    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
-
-
-@login_required
-@needs_api_key
-def apply_change_request(request, api_key):
-    change_request = request.POST.get('change_request')
-    repo_owner = request.POST.get('repo_owner')
-    repo_name = request.POST.get('repo_name')
-    pr_number = request.POST.get('pr_number')
-    try:
-        repo = BookmarkedRepo.objects.get(owner=repo_owner, repo_name=repo_name, user=request.user)
-        engine = ArcaneEngine(api_key)
-        task = engine.create_task(f"{repo_owner}/{repo_name}", change_request, pr_number=pr_number)
-        PullRequestChangeRequest.objects.create(
-            user=request.user,
-            repo=repo,
-            pr_number=pr_number,
-            prompt=change_request,
-            task_id=task.id
-        )
-    except BookmarkedRepo.DoesNotExist:
-        logger.error("Repository not found")
-        return render(request, "error.html", {"error": "Repository not found"})
-    except arcane.exceptions.ApiException as e:
-        logger.error(f"Failed to create task: {e}")
-        return render(request, "error.html", {"error": f"Failed to create task: {str(e)}"})
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}", exc_info=True)
-        return render(request, "error.html", {"error": "An unexpected error occurred. Please try again later."})
-
-    return redirect(reverse('view_pull_request', args=(repo_owner, repo_name, pr_number, "changes")))
-
-
-@login_required
-@require_POST
-def comment_on_pr_review(request):
-    """Create a comment on a PR review in a particular line for a particular file"""
-    line = int(request.POST.get('line'))
-    file = request.POST.get('file')
-    comment = request.POST.get('comment')
-    try:
-        g = Github(get_github_token(request))
-        repo = g.get_repo(request.POST.get('repo'))
-        pr = repo.get_pull(int(request.POST.get('pr_number')))
-        commit = pr.get_commits().reversed[0]
-        comment = pr.create_review_comment(body=comment, commit=commit, path=file, start_line=line)
+        g = Github(github_token)
+        github_repo = g.get_repo(f"{owner}/{repo}")
+        return github_repo.get_pulls(state='open'), None
     except GithubException as e:
-        message = e.message
-        if not message:
-            message = str(e.data)
-        return render(request, "error.html", {"error": f"Failed to create comment: {message}"})
-    # Redirect to the comment URL
-    return redirect(comment.html_url)
+        return None, e
 
+def handle_github_error(error: GithubException, owner: str, repo: str):
+    """
+    Handle GitHub exceptions by redirecting or rendering an error page.
+
+    :param error: The GitHub exception encountered.
+    :param owner: The owner of the repository.
+    :param repo: The name of the repository.
+    :return: HTTP response for the error encountered.
+    """
+    if error.status == 401:
+        return redirect(reverse('user_logout'))
+    if error.status == 404:
+        return redirect('repositories:install_repo', owner_name=owner, repo_name=repo)
+    return render(request, "error.html", {"error": str(error)})
+
+def process_commits(commits) -> list:
+    """
+    Process and enrich commit data with author information.
+
+    :param commits: The list of commits to process.
+    :return: A list of processed commits with author information.
+    """
+    processed_commits = []
+    for commit in commits:
+        if commit.author:
+            commit.login = commit.author.login
+            commit.avatar_url = commit.author.avatar_url
+        else:
+            commit.login, commit.avatar_url = get_commit_author_info(commit)
+        processed_commits.append(commit)
+    return processed_commits
+
+def get_commit_author_info(commit) -> tuple:
+    """
+    Retrieve author information for a commit when the author is not directly available.
+
+    :param commit: The commit object to retrieve author information for.
+    :return: A tuple containing the username and avatar URL.
+    """
+    email = commit.commit.author.email
+    username = commit.commit.author.name
+    if email == "bot@arcane.engineer":
+        avatar_url = "https://avatars.githubusercontent.com/in/845970?s=60&v=4"
+    else:
+        avatar_url = (
+            f"https://www.gravatar.com/avatar/{hashlib.md5(email.encode()).hexdigest()}?d=identicon"
+            if email else "https://github.com/identicons/default.png"
+        )
+    return username, avatar_url
+
+def process_change_requests(owner: str, repo: str, user, pr_number: int, api_key: str) -> tuple:
+    """
+    Process change requests for a pull request, marking them as completed if necessary.
+
+    :param owner: The owner of the repository.
+    :param repo: The name of the repository.
+    :param user: The user associated with the change requests.
+    :param pr_number: The pull request number.
+    :param api_key: The API key for authentication.
+    :return: A tuple containing the change requests and the change request task.
+    """
+    change_requests = PullRequestChangeRequest.objects.filter(repo__owner=owner,
+                                                              repo__repo_name=repo,
+                                                              user=user,
+                                                              pr_number=pr_number)
+    change_request_task = None
+    for change_request in [cr for cr in change_requests if not cr.completed]:
+        if not change_request_task:
+            change_request_task = ArcaneEngine(api_key).get_task(change_request.task_id)
+            if change_request_task.status in ["completed", "failed"]:
+                change_request.completed = True
+                change_request.save()
+    return change_requests, change_request_task
