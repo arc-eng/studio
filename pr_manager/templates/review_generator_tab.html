@@ -15,7 +15,7 @@
             {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
 
             {% for finding in review.findings.all %}
-                <div class="card p-0 mx-3 has-background-light is-shadowless" style="border: 1px solid rgb(214, 217, 224);">
+                <div class="card p-0 mx-3 has-background-light is-shadowless is-bordered">
 
                     <header class="card-header p-2 has-round-corners is-shadowless is-borderless"
                             data-file="{{ finding.file }}"

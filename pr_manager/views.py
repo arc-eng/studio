@@ -179,10 +179,9 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
     change_requests = PullRequestChangeRequest.objects.filter(repo__owner=owner,
                                                               repo__repo_name=repo,
                                                               user=request.user,
-                                                              pr_number=selected_pr.number,
-                                                              completed=False)
+                                                              pr_number=selected_pr.number)
     change_request_task = None
-    for change_request in change_requests:
+    for change_request in [cr for cr in change_requests if not cr.completed]:
         if not change_request_task:
             change_request_task = ArcaneEngine(api_key).get_task(change_request.task_id)
             if change_request_task.status in ["completed", "failed"]:
@@ -200,7 +199,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
         "pr_tab": pr_tab,
         "category_colors": category_colors,
         "commits": commits,
-        "change_request_task": change_request_task
+        "change_request_task": change_request_task,
+        "change_requests": change_requests,
     }, owner, repo)
 
 
@@ -312,7 +312,7 @@ def apply_recommendation(request, api_key):
         task_id=task.id
     )
 
-    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
+    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "changes")))
 
 
 @login_required
@@ -343,7 +343,7 @@ def apply_change_request(request, api_key):
         logger.error(f"Unexpected error: {e}", exc_info=True)
         return render(request, "error.html", {"error": "An unexpected error occurred. Please try again later."})
 
-    return redirect(reverse('view_pull_request', args=(repo_owner, repo_name, pr_number, "review")))
+    return redirect(reverse('view_pull_request', args=(repo_owner, repo_name, pr_number, "changes")))
 
 
 @login_required
