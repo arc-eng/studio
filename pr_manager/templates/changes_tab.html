@@ -1,0 +1,34 @@
+<div class="table-container">
+    <table class="table is-fullwidth is-borderless">
+        <tbody>
+        {% for change in change_requests %}
+            <tr>
+                <td class="is-narrow">
+                    {% if change.completed %}
+                    <a href="{% url 'view_task' owner=repo_owner repo=repo_name task_id=change.task_id %}" class="button is-shadowless is-small">
+                        <span class="icon is-small">
+                            <i class="fa fa-eye"></i>
+                        </span>
+                    </a>
+                    {% else %}
+                    <span class="icon has-text-info is-small">
+                        <i class="fa fa-rotate fa-spin"></i>
+                    </span>
+                    {% endif %}
+
+                </td>
+
+                <td class="{% if not change.completed %}is-blinking{% endif %}">
+                    {{ change.prompt }}
+                </td>
+                <td class="is-narrow">
+                        <span class="has-font-weight-light is-family-monospace is-size-7">
+                            {{ change.created_at | timesince }}
+                        </span>
+                </td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

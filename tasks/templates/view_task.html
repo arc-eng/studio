@@ -41,7 +41,7 @@
         <div class="column is-narrow">
             <div class="buttons">
                 {% if task.pr_number %}
-                    <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="review" %}" class="button is-page-loader has-text-success-40">
+                    <a href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="describe" %}" class="button is-page-loader has-text-success-40">
                         <span class="icon is-small"><i class="fas fa-code-branch"></i></span> <span>#{{ task.pr_number }}</span>
                     </a>
 
@@ -94,7 +94,7 @@
                             {% if task.pr_number %}
                                 <div class="control">
                                     <a class="button is-rounded"
-                                       href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="review" %}">
+                                       href="{% url 'view_pull_request' owner=repo_owner repo=repo_name pr_number=task.pr_number pr_tab="describe" %}">
                                         <span class="icon"><i class="fa fa-code-branch"></i></span>
                                         <span>#{{ task.pr_number }}</span>
                                     </a>

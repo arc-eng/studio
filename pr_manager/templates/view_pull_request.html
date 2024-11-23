@@ -61,6 +61,7 @@
     border-bottom: 1px solid rgb(214, 217, 224);
 }
 
+
 {% endblock %}
 
 {% block repo_content %}
@@ -110,7 +111,7 @@
                                 <td class="is-narrow has-text-grey has-text-right">{{ commit.commit.author.date|timesince }} ago</td>
                             </tr>
                         {% endfor %}
-                        {% if not change_request_task %}
+                        {% if not change_request_task or change_request_task.status == "completed" %}
                             <tr>
                                 <td class="is-narrow is-vcentered">
                                     <figure class="image is-32x32">
@@ -157,7 +158,14 @@
         <div class="column is-5">
             <div class="tabs mb-0 is-fullwidth is-boxed">
                 <ul>
-
+                    {% if change_requests %}
+                        <li id="changes-tab" class="tab" data-tab-id="changes">
+                            <a>
+                                <span class="icon is-small"><i class="fas fa-code"></i></span>
+                                <span>Changes</span>
+                            </a>
+                        </li>
+                    {% endif %}
                     <li id="review-tab" class="tab" data-tab-id="review">
                         <a>
                             <span class="icon is-small"><i class="fas fa-magnifying-glass"></i></span>
@@ -227,6 +235,11 @@
                     {% include 'review_generator_tab.html' %}
                 </p>
             </div>
+
+            <div id="changes-tab-container" class="tab-container is-hidden p-3 pb-0" data-tab-id="changes">
+                {% include 'changes_tab.html' %}
+            </div>
+
         </div>
 
     </div>
@@ -282,8 +295,6 @@
 
             $('#send-button').click(function() {
                 $(this).addClass('is-loading');
-                // Disable change request input
-                {#$('input[name="change_request"]').attr('disabled', 'disabled');#}
             });
 
 
