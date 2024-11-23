@@ -19,7 +19,7 @@
                 </td>
 
                 <td class="{% if not change.completed %}is-blinking{% endif %}">
-                    {{ change.prompt }}
+                    {% include 'markdown_container.html' with markdown=change.prompt id=change.id id_prefix="change" %}
                 </td>
                 <td class="is-narrow">
                         <span class="has-font-weight-light is-family-monospace is-size-7">
