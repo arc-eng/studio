@@ -321,8 +321,9 @@ def dismiss_recommendation(request, api_key):
     finding_id = request.POST.get('finding_id')
     finding = ReviewFinding.objects.get(id=finding_id)
     repo = finding.review.repo
-    if not finding.review.user == request.user:
-        return render(request, "error.html", {"error": "You are not authorized to apply this recommendation"})
+    # Check if the user has permission to dismiss the finding
+    if not (finding.review.user == request.user or request.user.is_staff):
+        return render(request, "error.html", {"error": "You are not authorized to dismiss this recommendation"})
     finding.dismissed = True
     finding.save()
 
@@ -380,3 +381,4 @@ def comment_on_pr_review(request):
         return render(request, "error.html", {"error": f"Failed to create comment: {message}"})
     # Redirect to the comment URL
     return redirect(comment.html_url)
+
