@@ -134,6 +134,8 @@ def view_pull_request(request, owner=None, repo=None, pr_number=0, pr_tab="descr
     except GithubException as e:
         if e.status == 401:
             return redirect(reverse('user_logout'))
+        if e.status == 404:
+            return redirect('repositories:install_repo', owner_name=owner, repo_name=repo)
         else:
             return render(request, "error.html", {
                 "error": str(e),
