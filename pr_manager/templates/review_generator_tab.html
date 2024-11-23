@@ -15,7 +15,8 @@
             {% include 'markdown_container.html' with markdown=review.summary id="summary" classes="p-3 mb-5" %}
 
             {% for finding in review.findings.all %}
-                <div class="card p-0 mx-3 has-background-light is-shadowless is-bordered">
+                {% if not finding.dismissed %}
+                <div class="card p-0 mx-3 has-background-light is-shadowless is-bordered review-finding">
 
                     <header class="card-header p-2 has-round-corners is-shadowless is-borderless"
                             data-file="{{ finding.file }}"
@@ -70,9 +71,15 @@
                         </span>
                             <div class="field has-addons mt-5">
                                 <div class="control">
-                                    <button class="button is-static is-small">
-                                        <span class="icon is-small"><i class="fas fa-lightbulb"></i></span>
-                                    </button>
+                                    <form action="{% url 'dismiss_review_finding_recommendation' %}" method="post">
+                                        <input type="hidden" name="finding_id" value="{{ finding.id }}">
+                                        {% csrf_token %}
+
+                                        <button class="button is-small has-text-link-25 dismiss-button">
+                                            <span class="icon is-small"><i class="fas fa-xmark"></i></span>
+                                            <span>Dismiss</span>
+                                        </button>
+                                    </form>
                                 </div>
                                 <div class="control">
                                     <button class="button is-small has-text-link-25 copy-button" data-copy-text="{{ finding.recommendation }}">
@@ -88,7 +95,7 @@
 
                                     <button class="button is-small has-text-success-25 finding-action {% if finding.task_id %}is-static{% endif %}">
                                         <span class="icon is-small"><i class="fas {% if finding.task_id %}fa-check{% else %}fa-play{% endif %}"></i></span>
-                                        <span>{% if finding.task_id %}Applied{% else %}Apply{% endif %}</span>
+                                        <span>{% if finding.task_id %}Applied{% else %}Apply Recommendation{% endif %}</span>
                                     </button>
                                 </form>
 
@@ -99,7 +106,7 @@
                     </div>
 
                 </div>
-
+                {% endif %}
             {% endfor %}
         </div>
     {% else %}
@@ -156,6 +163,9 @@
         $(this).addClass('is-loading');
     });
     $('.finding-action').click(function() {
+        $(this).addClass('is-loading');
+    });
+    $('.dismiss-button').click(function() {
         $(this).addClass('is-loading');
     });
 
@@ -242,4 +252,5 @@
             $button.find('i').removeClass('fa-check').addClass('fa-copy');
         }, 2000);
     });
+
 </script>

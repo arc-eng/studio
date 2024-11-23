@@ -317,6 +317,21 @@ def apply_recommendation(request, api_key):
 
 @login_required
 @needs_api_key
+def dismiss_recommendation(request, api_key):
+    finding_id = request.POST.get('finding_id')
+    finding = ReviewFinding.objects.get(id=finding_id)
+    repo = finding.review.repo
+    # Check if the user has permission to dismiss the finding
+    if not (finding.review.user == request.user or request.user.is_staff):
+        return render(request, "error.html", {"error": "You are not authorized to dismiss this recommendation"})
+    finding.dismissed = True
+    finding.save()
+
+    return redirect(reverse('view_pull_request', args=(repo.owner, repo.repo_name, finding.review.pr_number, "review")))
+
+
+@login_required
+@needs_api_key
 def apply_change_request(request, api_key):
     change_request = request.POST.get('change_request')
     repo_owner = request.POST.get('repo_owner')
@@ -366,3 +381,4 @@ def comment_on_pr_review(request):
         return render(request, "error.html", {"error": f"Failed to create comment: {message}"})
     # Redirect to the comment URL
     return redirect(comment.html_url)
+

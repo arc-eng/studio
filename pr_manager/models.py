@@ -27,6 +27,7 @@ class ReviewFinding(models.Model):
     line_start = models.IntegerField(null=True, blank=True)
     line_end = models.IntegerField(null=True, blank=True)
     recommendation = models.TextField(null=True, blank=True)
+    dismissed = models.BooleanField(default=False)
 
 
 class PullRequestReview(models.Model):
