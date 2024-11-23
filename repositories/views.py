@@ -1,3 +1,4 @@
+from arcane.engine import ArcaneEngine
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from github import Github, UnknownObjectException
@@ -27,9 +28,14 @@ def render_paginated_repo_picker(request, repos, repo_count, search_query=None):
         else:
             page_buttons = [page - 1, page, page + 1]
 
+    repo_list = repos.get_page(page - 1)
+    existing_bookmarks = BookmarkedRepo.objects.filter(user=request.user)
+    # Filter out already bookmarked repos
+    repo_list = [repo for repo in repo_list if repo.full_name not in [bookmark.full_name for bookmark in existing_bookmarks]]
+
     return render(request, 'repositories/repo_picker.html', {
         'search_query': search_query,
-        'repositories': repos.get_page(page - 1),
+        'repositories': repo_list,
         'total_page_count': page_count,
         'current_page': page,
         'page_buttons': page_buttons,
@@ -58,12 +64,16 @@ def repo_overview(request, api_key=None):
 
 
 @login_required
-def bookmark_repo(request, owner_name, repo_name):
+@needs_api_key
+def bookmark_repo(request, owner_name, repo_name, api_key=None):
     BookmarkedRepo.objects.update_or_create(
         owner=request.POST.get('repo_owner'),
         repo_name=request.POST.get('repo_name'),
         img_url=request.POST.get('img_url'),
         user=request.user)
+    engine = ArcaneEngine(api_key)
+    if not engine.is_repository_installed(request.POST.get('repo_owner'), request.POST.get('repo_name')):
+        return redirect('https://github.com/apps/arcane-engine/installations/new')
     return redirect('repositories:repo_overview')
 
 
