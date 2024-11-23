@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "studio"
-version = "0.9.8"
+version = "0.9.9"
 description = "Flagship application to showcase the Arcane Engineer platform"
 authors = ["Marco lamina <marco@arcane.engineer>"]
 license = "MIT"
@@ -10,7 +10,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "~3.10.0"
 django = "^5.1.1"
-arcane-engine = "^1.11.2"
+arcane-engine = "^1.12.1"
 pygithub = "^2.4.0"
 django-allauth = "^65.0.1"
 psycopg2-binary = "^2.9.9"

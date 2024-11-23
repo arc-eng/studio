@@ -71,7 +71,7 @@
                     <input type="hidden" name="repo_name" value="{{ repo.name }}" />
                     <input type="hidden" name="repo_owner" value="{{ repo.owner.login }}" />
                     <input type="hidden" name="img_url" value="{{ repo.owner.avatar_url }}" />
-                    <button type="submit" class="is-small button mr-3" aria-label="Add Repo">
+                    <button type="submit" class="is-small button is-link mr-3" aria-label="Add Repo">
                         <span class="icon"><i class="fas fa-plus"></i></span>
                     </button>
                 </form>
@@ -83,9 +83,9 @@
                           class="is-rounded" />
                 </figure>
 
-                <a href="{{ repo.html_url }}" target="_blank">
+                <span>
                     {{ repo.owner.login }} / {{ repo.name }}
-                </a>
+                </span>
 
             </span>
 
